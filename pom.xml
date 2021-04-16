@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.ruoyi</groupId>
-    <artifactId>ruoyi</artifactId>
+    <artifactId>wer</artifactId>
     <version>4.6.1</version>
     <packaging>jar</packaging>
 
-    <name>ruoyi</name>
+    <name>wer</name>
     <description>Wer管理系统</description>
 
     <parent>

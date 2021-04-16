@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.client.mapper.UserStatisticsInfoMapper">
+
+    <resultMap type="UserStatisticsInfo" id="UserStatisticsInfoResult">
+        <result property="statisticsId"    column="statistics_id"    />
+        <result property="name"    column="name"    />
+        <result property="phoneNumber"    column="phone_number"    />
+        <result property="address"    column="address"    />
+        <result property="storeRemark"    column="store_remark"    />
+        <result property="region"    column="region"    />
+        <result property="store"    column="store"    />
+        <result property="clerk"    column="clerk"    />
+        <result property="code"    column="code"    />
+        <result property="discount"    column="discount"    />
+        <result property="fixedOffer"    column="fixed_offer"    />
+        <result property="faxNumber"    column="fax_number"    />
+        <result property="customerType"    column="customer_type"    />
+        <result property="applicablePrice"    column="applicable_price"    />
+        <result property="birthday"    column="birthday"    />
+        <result property="residualIntegral"    column="residual_integral"    />
+        <result property="balance"    column="balance"    />
+        <result property="parentCustomer"    column="parent_customer"    />
+        <result property="memberType"    column="member_type"    />
+        <result property="pickDays"    column="pick_days"    />
+        <result property="operator"    column="operator"    />
+        <result property="operatorTime"    column="Operator_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectUserStatisticsInfoVo">
+        select statistics_id, name, phone_number, address, store_remark, region, store, clerk, code, discount, fixed_offer, fax_number, customer_type, applicable_price, birthday, residual_integral, balance, parent_customer, member_type, pick_days, operator, Operator_time, create_by, create_time, update_by, update_time, remark from user_statistics_info
+    </sql>
+
+    <select id="selectUserStatisticsInfoList" parameterType="UserStatisticsInfo" resultMap="UserStatisticsInfoResult">
+        <include refid="selectUserStatisticsInfoVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="phoneNumber != null  and phoneNumber != ''"> and phone_number = #{phoneNumber}</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="storeRemark != null  and storeRemark != ''"> and store_remark = #{storeRemark}</if>
+            <if test="region != null  and region != ''"> and region = #{region}</if>
+            <if test="store != null  and store != ''"> and store = #{store}</if>
+            <if test="clerk != null  and clerk != ''"> and clerk = #{clerk}</if>
+            <if test="code != null  and code != ''"> and code = #{code}</if>
+            <if test="discount != null  and discount != ''"> and discount = #{discount}</if>
+            <if test="fixedOffer != null  and fixedOffer != ''"> and fixed_offer = #{fixedOffer}</if>
+            <if test="faxNumber != null  and faxNumber != ''"> and fax_number = #{faxNumber}</if>
+            <if test="customerType != null  and customerType != ''"> and customer_type = #{customerType}</if>
+            <if test="applicablePrice != null  and applicablePrice != ''"> and applicable_price = #{applicablePrice}</if>
+            <if test="birthday != null  and birthday != ''"> and birthday = #{birthday}</if>
+            <if test="residualIntegral != null  and residualIntegral != ''"> and residual_integral = #{residualIntegral}</if>
+            <if test="balance != null  and balance != ''"> and balance = #{balance}</if>
+            <if test="parentCustomer != null  and parentCustomer != ''"> and parent_customer = #{parentCustomer}</if>
+            <if test="memberType != null  and memberType != ''"> and member_type = #{memberType}</if>
+            <if test="pickDays != null  and pickDays != ''"> and pick_days = #{pickDays}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="operatorTime != null "> and Operator_time = #{operatorTime}</if>
+        </where>
+    </select>
+
+    <select id="selectUserStatisticsInfoById" parameterType="Long" resultMap="UserStatisticsInfoResult">
+        <include refid="selectUserStatisticsInfoVo"/>
+        where statistics_id = #{statisticsId}
+    </select>
+
+    <insert id="insertUserStatisticsInfo" parameterType="UserStatisticsInfo" useGeneratedKeys="true" keyProperty="statisticsId">
+        insert into user_statistics_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null">name,</if>
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number,</if>
+            <if test="address != null">address,</if>
+            <if test="storeRemark != null">store_remark,</if>
+            <if test="region != null">region,</if>
+            <if test="store != null">store,</if>
+            <if test="clerk != null">clerk,</if>
+            <if test="code != null">code,</if>
+            <if test="discount != null">discount,</if>
+            <if test="fixedOffer != null">fixed_offer,</if>
+            <if test="faxNumber != null">fax_number,</if>
+            <if test="customerType != null">customer_type,</if>
+            <if test="applicablePrice != null">applicable_price,</if>
+            <if test="birthday != null">birthday,</if>
+            <if test="residualIntegral != null">residual_integral,</if>
+            <if test="balance != null">balance,</if>
+            <if test="parentCustomer != null">parent_customer,</if>
+            <if test="memberType != null">member_type,</if>
+            <if test="pickDays != null">pick_days,</if>
+            <if test="operator != null">operator,</if>
+            <if test="operatorTime != null">Operator_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null">#{name},</if>
+            <if test="phoneNumber != null and phoneNumber != ''">#{phoneNumber},</if>
+            <if test="address != null">#{address},</if>
+            <if test="storeRemark != null">#{storeRemark},</if>
+            <if test="region != null">#{region},</if>
+            <if test="store != null">#{store},</if>
+            <if test="clerk != null">#{clerk},</if>
+            <if test="code != null">#{code},</if>
+            <if test="discount != null">#{discount},</if>
+            <if test="fixedOffer != null">#{fixedOffer},</if>
+            <if test="faxNumber != null">#{faxNumber},</if>
+            <if test="customerType != null">#{customerType},</if>
+            <if test="applicablePrice != null">#{applicablePrice},</if>
+            <if test="birthday != null">#{birthday},</if>
+            <if test="residualIntegral != null">#{residualIntegral},</if>
+            <if test="balance != null">#{balance},</if>
+            <if test="parentCustomer != null">#{parentCustomer},</if>
+            <if test="memberType != null">#{memberType},</if>
+            <if test="pickDays != null">#{pickDays},</if>
+            <if test="operator != null">#{operator},</if>
+            <if test="operatorTime != null">#{operatorTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserStatisticsInfo" parameterType="UserStatisticsInfo">
+        update user_statistics_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null">name = #{name},</if>
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number = #{phoneNumber},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="storeRemark != null">store_remark = #{storeRemark},</if>
+            <if test="region != null">region = #{region},</if>
+            <if test="store != null">store = #{store},</if>
+            <if test="clerk != null">clerk = #{clerk},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="fixedOffer != null">fixed_offer = #{fixedOffer},</if>
+            <if test="faxNumber != null">fax_number = #{faxNumber},</if>
+            <if test="customerType != null">customer_type = #{customerType},</if>
+            <if test="applicablePrice != null">applicable_price = #{applicablePrice},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="residualIntegral != null">residual_integral = #{residualIntegral},</if>
+            <if test="balance != null">balance = #{balance},</if>
+            <if test="parentCustomer != null">parent_customer = #{parentCustomer},</if>
+            <if test="memberType != null">member_type = #{memberType},</if>
+            <if test="pickDays != null">pick_days = #{pickDays},</if>
+            <if test="operator != null">operator = #{operator},</if>
+            <if test="operatorTime != null">Operator_time = #{operatorTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where statistics_id = #{statisticsId}
+    </update>
+
+    <delete id="deleteUserStatisticsInfoById" parameterType="Long">
+        delete from user_statistics_info where statistics_id = #{statisticsId}
+    </delete>
+
+    <delete id="deleteUserStatisticsInfoByIds" parameterType="String">
+        delete from user_statistics_info where statistics_id in
+        <foreach item="statisticsId" collection="array" open="(" separator="," close=")">
+            #{statisticsId}
+        </foreach>
+    </delete>
+
+</mapper>
