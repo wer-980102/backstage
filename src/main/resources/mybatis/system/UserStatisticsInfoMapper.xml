@@ -24,6 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="balance"    column="balance"    />
         <result property="parentCustomer"    column="parent_customer"    />
         <result property="memberType"    column="member_type"    />
+        <result property="quota"    column="quota"    />
         <result property="pickDays"    column="pick_days"    />
         <result property="operator"    column="operator"    />
         <result property="operatorTime"    column="Operator_time"    />
@@ -35,7 +36,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectUserStatisticsInfoVo">
-        select statistics_id, name, phone_number, address, store_remark, region, store, clerk, code, discount, fixed_offer, fax_number, customer_type, applicable_price, birthday, residual_integral, balance, parent_customer, member_type, pick_days, operator, Operator_time, create_by, create_time, update_by, update_time, remark from user_statistics_info
+        select statistics_id, name, phone_number, address, store_remark, region, store, clerk, code, discount, fixed_offer, fax_number, customer_type, applicable_price, birthday, residual_integral, balance, parent_customer, member_type,quota, pick_days, operator, Operator_time, create_by, create_time, update_by, update_time, remark from user_statistics_info
     </sql>
 
     <select id="selectUserStatisticsInfoList" parameterType="UserStatisticsInfo" resultMap="UserStatisticsInfoResult">
@@ -65,9 +66,47 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+
     <select id="selectUserStatisticsInfoById" parameterType="Long" resultMap="UserStatisticsInfoResult">
         <include refid="selectUserStatisticsInfoVo"/>
         where statistics_id = #{statisticsId}
+    </select>
+
+    <select id="getUserStatisticsInfo" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
+        select
+            usi.name as name,
+            usi.phone_number as phoneNumber,
+            usi.member_type as memberType,
+            usi.customer_type as customerType,
+            sum(csi.actual_sales) as actualSales,
+            sum(csi.refund_amount) as refundAmount,
+            sum(csi.goods_frequency) as goodsFrequency,
+            csi.last_goods as lastGoods,
+            usi.store as store,
+            usi.Operator_time as operatorTime,
+            usi.operator
+        from user_statistics_info usi
+                 inner join clerk_sale_info csi on usi.statistics_id = csi.customer_id
+        group by usi.name,
+                 usi.phone_number,
+                 usi.member_type,
+                 usi.customer_type,
+                 csi.last_goods,
+                 usi.store,
+                 usi.Operator_time,
+                 usi.operator
+    </select>
+
+    <select id="getUserById" parameterType="java.lang.String" resultMap="UserStatisticsInfoResult">
+        select
+               statistics_id,
+               name,
+                operator
+        from user_statistics_info
+        <where>
+            <if test="name != null  and name != ''"> and name = #{name}</if>
+        </where>
+        limit 1
     </select>
 
     <insert id="insertUserStatisticsInfo" parameterType="UserStatisticsInfo" useGeneratedKeys="true" keyProperty="statisticsId">
@@ -91,6 +130,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="balance != null">balance,</if>
             <if test="parentCustomer != null">parent_customer,</if>
             <if test="memberType != null">member_type,</if>
+            <if test="quota != null and quota != ''">quota,</if>
             <if test="pickDays != null">pick_days,</if>
             <if test="operator != null">operator,</if>
             <if test="operatorTime != null">Operator_time,</if>
@@ -119,6 +159,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="balance != null">#{balance},</if>
             <if test="parentCustomer != null">#{parentCustomer},</if>
             <if test="memberType != null">#{memberType},</if>
+            <if test="quota != null and quota != ''">#{quota},</if>
             <if test="pickDays != null">#{pickDays},</if>
             <if test="operator != null">#{operator},</if>
             <if test="operatorTime != null">#{operatorTime},</if>
@@ -151,6 +192,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="balance != null">balance = #{balance},</if>
             <if test="parentCustomer != null">parent_customer = #{parentCustomer},</if>
             <if test="memberType != null">member_type = #{memberType},</if>
+            <if test="quota != null and quota != ''">quota = #{quota},</if>
             <if test="pickDays != null">pick_days = #{pickDays},</if>
             <if test="operator != null">operator = #{operator},</if>
             <if test="operatorTime != null">Operator_time = #{operatorTime},</if>

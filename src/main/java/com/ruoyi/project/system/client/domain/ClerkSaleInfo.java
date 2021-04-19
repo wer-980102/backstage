@@ -23,7 +23,7 @@ public class ClerkSaleInfo extends BaseEntity
     private String modelNumber;
 
     /** 产品名称 */
-    @Excel(name = "产品名称")
+    @Excel(name = "名称")
     private String productName;
 
     /** 品牌 */
@@ -31,7 +31,6 @@ public class ClerkSaleInfo extends BaseEntity
     private String brand;
 
     /** 客户ID */
-    @Excel(name = "客户ID")
     private Long customerId;
 
     /** 客户 */
@@ -43,7 +42,7 @@ public class ClerkSaleInfo extends BaseEntity
     private String sales;
 
     /** 退款数 */
-    @Excel(name = "退款数")
+    @Excel(name = "退货数")
     private String store;
 
     /** 实销数 */
@@ -51,7 +50,7 @@ public class ClerkSaleInfo extends BaseEntity
     private String refundAmount;
 
     /** 实销额 */
-    @Excel(name = "实销额")
+    @Excel(name = "实销额 ")
     private String actualSales;
 
     /** 最后一次拿货 */

@@ -21,11 +21,11 @@ public class UserStatisticsInfo extends BaseEntity
     private Long statisticsId;
 
     /** 用户名 */
-    @Excel(name = "用户名")
+    @Excel(name = "名称")
     private String name;
 
     /** 手机号码 */
-    @Excel(name = "手机号码")
+    @Excel(name = "手机号")
     private String phoneNumber;
 
     /** 地址 */
@@ -65,7 +65,7 @@ public class UserStatisticsInfo extends BaseEntity
     private String faxNumber;
 
     /** 类型：1.零批客户 */
-    @Excel(name = "类型：1.零批客户")
+    @Excel(name = "类型")
     private String customerType;
 
     /** 适用价格 */
@@ -89,8 +89,12 @@ public class UserStatisticsInfo extends BaseEntity
     private String parentCustomer;
 
     /** 等级类型：1.普通会员 */
-    @Excel(name = "等级类型：1.普通会员")
+    @Excel(name = "等级")
     private String memberType;
+
+    /** 信用额度 */
+    @Excel(name = "信用额度")
+    private String quota;
 
     /** 最后拿货天数 */
     @Excel(name = "最后拿货天数")
@@ -101,8 +105,8 @@ public class UserStatisticsInfo extends BaseEntity
     private String operator;
 
     /** 操作时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "操作时间", width = 30, dateFormat = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @Excel(name = "操作时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date operatorTime;
 
     public void setStatisticsId(Long statisticsId)
@@ -304,6 +308,14 @@ public class UserStatisticsInfo extends BaseEntity
         return operatorTime;
     }
 
+    public String getQuota() {
+        return quota;
+    }
+
+    public void setQuota(String quota) {
+        this.quota = quota;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -326,6 +338,7 @@ public class UserStatisticsInfo extends BaseEntity
             .append("balance", getBalance())
             .append("parentCustomer", getParentCustomer())
             .append("memberType", getMemberType())
+            .append("quota", getQuota())
             .append("pickDays", getPickDays())
             .append("operator", getOperator())
             .append("operatorTime", getOperatorTime())

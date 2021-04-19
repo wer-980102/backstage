@@ -2,6 +2,7 @@ package com.ruoyi.project.system.client.controller;
 
 import java.util.List;
 
+import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.service.IUserStatisticsInfoService;
 import com.ruoyi.project.system.user.domain.User;
@@ -57,6 +58,15 @@ public class UserStatisticsInfoController extends BaseController
         return getDataTable(list);
     }
 
+    @RequiresPermissions("system:client:view")
+    @GetMapping("/importTemplate")
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+        ExcelUtil<UserStatisticsInfo> util = new ExcelUtil<UserStatisticsInfo>(UserStatisticsInfo.class);
+        return util.importTemplateExcel("后台数据");
+    }
+
     /**
      * 导出门店数据列表
      */
@@ -71,7 +81,7 @@ public class UserStatisticsInfoController extends BaseController
         return util.exportExcel(list, "门店数据数据");
     }
 
-    @Log(title = "用户管理", businessType = BusinessType.IMPORT)
+    @Log(title = "用户管理导入", businessType = BusinessType.IMPORT)
     @RequiresPermissions("system:client:import")
     @PostMapping("/importData")
     @ResponseBody

@@ -52,6 +52,16 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     }
 
     /**
+     * 根据name查询Id
+     * @param name
+     * @return
+     */
+    @Override
+    public UserStatisticsInfo getUserById(String name) {
+        return userStatisticsInfoMapper.getUserById(name);
+    }
+
+    /**
      * 新增门店数据
      *
      * @param userStatisticsInfo 门店数据
@@ -124,9 +134,7 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
         {
             try
             {
-                // 验证是否存在这个用户
-              //  User u = userMapper.selectUserByLoginName(user.getLoginName());
-                if (StringUtils.isNull(user.getName()))
+                if (StringUtils.isNotEmpty(user.getName()))
                 {
                     this.insertUserStatisticsInfo(user);
                     successNum++;

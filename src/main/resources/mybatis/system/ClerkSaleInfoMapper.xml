@@ -49,6 +49,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where sale_id = #{saleId}
     </select>
 
+    <select id="getClerkSaleInfo" parameterType="java.lang.String" resultMap="ClerkSaleInfoResult">
+        <include refid="selectClerkSaleInfoVo"/>
+        <where>
+            <if test="customer != null  and customer != ''"> and customer = #{customer}</if>
+        </where>
+    </select>
+
     <insert id="insertClerkSaleInfo" parameterType="ClerkSaleInfo" useGeneratedKeys="true" keyProperty="saleId">
         insert into clerk_sale_info
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -1,6 +1,7 @@
 package com.ruoyi.project.system.client.mapper;
 
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 
 import java.util.List;
 
@@ -20,6 +21,18 @@ public interface UserStatisticsInfoMapper
      */
     public UserStatisticsInfo selectUserStatisticsInfoById(Long statisticsId);
 
+    /**
+     * 查询所有数据
+     * @param userStatisticsInfo
+     * @return
+     */
+    List<UserStatisticsInfoDto> getUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
+    /**
+     * 根据name查询Id
+     * @param name
+     * @return
+     */
+    UserStatisticsInfo getUserById(String name);
     /**
      * 查询门店数据列表
      *

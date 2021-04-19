@@ -59,4 +59,13 @@ public interface IClerkSaleInfoService
      * @return 结果
      */
     public int deleteClerkSaleInfoById(Long saleId);
+
+    /**
+     * 导入销售数据
+     *
+     * @param saleInfoList 用户数据列表
+     * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
+     * @return 结果
+     */
+    public String importUser(List<ClerkSaleInfo> saleInfoList, Boolean isUpdateSupport);
 }

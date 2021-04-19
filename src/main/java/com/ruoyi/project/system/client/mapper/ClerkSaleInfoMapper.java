@@ -21,6 +21,12 @@ public interface ClerkSaleInfoMapper
     public ClerkSaleInfo selectClerkSaleInfoById(Long saleId);
 
     /**
+     *  根据那么查询
+     * @param customer
+     * @return
+     */
+    ClerkSaleInfo getClerkSaleInfo(String customer);
+    /**
      * 查询销售纪录列表
      *
      * @param clerkSaleInfo 销售纪录

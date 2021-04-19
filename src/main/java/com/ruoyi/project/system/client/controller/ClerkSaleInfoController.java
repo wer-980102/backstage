@@ -19,6 +19,7 @@ import com.ruoyi.framework.web.controller.BaseController;
 import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.framework.web.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 销售纪录Controller
@@ -27,25 +28,25 @@ import com.ruoyi.framework.web.page.TableDataInfo;
  * @date 2021-04-16
  */
 @Controller
-@RequestMapping("/system/info")
+@RequestMapping("/system/sale")
 public class ClerkSaleInfoController extends BaseController
 {
-    private String prefix = "system/info";
+    private String prefix = "system/sale";
 
     @Autowired
     private IClerkSaleInfoService clerkSaleInfoService;
 
-    @RequiresPermissions("system:info:view")
+    @RequiresPermissions("system:sale:view")
     @GetMapping()
     public String info()
     {
-        return prefix + "/info";
+        return prefix + "/sale";
     }
 
     /**
      * 查询销售纪录列表
      */
-    @RequiresPermissions("system:info:list")
+    @RequiresPermissions("system:sale:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(ClerkSaleInfo clerkSaleInfo)
@@ -58,7 +59,7 @@ public class ClerkSaleInfoController extends BaseController
     /**
      * 导出销售纪录列表
      */
-    @RequiresPermissions("system:info:export")
+    @RequiresPermissions("system:sale:export")
     @Log(title = "销售纪录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -68,7 +69,26 @@ public class ClerkSaleInfoController extends BaseController
         ExcelUtil<ClerkSaleInfo> util = new ExcelUtil<ClerkSaleInfo>(ClerkSaleInfo.class);
         return util.exportExcel(list, "销售纪录数据");
     }
+    @RequiresPermissions("system:sale:view")
+    @GetMapping("/saleimportTemplate")
+    @ResponseBody
+    public AjaxResult importTemplate()
+    {
+        ExcelUtil<ClerkSaleInfo> util = new ExcelUtil<ClerkSaleInfo>(ClerkSaleInfo.class);
+        return util.importTemplateExcel("后台数据");
+    }
 
+    @Log(title = "销售导入", businessType = BusinessType.IMPORT)
+    @RequiresPermissions("system:sale:import")
+    @PostMapping("/importData")
+    @ResponseBody
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
+    {
+        ExcelUtil<ClerkSaleInfo> util = new ExcelUtil<ClerkSaleInfo>(ClerkSaleInfo.class);
+        List<ClerkSaleInfo> saleInfoList = util.importExcel(file.getInputStream());
+        String message =clerkSaleInfoService.importUser(saleInfoList, updateSupport);
+        return AjaxResult.success(message);
+    }
     /**
      * 新增销售纪录
      */
@@ -81,7 +101,7 @@ public class ClerkSaleInfoController extends BaseController
     /**
      * 新增保存销售纪录
      */
-    @RequiresPermissions("system:info:add")
+    @RequiresPermissions("system:sale:add")
     @Log(title = "销售纪录", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -104,7 +124,7 @@ public class ClerkSaleInfoController extends BaseController
     /**
      * 修改保存销售纪录
      */
-    @RequiresPermissions("system:info:edit")
+    @RequiresPermissions("system:sale:edit")
     @Log(title = "销售纪录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -116,7 +136,7 @@ public class ClerkSaleInfoController extends BaseController
     /**
      * 删除销售纪录
      */
-    @RequiresPermissions("system:info:remove")
+    @RequiresPermissions("system:sale:remove")
     @Log(title = "销售纪录", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

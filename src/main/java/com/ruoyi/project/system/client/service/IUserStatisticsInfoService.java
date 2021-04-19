@@ -28,6 +28,13 @@ public interface IUserStatisticsInfoService
      */
     public List<UserStatisticsInfo> selectUserStatisticsInfoList(UserStatisticsInfo userStatisticsInfo);
 
+
+    /**
+     * 根据name查询Id
+     * @param name
+     * @return
+     */
+    UserStatisticsInfo getUserById(String name);
     /**
      * 新增门店数据
      *
