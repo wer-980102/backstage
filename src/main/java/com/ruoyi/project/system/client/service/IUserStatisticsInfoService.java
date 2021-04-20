@@ -1,6 +1,7 @@
 package com.ruoyi.project.system.client.service;
 
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 
 import java.util.List;
 
@@ -26,9 +27,21 @@ public interface IUserStatisticsInfoService
      * @param userStatisticsInfo 门店数据
      * @return 门店数据集合
      */
-    public List<UserStatisticsInfo> selectUserStatisticsInfoList(UserStatisticsInfo userStatisticsInfo);
+    public List<UserStatisticsInfoDto> selectUserStatisticsInfoList(UserStatisticsInfo userStatisticsInfo);
 
+    /**
+     * 查询特殊用户
+     * @param userStatisticsInfo
+     * @return
+     */
+    List<UserStatisticsInfoDto> getSpecialUserInfo(UserStatisticsInfo userStatisticsInfo);
 
+    /**
+     * 查询销售纪录管理
+     * @param userStatisticsInfo
+     * @return
+     */
+    List<UserStatisticsInfoDto> getSaleRecordInfo(UserStatisticsInfo userStatisticsInfo);
     /**
      * 根据name查询Id
      * @param name

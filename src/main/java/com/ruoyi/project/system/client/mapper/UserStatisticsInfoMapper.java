@@ -1,6 +1,7 @@
 package com.ruoyi.project.system.client.mapper;
 
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 
 import java.util.List;
@@ -27,6 +28,7 @@ public interface UserStatisticsInfoMapper
      * @return
      */
     List<UserStatisticsInfoDto> getUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
+
     /**
      * 根据name查询Id
      * @param name
@@ -41,6 +43,19 @@ public interface UserStatisticsInfoMapper
      */
     public List<UserStatisticsInfo> selectUserStatisticsInfoList(UserStatisticsInfo userStatisticsInfo);
 
+    /**
+     * 查询特殊客户管理
+     * @param userStatisticsInfo
+     * @return
+     */
+    List<UserStatisticsInfoDto> getSpecialUserInfo(UserStatisticsInfo userStatisticsInfo);
+
+    /**
+     * 查询销售纪录管理
+     * @param userStatisticsInfo
+     * @return
+     */
+    List<UserStatisticsInfoDto> getSaleRecordInfo(UserStatisticsInfo userStatisticsInfo);
     /**
      * 新增门店数据
      *

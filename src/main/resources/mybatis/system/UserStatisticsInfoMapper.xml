@@ -73,29 +73,65 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <select id="getUserStatisticsInfo" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
-        select
-            usi.name as name,
-            usi.phone_number as phoneNumber,
-            usi.member_type as memberType,
-            usi.customer_type as customerType,
-            sum(csi.actual_sales) as actualSales,
-            sum(csi.refund_amount) as refundAmount,
-            sum(csi.goods_frequency) as goodsFrequency,
-            csi.last_goods as lastGoods,
-            usi.store as store,
-            usi.Operator_time as operatorTime,
+        SELECT
+            usi.statistics_id AS statisticsId,
+            usi.NAME as name,
+            usi.phone_number AS phoneNumber,
+            usi.member_type AS memberType,
+            usi.customer_type AS customerType,
+            t2.lastGoodsCount as saleMonth,
+            sum( csi.actual_sales ) AS actualSales,
+            sum( csi.refund_amount ) AS refundAmount,
+            sum( csi.goods_frequency ) AS goodsFrequency,
+            t1.lastGoods,
+            usi.store,
+            usi.Operator_time AS operatorTime,
             usi.operator
-        from user_statistics_info usi
-                 inner join clerk_sale_info csi on usi.statistics_id = csi.customer_id
-        group by usi.name,
-                 usi.phone_number,
-                 usi.member_type,
-                 usi.customer_type,
-                 csi.last_goods,
-                 usi.store,
-                 usi.Operator_time,
-                 usi.operator
+        FROM
+            user_statistics_info usi
+                INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
+                INNER JOIN ( SELECT customer_id AS customerId, max( last_goods ) AS lastGoods FROM clerk_sale_info GROUP BY customerId ) t1 ON usi.statistics_id = t1.customerId
+                INNER JOIN (
+                SELECT
+                    a.customerId,
+                    sum( a.cs ) AS lastGoodsCount
+                FROM
+                    (
+                        SELECT
+                            customer_id AS customerId,
+                            substring( last_goods, 1, 5 ) AS lastGoods,
+                            count( DISTINCT customer_id ) AS cs
+                        FROM
+                            clerk_sale_info
+                        GROUP BY
+                            customer_id,
+                            lastGoods
+                    ) a
+                GROUP BY
+                    a.customerId
+            ) t2 ON usi.statistics_id = t2.customerId
+        <where>
+            <if test="name!=null and name!=''">
+                AND usi.name like concat('%', #{name}, '%')
+            </if>
+            <if test="phoneNumber!=null and phoneNumber!=''">
+                AND usi.phone_number like concat('%', #{phoneNumber}, '%')
+            </if>
+            <if test="memberType!=null and memberType!=''">
+                AND usi.member_type=#{memberType}
+            </if>
+        </where>
+        GROUP BY
+            usi.statistics_id,
+            usi.NAME,
+            usi.phone_number,
+            usi.member_type,
+            usi.customer_type,
+            usi.store,
+            usi.Operator_time,
+            usi.operator
     </select>
+
 
     <select id="getUserById" parameterType="java.lang.String" resultMap="UserStatisticsInfoResult">
         select
@@ -109,6 +145,89 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit 1
     </select>
 
+    <select id="getSpecialUserInfo" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
+        SELECT
+            usi.statistics_id AS statisticsId,
+            usi.NAME AS name,
+            usi.phone_number AS phoneNumber,
+            usi.member_type AS memberType,
+            usi.customer_type AS customerType,
+            t2.lastGoodsCount AS saleMonth,
+            sum( csi.actual_sales ) AS actualSales,
+            t1.lastGoods
+        FROM
+            user_statistics_info usi
+                INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
+                INNER JOIN ( SELECT customer_id AS customerId, max( last_goods ) AS lastGoods FROM clerk_sale_info GROUP BY customerId ) t1 ON usi.statistics_id = t1.customerId
+                INNER JOIN (
+                SELECT
+                    a.customerId,
+                    sum( a.cs ) AS lastGoodsCount
+                FROM
+                    (
+                        SELECT
+                            customer_id AS customerId,
+                            substring( last_goods, 1, 5 ) AS lastGoods,
+                            count( DISTINCT customer_id ) AS cs
+                        FROM
+                            clerk_sale_info
+                        GROUP BY
+                            customer_id,
+                            lastGoods
+                    ) a
+                GROUP BY
+                    a.customerId
+            ) t2 ON usi.statistics_id = t2.customerId
+        <where>
+            <if test="name!=null and name!=''">
+                AND usi.name like concat('%', #{name}, '%')
+            </if>
+            <if test="phoneNumber!=null and phoneNumber!=''">
+                AND usi.phone_number like concat('%', #{phoneNumber}, '%')
+            </if>
+        </where>
+        GROUP BY
+            usi.statistics_id,
+            usi.NAME,
+            usi.phone_number,
+            usi.member_type,
+            usi.customer_type
+    </select>
+
+    <select id="getSaleRecordInfo" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
+        SELECT
+            usi.statistics_id AS statisticsId,
+            usi.NAME AS name,
+            csi.model_number AS modelNumber,
+            csi.product_name AS productName,
+            usi.customer_type AS customerType,
+            sum( csi.actual_sales ) AS actualSales,
+            sum( csi.refund_amount ) AS refundAmount,
+            sum( csi.goods_frequency ) AS goodsFrequency,
+            csi.last_goods as lastGoods
+        FROM
+            user_statistics_info usi
+        INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
+        <where>
+            <if test="name!=null and name!=''">
+                AND usi.name like concat('%', #{name}, '%')
+            </if>
+            <if test="modelNumber!=null and modelNumber!=''">
+                AND csi.model_number like concat('%', #{modelNumber}, '%')
+            </if>
+            <if test="productName!=null and productName!=''">
+                AND csi.product_name like concat('%', #{productName}, '%')
+            </if>
+        </where>
+        GROUP BY
+            usi.statistics_id,
+            usi.NAME,
+            csi.model_number,
+            csi.product_name,
+            usi.customer_type,
+            csi.last_goods
+        order by csi.last_goods desc,usi.statistics_id desc
+    </select>
     <insert id="insertUserStatisticsInfo" parameterType="UserStatisticsInfo" useGeneratedKeys="true" keyProperty="statisticsId">
         insert into user_statistics_info
         <trim prefix="(" suffix=")" suffixOverrides=",">

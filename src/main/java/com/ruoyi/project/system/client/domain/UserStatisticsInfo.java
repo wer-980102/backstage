@@ -108,6 +108,10 @@ public class UserStatisticsInfo extends BaseEntity
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     @Excel(name = "操作时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date operatorTime;
+    /**款号**/
+    private String modelNumber;
+    /**产品名称**/
+    private String productName;
 
     public void setStatisticsId(Long statisticsId)
     {
@@ -316,6 +320,22 @@ public class UserStatisticsInfo extends BaseEntity
         this.quota = quota;
     }
 
+    public String getModelNumber() {
+        return modelNumber;
+    }
+
+    public void setModelNumber(String modelNumber) {
+        this.modelNumber = modelNumber;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -339,8 +359,9 @@ public class UserStatisticsInfo extends BaseEntity
             .append("parentCustomer", getParentCustomer())
             .append("memberType", getMemberType())
             .append("quota", getQuota())
-            .append("pickDays", getPickDays())
+            .append("modelNumber", getModelNumber())
             .append("operator", getOperator())
+            .append("productName", getProductName())
             .append("operatorTime", getOperatorTime())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

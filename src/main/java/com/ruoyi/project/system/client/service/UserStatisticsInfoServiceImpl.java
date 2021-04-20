@@ -6,6 +6,8 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
+import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.mapper.UserStatisticsInfoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,10 +48,32 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
      * @return 门店数据
      */
     @Override
-    public List<UserStatisticsInfo> selectUserStatisticsInfoList(UserStatisticsInfo userStatisticsInfo)
+    public List<UserStatisticsInfoDto> selectUserStatisticsInfoList(UserStatisticsInfo userStatisticsInfo)
     {
-        return userStatisticsInfoMapper.selectUserStatisticsInfoList(userStatisticsInfo);
+        return userStatisticsInfoMapper.getUserStatisticsInfo(userStatisticsInfo);
     }
+
+
+    /**
+     * 查询特殊用户
+     * @param userStatisticsInfo
+     * @return
+     */
+    @Override
+    public List<UserStatisticsInfoDto> getSpecialUserInfo(UserStatisticsInfo userStatisticsInfo) {
+        return userStatisticsInfoMapper.getSpecialUserInfo(userStatisticsInfo);
+    }
+
+    /**
+     * 查询销售纪录管理
+     * @param userStatisticsInfo
+     * @return
+     */
+    @Override
+    public List<UserStatisticsInfoDto> getSaleRecordInfo(UserStatisticsInfo userStatisticsInfo) {
+        return userStatisticsInfoMapper.getSaleRecordInfo(userStatisticsInfo);
+    }
+
 
     /**
      * 根据name查询Id

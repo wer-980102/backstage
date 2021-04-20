@@ -1,11 +1,10 @@
 package com.ruoyi.project.system.recode.controller;
 
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.framework.aspectj.lang.annotation.Log;
-import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.framework.web.controller.BaseController;
-import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.framework.web.page.TableDataInfo;
+import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
+import com.ruoyi.project.system.client.service.IUserStatisticsInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,12 +26,27 @@ public class RecodeController extends BaseController
 {
     private String prefix = "system/recode";
 
+    @Autowired
+    private IUserStatisticsInfoService iUserStatisticsInfoService;
 
-    @RequiresPermissions("system:user:view")
+    @RequiresPermissions("system:recode:view")
     @GetMapping()
     public String user()
     {
         return prefix + "/recode";
     }
 
+
+    /**
+     * 查询销售纪录管理
+     */
+    @RequiresPermissions("system:recode:list")
+    @PostMapping("/list")
+    @ResponseBody
+    public TableDataInfo list(UserStatisticsInfo userStatisticsInfo)
+    {
+        startPage();
+        List<UserStatisticsInfoDto> list = iUserStatisticsInfoService.getSaleRecordInfo(userStatisticsInfo);
+        return getDataTable(list);
+    }
 }

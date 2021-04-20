@@ -32,13 +32,13 @@
 			</div>
 
 	        <div class="btn-group-sm" id="toolbar" role="group">
-		        <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="system:notice:add">
+		        <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="system:recode:add">
 		            <i class="fa fa-plus"></i> 新增
 		        </a>
-		        <a class="btn btn-primary single disabled" onclick="$.operate.editFull()" shiro:hasPermission="system:notice:edit">
+		        <a class="btn btn-primary single disabled" onclick="$.operate.editFull()" shiro:hasPermission="system:recode:edit">
 		            <i class="fa fa-edit"></i> 修改
 		        </a>
-		        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:notice:remove">
+		        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:recode:remove">
 		            <i class="fa fa-remove"></i> 删除
 		        </a>
 	        </div>
@@ -50,11 +50,11 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:notice:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:notice:remove')}]];
+        var editFlag = [[${@permission.hasPermi('system:recode:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:recode:remove')}]];
         var types = [[${@dict.getType('sys_notice_type')}]];
         var datas = [[${@dict.getType('sys_notice_status')}]];
-        var prefix = ctx + "system/notice";
+        var prefix = ctx + "system/recode";
 
         $(function() {
             var options = {
@@ -67,37 +67,42 @@
 		            checkbox: true
 		        },
 					{
+					field: 'statisticsId',
+					title: '主键id',
+					visible: false
+					},
+					{
 						field: 'name',
 						title: '客户名称'
 					},
 					{
-						field: 'phoneNumber',
+						field: 'modelNumber',
 						title: '货号',
 						sortable: true
 					},
 					{
-						field: 'memberType',
+						field: 'productName',
 						title: '产品名称',
 						sortable: true
 					},
 					{
-						field: 'customerType',
+						field: 'actualSales',
 						title: '实销额',
 						sortable: true
 					},
 					{
-						field: 'monthsales',
+						field: 'refundAmount',
 						title: '实销数',
 						sortable: true
-					},
+					}	,
 					{
-						field: 'actualSales',
-						title: '拿货时间',
+						field: 'goodsFrequency',
+						title: '拿货次数',
 						sortable: true
 					},
 					{
 						field: 'lastGoods',
-						title: '拿货次数',
+						title: '拿货时间',
 						sortable: true
 					},
 		        {

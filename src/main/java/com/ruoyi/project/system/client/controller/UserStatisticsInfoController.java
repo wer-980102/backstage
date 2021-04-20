@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.service.IUserStatisticsInfoService;
 import com.ruoyi.project.system.user.domain.User;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -54,7 +55,7 @@ public class UserStatisticsInfoController extends BaseController
     public TableDataInfo list(UserStatisticsInfo userStatisticsInfo)
     {
         startPage();
-        List<UserStatisticsInfo> list = userStatisticsInfoService.selectUserStatisticsInfoList(userStatisticsInfo);
+        List<UserStatisticsInfoDto> list = userStatisticsInfoService.selectUserStatisticsInfoList(userStatisticsInfo);
         return getDataTable(list);
     }
 
@@ -76,8 +77,8 @@ public class UserStatisticsInfoController extends BaseController
     @ResponseBody
     public AjaxResult export(UserStatisticsInfo userStatisticsInfo)
     {
-        List<UserStatisticsInfo> list = userStatisticsInfoService.selectUserStatisticsInfoList(userStatisticsInfo);
-        ExcelUtil<UserStatisticsInfo> util = new ExcelUtil<UserStatisticsInfo>(UserStatisticsInfo.class);
+        List<UserStatisticsInfoDto> list = userStatisticsInfoService.selectUserStatisticsInfoList(userStatisticsInfo);
+        ExcelUtil<UserStatisticsInfoDto> util = new ExcelUtil<UserStatisticsInfoDto>(UserStatisticsInfoDto.class);
         return util.exportExcel(list, "门店数据数据");
     }
 
