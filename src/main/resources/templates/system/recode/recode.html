@@ -17,10 +17,10 @@
 								手机号码：<input type="text" name="phoneNumber"/>
 							</li>
 							<li class="select-time">
-								<label>创建时间： </label>
-								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
+								<label>拿货时间： </label>
+								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startTime"/>
 								<span>-</span>
-								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
+								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="endTime"/>
 							</li>
 							<li>
 								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -30,18 +30,6 @@
 					</div>
 				</form>
 			</div>
-
-	        <div class="btn-group-sm" id="toolbar" role="group">
-		        <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="system:recode:add">
-		            <i class="fa fa-plus"></i> 新增
-		        </a>
-		        <a class="btn btn-primary single disabled" onclick="$.operate.editFull()" shiro:hasPermission="system:recode:edit">
-		            <i class="fa fa-edit"></i> 修改
-		        </a>
-		        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:recode:remove">
-		            <i class="fa fa-remove"></i> 删除
-		        </a>
-	        </div>
 
 	        <div class="col-sm-12 select-table table-striped">
 	            <table id="bootstrap-table"></table>
@@ -59,13 +47,17 @@
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
                 modalName: "公告",
                 columns: [{
 		            checkbox: true
 		        },
+					{
+					field: 'saleId',
+					title: '销售主键id',
+					visible: false
+					},
 					{
 					field: 'statisticsId',
 					title: '主键id',
@@ -110,14 +102,21 @@
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.noticeId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.noticeId + '\')"><i class="fa fa-remove"></i>删除</a>');
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.saleId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="deleteSale(\'' + row.statisticsId + '\')"><i class="fa fa-remove"></i>删除</a>');
 						return actions.join('');
 		            }
 		        }]
             };
             $.table.init(options);
         });
+
+		/* 升级用户*/
+		function deleteSale(id) {
+			$.modal.confirm("确认要删除该销售纪录吗？", function() {
+				$.operate.post(prefix + "/remove", { "statisticsId": id});
+			})
+		}
     </script>
 </body>
 </html>

@@ -1,9 +1,9 @@
 package com.ruoyi.project.system.client.domain;
 
-import java.util.Date;
-import com.fasterxml.jackson.annotation.JsonFormat;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.framework.web.domain.BaseEntity;
 
@@ -13,6 +13,10 @@ import com.ruoyi.framework.web.domain.BaseEntity;
  * @author ruoyi
  * @date 2021-04-16
  */
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserStatisticsInfo extends BaseEntity
 {
     private static final long serialVersionUID = 1L;
@@ -105,269 +109,18 @@ public class UserStatisticsInfo extends BaseEntity
     private String operator;
 
     /** 操作时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    @Excel(name = "操作时间", width = 30, dateFormat = "yyyy-MM-dd HH:mm:ss")
-    private Date operatorTime;
+    @Excel(name = "操作时间")
+    private String operatorTime;
     /**款号**/
     private String modelNumber;
     /**产品名称**/
     private String productName;
-
-    public void setStatisticsId(Long statisticsId)
-    {
-        this.statisticsId = statisticsId;
-    }
-
-    public Long getStatisticsId()
-    {
-        return statisticsId;
-    }
-    public void setName(String name)
-    {
-        this.name = name;
-    }
-
-    public String getName()
-    {
-        return name;
-    }
-    public void setPhoneNumber(String phoneNumber)
-    {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getPhoneNumber()
-    {
-        return phoneNumber;
-    }
-    public void setAddress(String address)
-    {
-        this.address = address;
-    }
-
-    public String getAddress()
-    {
-        return address;
-    }
-    public void setStoreRemark(String storeRemark)
-    {
-        this.storeRemark = storeRemark;
-    }
-
-    public String getStoreRemark()
-    {
-        return storeRemark;
-    }
-    public void setRegion(String region)
-    {
-        this.region = region;
-    }
-
-    public String getRegion()
-    {
-        return region;
-    }
-    public void setStore(String store)
-    {
-        this.store = store;
-    }
-
-    public String getStore()
-    {
-        return store;
-    }
-    public void setClerk(String clerk)
-    {
-        this.clerk = clerk;
-    }
-
-    public String getClerk()
-    {
-        return clerk;
-    }
-    public void setCode(String code)
-    {
-        this.code = code;
-    }
-
-    public String getCode()
-    {
-        return code;
-    }
-    public void setDiscount(String discount)
-    {
-        this.discount = discount;
-    }
-
-    public String getDiscount()
-    {
-        return discount;
-    }
-    public void setFixedOffer(String fixedOffer)
-    {
-        this.fixedOffer = fixedOffer;
-    }
-
-    public String getFixedOffer()
-    {
-        return fixedOffer;
-    }
-    public void setFaxNumber(String faxNumber)
-    {
-        this.faxNumber = faxNumber;
-    }
-
-    public String getFaxNumber()
-    {
-        return faxNumber;
-    }
-    public void setCustomerType(String customerType)
-    {
-        this.customerType = customerType;
-    }
-
-    public String getCustomerType()
-    {
-        return customerType;
-    }
-    public void setApplicablePrice(String applicablePrice)
-    {
-        this.applicablePrice = applicablePrice;
-    }
-
-    public String getApplicablePrice()
-    {
-        return applicablePrice;
-    }
-    public void setBirthday(String birthday)
-    {
-        this.birthday = birthday;
-    }
-
-    public String getBirthday()
-    {
-        return birthday;
-    }
-    public void setResidualIntegral(String residualIntegral)
-    {
-        this.residualIntegral = residualIntegral;
-    }
-
-    public String getResidualIntegral()
-    {
-        return residualIntegral;
-    }
-    public void setBalance(String balance)
-    {
-        this.balance = balance;
-    }
-
-    public String getBalance()
-    {
-        return balance;
-    }
-    public void setParentCustomer(String parentCustomer)
-    {
-        this.parentCustomer = parentCustomer;
-    }
-
-    public String getParentCustomer()
-    {
-        return parentCustomer;
-    }
-    public void setMemberType(String memberType)
-    {
-        this.memberType = memberType;
-    }
-
-    public String getMemberType()
-    {
-        return memberType;
-    }
-    public void setPickDays(String pickDays)
-    {
-        this.pickDays = pickDays;
-    }
-
-    public String getPickDays()
-    {
-        return pickDays;
-    }
-    public void setOperator(String operator)
-    {
-        this.operator = operator;
-    }
-
-    public String getOperator()
-    {
-        return operator;
-    }
-    public void setOperatorTime(Date operatorTime)
-    {
-        this.operatorTime = operatorTime;
-    }
-
-    public Date getOperatorTime()
-    {
-        return operatorTime;
-    }
-
-    public String getQuota() {
-        return quota;
-    }
-
-    public void setQuota(String quota) {
-        this.quota = quota;
-    }
-
-    public String getModelNumber() {
-        return modelNumber;
-    }
-
-    public void setModelNumber(String modelNumber) {
-        this.modelNumber = modelNumber;
-    }
-
-    public String getProductName() {
-        return productName;
-    }
-
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
-            .append("statisticsId", getStatisticsId())
-            .append("name", getName())
-            .append("phoneNumber", getPhoneNumber())
-            .append("address", getAddress())
-            .append("storeRemark", getStoreRemark())
-            .append("region", getRegion())
-            .append("store", getStore())
-            .append("clerk", getClerk())
-            .append("code", getCode())
-            .append("discount", getDiscount())
-            .append("fixedOffer", getFixedOffer())
-            .append("faxNumber", getFaxNumber())
-            .append("customerType", getCustomerType())
-            .append("applicablePrice", getApplicablePrice())
-            .append("birthday", getBirthday())
-            .append("residualIntegral", getResidualIntegral())
-            .append("balance", getBalance())
-            .append("parentCustomer", getParentCustomer())
-            .append("memberType", getMemberType())
-            .append("quota", getQuota())
-            .append("modelNumber", getModelNumber())
-            .append("operator", getOperator())
-            .append("productName", getProductName())
-            .append("operatorTime", getOperatorTime())
-            .append("createBy", getCreateBy())
-            .append("createTime", getCreateTime())
-            .append("updateBy", getUpdateBy())
-            .append("updateTime", getUpdateTime())
-            .append("remark", getRemark())
-            .toString();
-    }
+    /** 特殊用户**/
+    private String specialUser;
+    /** 开始时间**/
+    private String startTime;
+    /** 结束时间**/
+    private String endTime;
+    /** 销售Id**/
+    private String saleId;
 }

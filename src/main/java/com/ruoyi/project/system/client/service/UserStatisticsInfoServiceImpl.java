@@ -3,17 +3,21 @@ package com.ruoyi.project.system.client.service;
 import java.util.List;
 
 import com.ruoyi.common.exception.BusinessException;
+import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
+import com.ruoyi.project.system.client.mapper.ClerkSaleInfoMapper;
 import com.ruoyi.project.system.client.mapper.UserStatisticsInfoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.utils.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 门店数据Service业务层处理
@@ -29,6 +33,18 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     @Autowired
     private UserStatisticsInfoMapper userStatisticsInfoMapper;
 
+    @Autowired
+    private ClerkSaleInfoMapper clerkSaleInfoMapper;
+    /**
+     * 判断是否是特殊用户
+     * @param statisticsId
+     * @return
+     */
+    @Override
+    public String getSpecialUserById(Long statisticsId) {
+        return userStatisticsInfoMapper.getSpecialUserById(statisticsId);
+    }
+
     /**
      * 查询门店数据
      *
@@ -36,9 +52,23 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
      * @return 门店数据
      */
     @Override
-    public UserStatisticsInfo selectUserStatisticsInfoById(Long statisticsId)
+    public UserStatisticsInfoDto selectUserStatisticsInfoById(Long statisticsId)
     {
-        return userStatisticsInfoMapper.selectUserStatisticsInfoById(statisticsId);
+        UserStatisticsInfoDto info = userStatisticsInfoMapper.selectUserStatisticsInfoById(statisticsId);
+        if(null != info){
+            if(StringUtils.isNotNull(info.getActualSales())){
+                if(info.getActualSales()>=10000){
+                    info.setMemberType("一级");
+                }else if(info.getActualSales()>=8000 && info.getActualSales()<=9999){
+                    info.setMemberType("二级");
+                }else if(info.getActualSales()>=5000 && info.getActualSales()<=7999){
+                    info.setMemberType("三级");
+                }else{
+                    info.setMemberType("四级");
+                }
+            }
+        }
+        return info;
     }
 
     /**
@@ -50,7 +80,29 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     @Override
     public List<UserStatisticsInfoDto> selectUserStatisticsInfoList(UserStatisticsInfo userStatisticsInfo)
     {
-        return userStatisticsInfoMapper.getUserStatisticsInfo(userStatisticsInfo);
+        List<UserStatisticsInfoDto> statisticsInfo = userStatisticsInfoMapper.getUserStatisticsInfo(userStatisticsInfo);
+        if(null != statisticsInfo){
+            statisticsInfo.stream().forEach(info->{
+                if(StringUtils.isNotEmpty(info.getSpecialUser())){
+                    if(info.getSpecialUser().equals(CommonUtils.NORMAL_USER)){
+                        info.setSpecialUser("否");
+                    }else{
+                        info.setSpecialUser("是");
+                    }
+                }
+
+                if(info.getActualSales()>=10000){
+                    info.setMemberType("一级");
+                }else if(info.getActualSales()>=8000 && info.getActualSales()<=9999){
+                    info.setMemberType("二级");
+                }else if(info.getActualSales()>=5000 && info.getActualSales()<=7999){
+                    info.setMemberType("三级");
+                }else{
+                    info.setMemberType("四级");
+                }
+            });
+        }
+        return statisticsInfo;
     }
 
 
@@ -62,6 +114,16 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     @Override
     public List<UserStatisticsInfoDto> getSpecialUserInfo(UserStatisticsInfo userStatisticsInfo) {
         return userStatisticsInfoMapper.getSpecialUserInfo(userStatisticsInfo);
+    }
+
+    /**
+     * 根据ID查询特殊用户
+     * @param statisticsId
+     * @return
+     */
+    @Override
+    public UserStatisticsInfoDto getSpecialUserByIdInfo(Long statisticsId) {
+        return userStatisticsInfoMapper.getSpecialUserByIdInfo(statisticsId);
     }
 
     /**
@@ -86,6 +148,16 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     }
 
     /**
+     * 根据ID查询销售纪录
+     * @param saleId
+     * @return
+     */
+    @Override
+    public UserStatisticsInfoDto getSaleRecordById(Long saleId) {
+        return userStatisticsInfoMapper.getSaleRecordById(saleId);
+    }
+
+    /**
      * 新增门店数据
      *
      * @param userStatisticsInfo 门店数据
@@ -105,8 +177,16 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
      * @return 结果
      */
     @Override
+    @Transactional
     public int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo)
     {
+        //修改销售数据
+        ClerkSaleInfo saleInfo = ClerkSaleInfo.builder().customerId(userStatisticsInfo
+                .getStatisticsId())
+                .modelNumber(StringUtils.isNotEmpty(userStatisticsInfo.getModelNumber())?userStatisticsInfo.getModelNumber():null)
+                .productName(StringUtils.isNotEmpty(userStatisticsInfo.getProductName())?userStatisticsInfo.getProductName():null).build();
+        saleInfo.setUpdateTime(DateUtils.getNowDate());
+        clerkSaleInfoMapper.updateClerkSaleByCustomerId(saleInfo);
         userStatisticsInfo.setUpdateTime(DateUtils.getNowDate());
         return userStatisticsInfoMapper.updateUserStatisticsInfo(userStatisticsInfo);
     }
@@ -160,12 +240,18 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
             {
                 if (StringUtils.isNotEmpty(user.getName()))
                 {
+                    if(StringUtils.isNotEmpty(user.getOperatorTime())){
+                        user.setOperatorTime("20"+user.getOperatorTime());
+                    }
                     this.insertUserStatisticsInfo(user);
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、账号 " + user.getName() + " 导入成功");
                 }
                 else if (isUpdateSupport)
                 {
+                    if(StringUtils.isNotEmpty(user.getOperatorTime())){
+                        user.setOperatorTime("20"+user.getOperatorTime());
+                    }
                     user.setUpdateBy(user.getOperator());
                     this.updateUserStatisticsInfo(user);
                     successNum++;

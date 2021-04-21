@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" >
 <head>
-    <th:block th:include="include :: header('修改后台销售纪录')" />
+    <th:block th:include="include :: header('修改特殊用户管理纪录')" />
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-client-edit" th:object="${userStatisticsInfo}">
+        <form class="form-horizontal m" id="form-special-edit" th:object="${userStatisticsInfo}">
             <input name="statisticsId" th:field="*{statisticsId}" type="hidden">
 
             <div class="form-group">
@@ -39,21 +39,9 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">累计销售额：</label>
+                <label class="col-sm-3 control-label">累计销售金额：</label>
                 <div class="col-sm-8">
                     <input name="actualSales" th:field="*{actualSales}" class="form-control" type="text" disabled="true">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">累计实销数：</label>
-                <div class="col-sm-8">
-                    <input name="refundAmount" th:field="*{refundAmount}" class="form-control" type="text" disabled="true">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">累计拿货次数：</label>
-                <div class="col-sm-8">
-                    <input name="goodsFrequency" th:field="*{goodsFrequency}" class="form-control" type="text" disabled="true">
                 </div>
             </div>
             <div class="form-group">
@@ -62,36 +50,18 @@
                     <input name="lastGoods" th:field="*{lastGoods}" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label  is-required">分店名称：</label>
-                <div class="col-sm-8">
-                    <input name="store" th:field="*{store}" class="form-control" type="text"  disabled="true">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">录入时间：</label>
-                <div class="col-sm-8">
-                    <input name="operatorTime" th:field="*{operatorTime}" class="form-control" type="text">
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-3 control-label">操作人：</label>
-                <div class="col-sm-8">
-                    <input name="operator" th:field="*{operator}" class="form-control" type="text">
-                </div>
-            </div>
         </form>
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var prefix = ctx + "system/client";
-        $("#form-client-edit").validate({
+        var prefix = ctx + "system/special";
+        $("#form-special-edit").validate({
             focusCleanup: true
         });
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/edit", $('#form-client-edit').serialize());
+                $.operate.save(prefix + "/edit", $('#form-special-edit').serialize());
             }
         }
     </script>

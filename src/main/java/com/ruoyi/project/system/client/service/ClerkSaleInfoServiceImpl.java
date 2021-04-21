@@ -132,6 +132,9 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
                 if(user!= null){
                     if (StringUtils.isNotEmpty(sale.getCustomer()))
                     {
+                        if(StringUtils.isNotEmpty(sale.getLastGoods())){
+                            user.setOperatorTime("20"+sale.getLastGoods());
+                        }
                         sale.setCreateBy(user.getOperator());
                         sale.setCustomerId(user.getStatisticsId());
                         this.insertClerkSaleInfo(sale);

@@ -2,6 +2,7 @@ package com.ruoyi.project.system.client.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
@@ -115,16 +116,48 @@ public class UserStatisticsInfoController extends BaseController
     }
 
     /**
-     * 修改门店数据
+     * 详情
      */
     @GetMapping("/edit/{statisticsId}")
     public String edit(@PathVariable("statisticsId") Long statisticsId, ModelMap mmap)
     {
-        UserStatisticsInfo userStatisticsInfo = userStatisticsInfoService.selectUserStatisticsInfoById(statisticsId);
+        UserStatisticsInfoDto userStatisticsInfo = userStatisticsInfoService.selectUserStatisticsInfoById(statisticsId);
         mmap.put("userStatisticsInfo", userStatisticsInfo);
         return prefix + "/edit";
     }
+    /**
+     * 升级用户
+     */
+    @ResponseBody
+    @RequiresPermissions("system:client:edit")
+    @Log(title = "用户升级", businessType = BusinessType.UPDATE)
+    @PostMapping("/specialUserEdit")
+    public AjaxResult specialUserEdit(UserStatisticsInfo userStatisticsInfo)
+    {
+        String specialUserById = userStatisticsInfoService.getSpecialUserById(userStatisticsInfo.getStatisticsId());
+        if(CommonUtils.SPECIAL_USER.equals(specialUserById)){
+            return error("升级用户'" + userStatisticsInfo.getName() + "'失败，该用户是特殊用户");
+        }
+        userStatisticsInfo.setSpecialUser(CommonUtils.SPECIAL_USER);
+        return toAjax(userStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
+    }
 
+    /**
+     * 升级用户
+     */
+    @ResponseBody
+    @RequiresPermissions("system:client:edit")
+    @Log(title = "用户减分", businessType = BusinessType.UPDATE)
+    @PostMapping("/scoreReduction")
+    public AjaxResult ScoreReduction(UserStatisticsInfo userStatisticsInfo)
+    {
+        String specialUserById = userStatisticsInfoService.getSpecialUserById(userStatisticsInfo.getStatisticsId());
+        if(CommonUtils.SPECIAL_USER.equals(specialUserById)){
+            return error("减分用户'" + userStatisticsInfo.getName() + "'失败，该用户是特殊用户");
+        }
+        userStatisticsInfo.setSpecialUser(CommonUtils.SPECIAL_USER);
+        return toAjax(userStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
+    }
     /**
      * 修改保存门店数据
      */
@@ -134,6 +167,10 @@ public class UserStatisticsInfoController extends BaseController
     @ResponseBody
     public AjaxResult editSave(UserStatisticsInfo userStatisticsInfo)
     {
+        String specialUserById = userStatisticsInfoService.getSpecialUserById(userStatisticsInfo.getStatisticsId());
+        if(CommonUtils.SPECIAL_USER.equals(specialUserById)){
+            return error("修改用户'" + userStatisticsInfo.getName() + "'失败，该用户是特殊用户");
+        }
         return toAjax(userStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
     }
 

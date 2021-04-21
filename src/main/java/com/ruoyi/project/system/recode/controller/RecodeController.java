@@ -1,6 +1,9 @@
 package com.ruoyi.project.system.recode.controller;
 
+import com.ruoyi.framework.aspectj.lang.annotation.Log;
+import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.framework.web.controller.BaseController;
+import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.framework.web.page.TableDataInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
@@ -8,10 +11,8 @@ import com.ruoyi.project.system.client.service.IUserStatisticsInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -48,5 +49,40 @@ public class RecodeController extends BaseController
         startPage();
         List<UserStatisticsInfoDto> list = iUserStatisticsInfoService.getSaleRecordInfo(userStatisticsInfo);
         return getDataTable(list);
+    }
+
+    /**
+     * 详情
+     */
+    @GetMapping("/edit/{saleId}")
+    public String edit(@PathVariable("saleId") Long saleId, ModelMap mmap)
+    {
+        UserStatisticsInfoDto userStatisticsInfo = iUserStatisticsInfoService.getSaleRecordById(saleId);
+        mmap.put("userStatisticsInfo", userStatisticsInfo);
+        return prefix + "/edit";
+    }
+
+    /**
+     * 修改销售纪录数据
+     */
+    @RequiresPermissions("system:recode:edit")
+    @Log(title = "修改特殊用户数据", businessType = BusinessType.UPDATE)
+    @PostMapping("/edit")
+    @ResponseBody
+    public AjaxResult editSave(UserStatisticsInfo userStatisticsInfo)
+    {
+        return toAjax(iUserStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
+    }
+
+    /**
+     * 删除销售纪录
+     */
+    @RequiresPermissions("system:recode:remove")
+    @Log(title = "删除销售纪录", businessType = BusinessType.DELETE)
+    @PostMapping( "/remove")
+    @ResponseBody
+    public AjaxResult remove(UserStatisticsInfo userStatisticsInfo)
+    {
+        return toAjax(iUserStatisticsInfoService.deleteUserStatisticsInfoById(userStatisticsInfo.getStatisticsId()));
     }
 }

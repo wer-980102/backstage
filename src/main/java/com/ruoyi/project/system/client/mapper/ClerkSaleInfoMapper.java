@@ -48,8 +48,14 @@ public interface ClerkSaleInfoMapper
      * @param clerkSaleInfo 销售纪录
      * @return 结果
      */
-    public int updateClerkSaleInfo(ClerkSaleInfo clerkSaleInfo);
-
+     int updateClerkSaleInfo(ClerkSaleInfo clerkSaleInfo);
+    /**
+     * 根据客户ID修改销售纪录
+     *
+     * @param clerkSaleInfo 销售纪录
+     * @return 结果
+     */
+    int updateClerkSaleByCustomerId(ClerkSaleInfo clerkSaleInfo);
     /**
      * 删除销售纪录
      *

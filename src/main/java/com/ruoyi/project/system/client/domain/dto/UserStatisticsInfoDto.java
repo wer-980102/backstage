@@ -25,7 +25,7 @@ public class UserStatisticsInfoDto extends BaseEntity {
     /** 累计销售月数**/
     private String saleMonth;
     /** 累计销售额**/
-    private String actualSales;
+    private double actualSales;
     /**  累计实销数**/
     private String refundAmount;
     /** 累计拿货次数**/
@@ -42,4 +42,8 @@ public class UserStatisticsInfoDto extends BaseEntity {
     private String modelNumber;
     /** 产品名称**/
     private String productName;
+    /** 特殊用户：将客户标识为特殊客户，特殊客户不受手动减分操作**/
+    private String specialUser;
+    /** 销售Id**/
+    private String saleId;
 }

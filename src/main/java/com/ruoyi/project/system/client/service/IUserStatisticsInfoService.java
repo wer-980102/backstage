@@ -14,12 +14,18 @@ import java.util.List;
 public interface IUserStatisticsInfoService
 {
     /**
+     * 判断是否是特殊用户
+     * @param statisticsId
+     * @return
+     */
+    String getSpecialUserById(Long statisticsId);
+    /**
      * 查询门店数据
      *
      * @param statisticsId 门店数据ID
      * @return 门店数据
      */
-    public UserStatisticsInfo selectUserStatisticsInfoById(Long statisticsId);
+    public UserStatisticsInfoDto selectUserStatisticsInfoById(Long statisticsId);
 
     /**
      * 查询门店数据列表
@@ -37,6 +43,12 @@ public interface IUserStatisticsInfoService
     List<UserStatisticsInfoDto> getSpecialUserInfo(UserStatisticsInfo userStatisticsInfo);
 
     /**
+     * 根据ID查询特殊用户
+     * @param statisticsId
+     * @return
+     */
+    UserStatisticsInfoDto getSpecialUserByIdInfo(Long statisticsId);
+    /**
      * 查询销售纪录管理
      * @param userStatisticsInfo
      * @return
@@ -48,6 +60,13 @@ public interface IUserStatisticsInfoService
      * @return
      */
     UserStatisticsInfo getUserById(String name);
+
+    /**
+     * 根据ID查询销售纪录
+     * @param saleId
+     * @return
+     */
+    UserStatisticsInfoDto getSaleRecordById(Long saleId);
     /**
      * 新增门店数据
      *

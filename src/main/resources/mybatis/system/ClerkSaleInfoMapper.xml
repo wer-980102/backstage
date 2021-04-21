@@ -116,6 +116,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where sale_id = #{saleId}
     </update>
 
+    <update id="updateClerkSaleByCustomerId" parameterType="ClerkSaleInfo">
+        update clerk_sale_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="modelNumber != null">model_number = #{modelNumber},</if>
+            <if test="productName != null and productName != ''">product_name = #{productName},</if>
+            <if test="brand != null">brand = #{brand},</if>
+            <if test="customer != null">customer = #{customer},</if>
+            <if test="sales != null">sales = #{sales},</if>
+            <if test="store != null">store = #{store},</if>
+            <if test="refundAmount != null">refund_amount = #{refundAmount},</if>
+            <if test="actualSales != null">actual_sales = #{actualSales},</if>
+            <if test="lastGoods != null">last_goods = #{lastGoods},</if>
+            <if test="goodsFrequency != null">goods_frequency = #{goodsFrequency},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where customer_id = #{customerId}
+    </update>
     <delete id="deleteClerkSaleInfoById" parameterType="Long">
         delete from clerk_sale_info where sale_id = #{saleId}
     </delete>
