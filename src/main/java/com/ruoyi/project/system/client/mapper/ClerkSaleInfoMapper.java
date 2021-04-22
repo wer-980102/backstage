@@ -26,6 +26,13 @@ public interface ClerkSaleInfoMapper
      * @return
      */
     ClerkSaleInfo getClerkSaleInfo(String customer);
+
+    /**
+     * 计算用户累计销售额
+     * @param customerId
+     * @return
+     */
+    Integer getActualSalesInfo(Long customerId);
     /**
      * 查询销售纪录列表
      *
@@ -62,7 +69,7 @@ public interface ClerkSaleInfoMapper
      * @param saleId 销售纪录ID
      * @return 结果
      */
-    public int deleteClerkSaleInfoById(Long saleId);
+     int deleteClerkSaleInfoById(Long saleId);
 
     /**
      * 批量删除销售纪录

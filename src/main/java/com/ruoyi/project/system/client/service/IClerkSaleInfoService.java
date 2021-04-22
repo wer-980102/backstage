@@ -58,7 +58,7 @@ public interface IClerkSaleInfoService
      * @param saleId 销售纪录ID
      * @return 结果
      */
-    public int deleteClerkSaleInfoById(Long saleId);
+     int deleteClerkSaleInfoById(Long saleId);
 
     /**
      * 导入销售数据

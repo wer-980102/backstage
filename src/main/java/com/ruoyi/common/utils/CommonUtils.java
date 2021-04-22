@@ -25,7 +25,47 @@ public class CommonUtils {
      **/
     public static final String SPECIAL_USER = "1";
 
+    /**
+     * 计算积分
+     * @param param
+     * @return
+     */
+    public static Integer getIntegralInfo(Integer param)  {
+        if(param>=10000){
+            return 12;
+        }else if(param>=8000 && param<=9999){
+            return 9;
+        }else if(param>=5000 && param<=7999){
+            return 6;
+        }else{
+            return 3;
+        }
+    }
 
+    /**
+     * 计算月积分
+     * @param param
+     * @return
+     */
+    public static  Integer getPlusIntegralInfo(Integer param)  {
+        if(param>10000){
+            return param+1;
+        }else if(param<=1000){
+            return param>0?param-1:0;
+        }else if(param>8000){
+            return param+1;
+        }else if(param<=8000){
+            return param>0?param-1:0;
+        }else if(param>5000){
+            return param+1;
+        }else if(param<=5000){
+            return param>0?param-1:0;
+        }else if(param>3000){
+            return param+1;
+        }else{
+            return param>0?param-1:0;
+        }
+    }
 
 /** 获取*/
     /**

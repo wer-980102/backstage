@@ -1,63 +1,95 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('通知公告列表')" />
+    <th:block th:include="include :: header('规则信息列表')" />
 </head>
 <body class="gray-bg">
-    <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="notice-form">
-					<div class="select-list">
-						<ul>
-							<li>
-								客户名称：<input type="text" name="name"/>
-							</li>
-							<li>
-								变动类型：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
-								<option value="">所有</option>
-								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-							</select>
-							</li>
-							<li class="select-time">
-								<label>创建时间： </label>
-								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
-								<span>-</span>
-								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
-							</li>
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
+     <div class="container-div">
+        <div class="row">
+           <!-- <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>客户ID：</label>
+                                <input type="text" name="customerId"/>
+                            </li>
+                            <li>
+                                <label>客户：</label>
+                                <input type="text" name="customerName"/>
+                            </li>
+                            <li>
+                                <label>总积分：</label>
+                                <input type="text" name="integral"/>
+                            </li>
+                            <li>
+                                <label>积分规则：</label>
+                                <input type="text" name="integralRule"/>
+                            </li>
+                            <li>
+                                <label>规则描述：</label>
+                                <input type="text" name="integralRemark"/>
+                            </li>
+                            <li>
+                                <label>积分变动情况：</label>
+                                <input type="text" name="changeSituation"/>
+                            </li>
+                            <li>
+                                <label>积分变动类型：</label>
+                                <select name="changeType">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>积分变动名称：</label>
+                                <input type="text" name="changeName"/>
+                            </li>
+                            <li>
+                                <label>状态：</label>
+                                <select name="status">
+                                    <option value="">所有</option>
+                                    <option value="-1">代码生成请选择字典属性</option>
+                                </select>
+                            </li>
+                            <li>
+                                <label>操作人：</label>
+                                <input type="text" name="operator"/>
+                            </li>
+                            <li>
+                                <label>操作时间：</label>
+                                <input type="text" class="time-input" placeholder="请选择操作时间" name="operatorTime"/>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>-->
 
-	        <div class="btn-group-sm" id="toolbar" role="group">
-		        <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="system:notice:add">
-		            <i class="fa fa-plus"></i> 新增
-		        </a>
-		        <a class="btn btn-primary single disabled" onclick="$.operate.editFull()" shiro:hasPermission="system:notice:edit">
-		            <i class="fa fa-edit"></i> 修改
-		        </a>
-		        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:notice:remove">
-		            <i class="fa fa-remove"></i> 删除
-		        </a>
-	        </div>
-
-	        <div class="col-sm-12 select-table table-striped">
-	            <table id="bootstrap-table"></table>
-	        </div>
-    	</div>
+            <div class="btn-group-sm" id="toolbar" role="group">
+                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:integral:add">
+                    <i class="fa fa-plus"></i> 一键增加规则
+                </a>
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:integral:edit">
+                    <i class="fa fa-edit"></i> 修改
+                </a>
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:integral:remove">
+                    <i class="fa fa-remove"></i> 删除
+                </a>
+            </div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:notice:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:notice:remove')}]];
-        var types = [[${@dict.getType('sys_notice_type')}]];
-        var datas = [[${@dict.getType('sys_notice_status')}]];
-        var prefix = ctx + "system/notice";
+        var editFlag = [[${@permission.hasPermi('system:integral:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:integral:remove')}]];
+        var prefix = ctx + "system/integral";
 
         $(function() {
             var options = {
@@ -65,47 +97,93 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
-                modalName: "公告",
+                exportUrl: prefix + "/export",
+                modalName: "积分规则管理",
                 columns: [{
-		            checkbox: true
-		        },
-					{
-						field: 'name',
-						title: '积分规则'
-					},
-					{
-						field: 'phoneNumber',
-						title: '规则描述',
-						sortable: true
-					},
-					{
-						field: 'memberType',
-						title: '录入人',
-						sortable: true
-					},
-					{
-						field: 'customerType',
-						title: '录入时间',
-						sortable: true
-					},
-					{
-						field: 'monthsales',
-						title: '状态',
-						sortable: true
-					},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.noticeId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.noticeId + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
+                    checkbox: true
+                },
+                {
+                    field: 'integralId',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'customerId',
+                    title: '客户ID',
+                    visible: false
+                },
+                {
+                    field: 'integralRule',
+                    title: '积分规则',
+                    align: 'center'
+                },
+                {
+                    field: 'integralRemark',
+                    title: '规则描述',
+                    align: 'center'
+                },
+                {
+                    // field: 'status',
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '状态',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
+                    field: 'operator',
+                    title: '录入人',
+                    align: 'center'
+                },
+                {
+                    field: 'operatorTime',
+                    title: '录入时间',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.integralId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="deleteIntegral(\'' + row.integralId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
             };
             $.table.init(options);
         });
+
+        /* 状态显示 */
+        function statusTools(row) {
+            if (row.status == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.customerId + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.customerId + '\')"></i> ';
+            }
+        }
+
+        /* 状态-停用 */
+        function disable(customerId) {
+            $.modal.confirm("确认要停用该规则吗？", function() {
+                $.operate.post(prefix + "/edit", { "customerId": customerId, "status": 1 });
+            })
+        }
+
+        /* 状态-启用 */
+        function enable(customerId) {
+            $.modal.confirm("确认要启用该规则吗？", function() {
+                $.operate.post(prefix + "/edit", { "customerId": customerId, "status": 0 });
+            })
+        }
+
+        /* 升级用户*/
+        function deleteIntegral(id) {
+            $.modal.confirm("确认要删除该条积分规则吗？", function() {
+                $.operate.post(prefix + "/deleteIntegral", { "integralId": id});
+            })
+        }
     </script>
 </body>
 </html>

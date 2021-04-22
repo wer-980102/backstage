@@ -67,6 +67,12 @@ public interface IUserStatisticsInfoService
      * @return
      */
     UserStatisticsInfoDto getSaleRecordById(Long saleId);
+
+    /**
+     * 定时计算积分
+     * @return
+     */
+    List<UserStatisticsInfoDto> getTimingInfo();
     /**
      * 新增门店数据
      *
@@ -81,7 +87,7 @@ public interface IUserStatisticsInfoService
      * @param userStatisticsInfo 门店数据
      * @return 结果
      */
-    public int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
+     int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
 
     /**
      * 批量删除门店数据

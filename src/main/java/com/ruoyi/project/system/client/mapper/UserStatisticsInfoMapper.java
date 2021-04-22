@@ -75,6 +75,12 @@ public interface UserStatisticsInfoMapper
      * @return
      */
     UserStatisticsInfoDto getSaleRecordById(Long statisticsId);
+
+    /**
+     * 定时计算积分
+     * @return
+     */
+    List<UserStatisticsInfoDto> getTimingInfo();
     /**
      * 新增门店数据
      *

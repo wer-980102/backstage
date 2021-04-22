@@ -56,6 +56,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="getActualSalesInfo" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select
+            sum(actual_sales) as actualSales
+        from clerk_sale_info
+        where customer_id = #{customerId}
+    </select>
     <insert id="insertClerkSaleInfo" parameterType="ClerkSaleInfo" useGeneratedKeys="true" keyProperty="saleId">
         insert into clerk_sale_info
         <trim prefix="(" suffix=")" suffixOverrides=",">

@@ -122,5 +122,5 @@ public class UserStatisticsInfo extends BaseEntity
     /** 结束时间**/
     private String endTime;
     /** 销售Id**/
-    private String saleId;
+    private Long saleId;
 }

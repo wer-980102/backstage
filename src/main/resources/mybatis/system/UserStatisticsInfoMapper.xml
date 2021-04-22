@@ -346,6 +346,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="getSaleRecordById" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
         SELECT
+        csi.sale_id as saleId,
         usi.statistics_id AS statisticsId,
         usi.NAME AS name,
         csi.model_number AS modelNumber,
@@ -371,6 +372,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         usi.customer_type,
         csi.last_goods
         order by csi.last_goods desc,usi.statistics_id desc
+    </select>
+
+    <select id="getTimingInfo" resultType="UserStatisticsInfoDto">
+        SELECT
+            usi.statistics_id AS statisticsId,
+            usi.NAME AS NAME,
+            sum( csi.actual_sales ) AS actualSales,
+            usi.operator,
+            t1.lastGoods
+        FROM
+            user_statistics_info usi
+                INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
+                INNER JOIN ( SELECT customer_id AS customerId, max( last_goods ) AS lastGoods FROM clerk_sale_info GROUP BY customerId ) t1 ON usi.statistics_id = t1.customerId
+        GROUP BY
+            usi.statistics_id,
+            usi.NAME
     </select>
     <insert id="insertUserStatisticsInfo" parameterType="UserStatisticsInfo" useGeneratedKeys="true" keyProperty="statisticsId">
         insert into user_statistics_info

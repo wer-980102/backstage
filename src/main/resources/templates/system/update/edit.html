@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改积分')" />
+    <th:block th:include="include :: datetimepicker-css" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-update-edit" th:object="${userIntegralInfo}">
+            <input name="integralId" th:field="*{integralId}" type="hidden">
+            <input name="customerId" th:field="*{customerId}" type="hidden">
+            <div class="form-group">
+                <label class="col-sm-3 control-label">客户：</label>
+                <div class="col-sm-8">
+                    <input name="customerName" th:field="*{customerName}" class="form-control" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">总积分：</label>
+                <div class="col-sm-8">
+                    <input name="integral" th:field="*{integral}" class="form-control" type="text" disabled="true">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">积分变动情况：</label>
+                <div class="col-sm-8">
+                    <input name="changeSituation" th:field="*{changeSituation}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">积分变动类型：</label>
+                <div class="col-sm-8">
+                    <select name="changeType" class="form-control m-b">
+                        <option value="">所有</option>
+                        <option value="初始化">初始化</option>
+                        <option value="年调整">年调整</option>
+                        <option value="月调整">月调整</option>
+                        <option value="日调整">日调整</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">积分变动名称：</label>
+                <div class="col-sm-8">
+                    <input name="changeName" th:field="*{changeName}" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3 control-label">创建时间：</label>
+                <div class="col-sm-8">
+                    <input name="operatorTime" th:field="*{operatorTime}" class="form-control" type="text"  disabled="true">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <th:block th:include="include :: datetimepicker-js" />
+    <script th:inline="javascript">
+        var prefix = ctx + "system/update";
+        $("#form-update-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-update-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

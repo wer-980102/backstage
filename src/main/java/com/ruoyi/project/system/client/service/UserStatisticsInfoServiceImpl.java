@@ -158,6 +158,15 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     }
 
     /**
+     * 定时计算积分
+     * @return
+     */
+    @Override
+    public List<UserStatisticsInfoDto> getTimingInfo() {
+        return userStatisticsInfoMapper.getTimingInfo();
+    }
+
+    /**
      * 新增门店数据
      *
      * @param userStatisticsInfo 门店数据
@@ -181,14 +190,12 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     public int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo)
     {
         //修改销售数据
-        ClerkSaleInfo saleInfo = ClerkSaleInfo.builder().customerId(userStatisticsInfo
-                .getStatisticsId())
+        ClerkSaleInfo saleInfo = ClerkSaleInfo.builder()
+                .saleId(userStatisticsInfo.getSaleId())
                 .modelNumber(StringUtils.isNotEmpty(userStatisticsInfo.getModelNumber())?userStatisticsInfo.getModelNumber():null)
                 .productName(StringUtils.isNotEmpty(userStatisticsInfo.getProductName())?userStatisticsInfo.getProductName():null).build();
         saleInfo.setUpdateTime(DateUtils.getNowDate());
-        clerkSaleInfoMapper.updateClerkSaleByCustomerId(saleInfo);
-        userStatisticsInfo.setUpdateTime(DateUtils.getNowDate());
-        return userStatisticsInfoMapper.updateUserStatisticsInfo(userStatisticsInfo);
+        return clerkSaleInfoMapper.updateClerkSaleInfo(saleInfo);
     }
 
     /**

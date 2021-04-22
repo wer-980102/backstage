@@ -7,6 +7,7 @@ import com.ruoyi.framework.web.domain.AjaxResult;
 import com.ruoyi.framework.web.page.TableDataInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
+import com.ruoyi.project.system.client.service.IClerkSaleInfoService;
 import com.ruoyi.project.system.client.service.IUserStatisticsInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class RecodeController extends BaseController
 
     @Autowired
     private IUserStatisticsInfoService iUserStatisticsInfoService;
+
+    @Autowired
+    private IClerkSaleInfoService clerkSaleInfoService;
 
     @RequiresPermissions("system:recode:view")
     @GetMapping()
@@ -83,6 +87,6 @@ public class RecodeController extends BaseController
     @ResponseBody
     public AjaxResult remove(UserStatisticsInfo userStatisticsInfo)
     {
-        return toAjax(iUserStatisticsInfoService.deleteUserStatisticsInfoById(userStatisticsInfo.getStatisticsId()));
+        return toAjax(clerkSaleInfoService.deleteClerkSaleInfoById(userStatisticsInfo.getSaleId()));
     }
 }

@@ -1,63 +1,48 @@
 <!DOCTYPE html>
 <html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
 <head>
-	<th:block th:include="include :: header('通知公告列表')" />
+    <th:block th:include="include :: header('积分变动管理')" />
 </head>
 <body class="gray-bg">
-    <div class="container-div">
-		<div class="row">
-			<div class="col-sm-12 search-collapse">
-				<form id="notice-form">
-					<div class="select-list">
-						<ul>
-							<li>
-								客户名称：<input type="text" name="name"/>
-							</li>
-							<li>
-								变动类型：<select name="status" th:with="type=${@dict.getType('sys_normal_disable')}">
-								<option value="">所有</option>
-								<option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
-							</select>
-							</li>
-							<li class="select-time">
-								<label>创建时间： </label>
-								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="params[beginTime]"/>
-								<span>-</span>
-								<input type="text" class="time-input" id="endTime" placeholder="结束时间" name="params[endTime]"/>
-							</li>
-							<li>
-								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-							</li>
-						</ul>
-					</div>
-				</form>
-			</div>
+     <div class="container-div">
+        <div class="row">
+            <div class="col-sm-12 search-collapse">
+                <form id="formId">
+                    <div class="select-list">
+                        <ul>
+                            <li>
+                                <label>客户名称：</label>
+                                <input type="text" name="customerName"/>
+                            </li>
+                            <li>
+                                <label>变动类型：</label>
+                                <select name="changeType">
+                                    <option value="">所有</option>
+                                    <option value="初始化">初始化</option>
+                                    <option value="年调整">年调整</option>
+                                    <option value="月调整">月调整</option>
+                                    <option value="日调整">日调整</option>
+                                </select>
+                            </li>
+                            <li>
+                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+                            </li>
+                        </ul>
+                    </div>
+                </form>
+            </div>
 
-	        <div class="btn-group-sm" id="toolbar" role="group">
-		        <a class="btn btn-success" onclick="$.operate.addFull()" shiro:hasPermission="system:notice:add">
-		            <i class="fa fa-plus"></i> 新增
-		        </a>
-		        <a class="btn btn-primary single disabled" onclick="$.operate.editFull()" shiro:hasPermission="system:notice:edit">
-		            <i class="fa fa-edit"></i> 修改
-		        </a>
-		        <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:notice:remove">
-		            <i class="fa fa-remove"></i> 删除
-		        </a>
-	        </div>
-
-	        <div class="col-sm-12 select-table table-striped">
-	            <table id="bootstrap-table"></table>
-	        </div>
-    	</div>
+            <div class="col-sm-12 select-table table-striped">
+                <table id="bootstrap-table"></table>
+            </div>
+        </div>
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var editFlag = [[${@permission.hasPermi('system:notice:edit')}]];
-        var removeFlag = [[${@permission.hasPermi('system:notice:remove')}]];
-        var types = [[${@dict.getType('sys_notice_type')}]];
-        var datas = [[${@dict.getType('sys_notice_status')}]];
-        var prefix = ctx + "system/notice";
+        var editFlag = [[${@permission.hasPermi('system:update:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:update:remove')}]];
+        var prefix = ctx + "system/update";
 
         $(function() {
             var options = {
@@ -65,52 +50,71 @@
                 createUrl: prefix + "/add",
                 updateUrl: prefix + "/edit/{id}",
                 removeUrl: prefix + "/remove",
-                modalName: "公告",
+                exportUrl: prefix + "/export",
+                modalName: "积分规则",
                 columns: [{
-		            checkbox: true
-		        },
-					{
-						field: 'name',
-						title: '客户名称'
-					},
-					{
-						field: 'phoneNumber',
-						title: '总积分',
-						sortable: true
-					},
-					{
-						field: 'memberType',
-						title: '变动情况',
-						sortable: true
-					},
-					{
-						field: 'customerType',
-						title: '变动类型',
-						sortable: true
-					},
-					{
-						field: 'monthsales',
-						title: '变动原因',
-						sortable: true
-					},
-					{
-						field: 'actualSales',
-						title: '创建时间',
-						sortable: true
-					},
-		        {
-		            title: '操作',
-		            align: 'center',
-		            formatter: function(value, row, index) {
-		            	var actions = [];
-		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.editFull(\'' + row.noticeId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.noticeId + '\')"><i class="fa fa-remove"></i>删除</a>');
-						return actions.join('');
-		            }
-		        }]
+                    checkbox: true
+                },
+                {
+                    field: 'integralId',
+                    title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'customerId',
+                    title: '客户ID',
+                    visible: false
+                },
+                {
+                    field: 'customerName',
+                    title: '客户名称',
+                    align: 'center'
+                },
+                {
+                    field: 'integral',
+                    title: '总积分',
+                    align: 'center'
+                },
+                {
+                    field: 'changeSituation',
+                    title: '积分变动情况',
+                    align: 'center'
+                },
+                {
+                    field: 'changeType',
+                    title: '积分变动类型',
+                    align: 'center'
+                },
+                {
+                    field: 'changeName',
+                    title: '积分变动原因',
+                    align: 'center'
+                },
+                {
+                    field: 'operatorTime',
+                    title: '创建时间',
+                    align: 'center'
+                },
+                {
+                    title: '操作',
+                    align: 'center',
+                    formatter: function(value, row, index) {
+                        var actions = [];
+                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.integralId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="deleteIntegral(\'' + row.integralId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        return actions.join('');
+                    }
+                }]
             };
             $.table.init(options);
         });
+
+        /* 升级用户*/
+        function deleteIntegral(id) {
+            $.modal.confirm("确认要删除该条积分规则吗？", function() {
+                $.operate.post(prefix + "/remove", { "integralId": id});
+            })
+        }
     </script>
 </body>
 </html>

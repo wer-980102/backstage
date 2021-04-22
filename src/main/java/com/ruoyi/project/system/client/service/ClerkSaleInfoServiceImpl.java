@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.utils.text.Convert;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 销售纪录Service业务层处理
@@ -112,6 +113,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
      * @return 结果
      */
     @Override
+    @Transactional
     public String importUser(List<ClerkSaleInfo> saleInfoList, Boolean isUpdateSupport)
     {
         if (StringUtils.isNull(saleInfoList) || saleInfoList.size() == 0)
@@ -132,6 +134,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
                 if(user!= null){
                     if (StringUtils.isNotEmpty(sale.getCustomer()))
                     {
+
                         if(StringUtils.isNotEmpty(sale.getLastGoods())){
                             user.setOperatorTime("20"+sale.getLastGoods());
                         }
