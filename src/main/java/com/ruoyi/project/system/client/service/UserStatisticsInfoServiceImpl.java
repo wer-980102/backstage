@@ -10,6 +10,7 @@ import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.client.mapper.ClerkSaleInfoMapper;
 import com.ruoyi.project.system.client.mapper.UserStatisticsInfoMapper;
 import org.slf4j.Logger;
@@ -162,8 +163,18 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
      * @return
      */
     @Override
-    public List<UserStatisticsInfoDto> getTimingInfo() {
-        return userStatisticsInfoMapper.getTimingInfo();
+    public List<UserStatisticsInfoDto> getTimingInfo(TimeInfoParam param) {
+        return userStatisticsInfoMapper.getTimingInfo(param);
+    }
+
+
+    /**
+     * 定时计算所有额度
+     * @return
+     */
+    @Override
+    public List<UserStatisticsInfoDto> getTimingSumInfo(TimeInfoParam param) {
+        return userStatisticsInfoMapper.getTimingSumInfo(param);
     }
 
     /**
@@ -196,6 +207,18 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
                 .productName(StringUtils.isNotEmpty(userStatisticsInfo.getProductName())?userStatisticsInfo.getProductName():null).build();
         saleInfo.setUpdateTime(DateUtils.getNowDate());
         return clerkSaleInfoMapper.updateClerkSaleInfo(saleInfo);
+    }
+
+    /**
+     * 升级特殊用户
+     *
+     * @param userStatisticsInfo 门店数据
+     * @return 结果
+     */
+    @Override
+    public int updateSpecialUserInfo(UserStatisticsInfo userStatisticsInfo) {
+        userStatisticsInfo.setUpdateTime(DateUtils.getNowDate());
+        return userStatisticsInfoMapper.updateUserStatisticsInfo(userStatisticsInfo);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.ruoyi.project.system.client.mapper;
 
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
+import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
 
 import java.util.List;
 
@@ -33,6 +34,7 @@ public interface ClerkSaleInfoMapper
      * @return
      */
     Integer getActualSalesInfo(Long customerId);
+
     /**
      * 查询销售纪录列表
      *

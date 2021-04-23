@@ -7,13 +7,14 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
 import com.ruoyi.project.system.client.mapper.ClerkSaleInfoMapper;
+import com.ruoyi.project.system.client.mapper.NotClerkSaleInfoMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.common.utils.text.Convert;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 销售纪录Service业务层处理
@@ -27,6 +28,8 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
     private static final Logger log = LoggerFactory.getLogger(UserStatisticsInfoServiceImpl.class);
     @Autowired
     private ClerkSaleInfoMapper clerkSaleInfoMapper;
+    @Autowired
+    private NotClerkSaleInfoMapper notClerkSaleInfoMapper;
     @Autowired
     private IUserStatisticsInfoService iUserStatisticsInfoService;
 
@@ -53,6 +56,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
     {
         return clerkSaleInfoMapper.selectClerkSaleInfoList(clerkSaleInfo);
     }
+
 
     /**
      * 新增销售纪录
@@ -113,7 +117,6 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
      * @return 结果
      */
     @Override
-    @Transactional
     public String importUser(List<ClerkSaleInfo> saleInfoList, Boolean isUpdateSupport)
     {
         if (StringUtils.isNull(saleInfoList) || saleInfoList.size() == 0)
@@ -122,6 +125,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
         }
         int successNum = 0;
         int failureNum = 0;
+        int notUserNum = 0;
         StringBuilder successMsg = new StringBuilder();
         StringBuilder failureMsg = new StringBuilder();
 
@@ -136,7 +140,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
                     {
 
                         if(StringUtils.isNotEmpty(sale.getLastGoods())){
-                            user.setOperatorTime("20"+sale.getLastGoods());
+                            sale.setLastGoods("20"+sale.getLastGoods());
                         }
                         sale.setCreateBy(user.getOperator());
                         sale.setCustomerId(user.getStatisticsId());
@@ -157,8 +161,16 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
                         failureMsg.append("<br/>" + failureNum + "、账号 " + sale.getCustomer() + " 已存在");
                     }
                 }else{
-                    failureMsg.insert(0, "没有该用户，请先导入用户数据！");
-                    throw new BusinessException(failureMsg.toString());
+
+                    //没有注册的用户
+                    if(StringUtils.isNotEmpty(sale.getLastGoods())){
+                        sale.setLastGoods("20"+sale.getLastGoods());
+                    }
+                    sale.setCreateBy("admin");
+                    notClerkSaleInfoMapper.insertNotClerkSaleInfo(sale);
+
+                    notUserNum++;
+                    successMsg.append("<br/>" + notUserNum + "、账号 " + sale.getCustomer() + " 导入成功");
                 }
             }
             catch (Exception e)
@@ -169,6 +181,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
                 log.error(msg, e);
             }
         }
+
         if (failureNum > 0)
         {
             failureMsg.insert(0, "很抱歉，导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
@@ -176,7 +189,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
         }
         else
         {
-            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
+            successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + (successNum<=0?failureNum:successNum) + " 条，数据如下：");
         }
         return successMsg.toString();
     }

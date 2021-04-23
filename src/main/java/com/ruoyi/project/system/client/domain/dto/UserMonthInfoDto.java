@@ -17,5 +17,5 @@ public class UserMonthInfoDto extends BaseEntity {
     /** 用户ID**/
     private String customerId;
     /** 月份次数**/
-    private String lastGoods;
+    private String lastGoodsCount;
 }

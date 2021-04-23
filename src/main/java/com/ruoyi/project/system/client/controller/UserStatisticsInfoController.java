@@ -139,7 +139,7 @@ public class UserStatisticsInfoController extends BaseController
             return error("升级用户'" + userStatisticsInfo.getName() + "'失败，该用户是特殊用户");
         }
         userStatisticsInfo.setSpecialUser(CommonUtils.SPECIAL_USER);
-        return toAjax(userStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
+        return toAjax(userStatisticsInfoService.updateSpecialUserInfo(userStatisticsInfo));
     }
 
     /**

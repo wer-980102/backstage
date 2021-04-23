@@ -202,7 +202,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 operator
         from user_statistics_info
         <where>
-            <if test="name != null  and name != ''"> and name = #{name}</if>
+            <if test="name != null  and name != ''">AND name like concat(#{name}, '%')</if>
         </where>
         limit 1
     </select>
@@ -242,7 +242,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             ) t2 ON usi.statistics_id = t2.customerId
         <where> usi.special_user = '1'
             <if test="name!=null and name!=''">
-                AND usi.name like concat('%', #{name}, '%')
+                AND usi.name like concat(#{name}, '%')
             </if>
             <if test="phoneNumber!=null and phoneNumber!=''">
                 AND usi.phone_number like concat('%', #{phoneNumber}, '%')
@@ -322,7 +322,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
         <where>
             <if test="name!=null and name!=''">
-                AND usi.name like concat('%', #{name}, '%')
+                AND usi.name like concat(#{name}, '%')
             </if>
             <if test="modelNumber!=null and modelNumber!=''">
                 AND csi.model_number like concat('%', #{modelNumber}, '%')
@@ -374,7 +374,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         order by csi.last_goods desc,usi.statistics_id desc
     </select>
 
-    <select id="getTimingInfo" resultType="UserStatisticsInfoDto">
+    <select id="getTimingInfo" parameterType="TimeInfoParam" resultType="UserStatisticsInfoDto">
         SELECT
             usi.statistics_id AS statisticsId,
             usi.NAME AS NAME,
@@ -385,9 +385,60 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             user_statistics_info usi
                 INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
                 INNER JOIN ( SELECT customer_id AS customerId, max( last_goods ) AS lastGoods FROM clerk_sale_info GROUP BY customerId ) t1 ON usi.statistics_id = t1.customerId
+        <where>
+            <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+                and csi.create_time between #{startTime} and #{endTime}
+            </if>
+        </where>
         GROUP BY
             usi.statistics_id,
             usi.NAME
+    </select>
+
+    <select id="getTimingSumInfo" parameterType="TimeInfoParam" resultType="UserStatisticsInfoDto">
+        SELECT
+            usi.statistics_id AS statisticsId,
+            t2.lastGoodsCount AS saleMonth,
+            sum( csi.actual_sales ) AS actualSales,
+            sum( csi.refund_amount ) AS refundAmount,
+            sum( csi.goods_frequency ) AS goodsFrequency
+        FROM
+            user_statistics_info usi
+                INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
+                INNER JOIN (
+                SELECT
+                    a.customerId,
+                    sum( a.cs ) AS lastGoodsCount
+                FROM
+                    (
+                        SELECT
+                            customer_id AS customerId,
+                            DATE_FORMAT( last_goods, '%Y-%m' ) AS lastGoods,
+                            count( DISTINCT customer_id ) AS cs
+                        FROM
+                            clerk_sale_info
+                        GROUP BY
+                            customer_id,
+                            lastGoods
+                    ) a
+                GROUP BY
+                    a.customerId
+            ) t2 ON usi.statistics_id = t2.customerId
+        <where>
+            <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+                and csi.create_time between #{startTime} and #{endTime}
+            </if>
+        </where>
+        GROUP BY
+            usi.statistics_id
+    </select>
+    <select id="getScoreReduction" resultType="java.lang.String">
+        select
+            usi.statistics_id as statisticsId
+        from user_statistics_info usi
+                 left join clerk_sale_info csi on usi.statistics_id = csi.customer_id
+        where DATE_FORMAT(csi.last_goods, '%Y-%m' ) != DATE_FORMAT( NOW(), '%Y-%m' )
+        group by usi.statistics_id
     </select>
     <insert id="insertUserStatisticsInfo" parameterType="UserStatisticsInfo" useGeneratedKeys="true" keyProperty="statisticsId">
         insert into user_statistics_info

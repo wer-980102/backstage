@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.client.mapper.BranchInfoMapper">
+
+    <resultMap type="BranchInfo" id="BranchInfoResult">
+        <result property="branchId"    column="branch_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="branchName"    column="branch_name"    />
+        <result property="address"    column="address"    />
+        <result property="chargeName"    column="charge_name"    />
+        <result property="information"    column="information"    />
+        <result property="status"    column="status"    />
+        <result property="operator"    column="operator"    />
+        <result property="operatorTime"    column="Operator_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectBranchInfoVo">
+        select branch_id, user_id, branch_name, address, charge_name, information, status, operator, Operator_time, create_by, create_time, update_by, update_time from branch_info
+    </sql>
+
+    <select id="selectBranchInfoList" parameterType="BranchInfo" resultMap="BranchInfoResult">
+        <include refid="selectBranchInfoVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="branchName != null  and branchName != ''"> and branch_name like concat('%', #{branchName}, '%')</if>
+            <if test="address != null  and address != ''"> and address = #{address}</if>
+            <if test="chargeName != null  and chargeName != ''"> and charge_name like concat('%', #{chargeName}, '%')</if>
+            <if test="information != null  and information != ''"> and information = #{information}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="operator != null  and operator != ''"> and operator = #{operator}</if>
+            <if test="operatorTime != null "> and Operator_time = #{operatorTime}</if>
+        </where>
+    </select>
+
+    <select id="selectBranchInfoById" parameterType="Long" resultMap="BranchInfoResult">
+        <include refid="selectBranchInfoVo"/>
+        where branch_id = #{branchId}
+    </select>
+
+    <insert id="insertBranchInfo" parameterType="BranchInfo" useGeneratedKeys="true" keyProperty="branchId">
+        insert into branch_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="branchName != null">branch_name,</if>
+            <if test="address != null">address,</if>
+            <if test="chargeName != null">charge_name,</if>
+            <if test="information != null">information,</if>
+            <if test="status != null">status,</if>
+            <if test="operator != null">operator,</if>
+            <if test="operatorTime != null">Operator_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="branchName != null">#{branchName},</if>
+            <if test="address != null">#{address},</if>
+            <if test="chargeName != null">#{chargeName},</if>
+            <if test="information != null">#{information},</if>
+            <if test="status != null">#{status},</if>
+            <if test="operator != null">#{operator},</if>
+            <if test="operatorTime != null">#{operatorTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateBranchInfo" parameterType="BranchInfo">
+        update branch_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="branchName != null">branch_name = #{branchName},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="chargeName != null">charge_name = #{chargeName},</if>
+            <if test="information != null">information = #{information},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="operator != null">operator = #{operator},</if>
+            <if test="operatorTime != null">Operator_time = #{operatorTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where branch_id = #{branchId}
+    </update>
+
+    <delete id="deleteBranchInfoById" parameterType="Long">
+        delete from branch_info where branch_id = #{branchId}
+    </delete>
+
+    <delete id="deleteBranchInfoByIds" parameterType="String">
+        delete from branch_info where branch_id in
+        <foreach item="branchId" collection="array" open="(" separator="," close=")">
+            #{branchId}
+        </foreach>
+    </delete>
+
+</mapper>

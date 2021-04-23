@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.client.mapper.StatisticsInfoMapper">
+
+    <resultMap type="StatisticsInfo" id="StatisticsInfoResult">
+        <result property="statisticsId"    column="statistics_id"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="salesMonthValue"    column="sales_month_value"    />
+        <result property="salesValue"    column="sales_value"    />
+        <result property="storeValue"    column="store_value"    />
+        <result property="refundAmountValue"    column="refund_amount_value"    />
+        <result property="actualSalesValue"    column="actual_sales_value"    />
+        <result property="goodsFrequencyValue"    column="goods_frequency_value"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectStatisticsInfoVo">
+        select statistics_id, customer_id, sales_month_value, sales_value, store_value, refund_amount_value, actual_sales_value, goods_frequency_value, create_time, update_time from statistics_info
+    </sql>
+
+    <select id="selectStatisticsInfoList" parameterType="StatisticsInfo" resultMap="StatisticsInfoResult">
+        <include refid="selectStatisticsInfoVo"/>
+        <where>
+            <if test="customerId != null "> and customer_id = #{customerId}</if>
+            <if test="salesMonthValue != null  and salesMonthValue != ''"> and sales_month_value = #{salesMonthValue}</if>
+            <if test="salesValue != null  and salesValue != ''"> and sales_value = #{salesValue}</if>
+            <if test="storeValue != null  and storeValue != ''"> and store_value = #{storeValue}</if>
+            <if test="refundAmountValue != null  and refundAmountValue != ''"> and refund_amount_value = #{refundAmountValue}</if>
+            <if test="actualSalesValue != null  and actualSalesValue != ''"> and actual_sales_value = #{actualSalesValue}</if>
+            <if test="goodsFrequencyValue != null  and goodsFrequencyValue != ''"> and goods_frequency_value = #{goodsFrequencyValue}</if>
+        </where>
+    </select>
+
+    <select id="selectStatisticsInfoById" parameterType="Long" resultMap="StatisticsInfoResult">
+        <include refid="selectStatisticsInfoVo"/>
+        where statistics_id = #{statisticsId}
+    </select>
+
+    <insert id="insertStatisticsInfo" parameterType="StatisticsInfo" useGeneratedKeys="true" keyProperty="statisticsId">
+        insert into statistics_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">customer_id,</if>
+            <if test="salesMonthValue != null">sales_month_value,</if>
+            <if test="salesValue != null">sales_value,</if>
+            <if test="storeValue != null">store_value,</if>
+            <if test="refundAmountValue != null">refund_amount_value,</if>
+            <if test="actualSalesValue != null">actual_sales_value,</if>
+            <if test="goodsFrequencyValue != null">goods_frequency_value,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">#{customerId},</if>
+            <if test="salesMonthValue != null">#{salesMonthValue},</if>
+            <if test="salesValue != null">#{salesValue},</if>
+            <if test="storeValue != null">#{storeValue},</if>
+            <if test="refundAmountValue != null">#{refundAmountValue},</if>
+            <if test="actualSalesValue != null">#{actualSalesValue},</if>
+            <if test="goodsFrequencyValue != null">#{goodsFrequencyValue},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStatisticsInfo" parameterType="StatisticsInfo">
+        update statistics_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="salesMonthValue != null">sales_month_value = #{salesMonthValue},</if>
+            <if test="salesValue != null">sales_value = #{salesValue},</if>
+            <if test="storeValue != null">store_value = #{storeValue},</if>
+            <if test="refundAmountValue != null">refund_amount_value = #{refundAmountValue},</if>
+            <if test="actualSalesValue != null">actual_sales_value = #{actualSalesValue},</if>
+            <if test="goodsFrequencyValue != null">goods_frequency_value = #{goodsFrequencyValue},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where statistics_id = #{statisticsId}
+    </update>
+
+    <delete id="deleteStatisticsInfoById" parameterType="Long">
+        delete from statistics_info where statistics_id = #{statisticsId}
+    </delete>
+
+    <delete id="deleteStatisticsInfoByIds" parameterType="String">
+        delete from statistics_info where statistics_id in
+        <foreach item="statisticsId" collection="array" open="(" separator="," close=")">
+            #{statisticsId}
+        </foreach>
+    </delete>
+
+</mapper>

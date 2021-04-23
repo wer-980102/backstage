@@ -1,6 +1,7 @@
 package com.ruoyi.project.system.client.service;
 
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
+import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ public interface IClerkSaleInfoService
      * @return 销售纪录集合
      */
     public List<ClerkSaleInfo> selectClerkSaleInfoList(ClerkSaleInfo clerkSaleInfo);
+
 
     /**
      * 新增销售纪录
@@ -67,5 +69,5 @@ public interface IClerkSaleInfoService
      * @param isUpdateSupport 是否更新支持，如果已存在，则进行更新数据
      * @return 结果
      */
-    public String importUser(List<ClerkSaleInfo> saleInfoList, Boolean isUpdateSupport);
+     String importUser(List<ClerkSaleInfo> saleInfoList, Boolean isUpdateSupport);
 }

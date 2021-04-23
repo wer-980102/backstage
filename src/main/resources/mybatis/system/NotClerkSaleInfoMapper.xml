@@ -2,14 +2,13 @@
 <!DOCTYPE mapper
 PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.ruoyi.project.system.client.mapper.ClerkSaleInfoMapper">
+<mapper namespace="com.ruoyi.project.system.client.mapper.NotClerkSaleInfoMapper">
 
-    <resultMap type="ClerkSaleInfo" id="ClerkSaleInfoResult">
+    <resultMap type="NotClerkSaleInfo" id="NotClerkSaleInfoResult">
         <result property="saleId"    column="sale_id"    />
         <result property="modelNumber"    column="model_number"    />
         <result property="productName"    column="product_name"    />
         <result property="brand"    column="brand"    />
-        <result property="customerId"    column="customer_id"    />
         <result property="customer"    column="customer"    />
         <result property="sales"    column="sales"    />
         <result property="store"    column="store"    />
@@ -23,53 +22,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
-    <sql id="selectClerkSaleInfoVo">
-        select sale_id, model_number, product_name, brand, customer_id, customer, sales, store, refund_amount, actual_sales, last_goods, goods_frequency, create_by, create_time, update_by, update_time from clerk_sale_info
+    <sql id="selectNotClerkSaleInfoVo">
+        select sale_id, model_number, product_name, brand, customer, sales, store, refund_amount, actual_sales, last_goods, goods_frequency, create_by, create_time, update_by, update_time from not_clerk_sale_info
     </sql>
 
-    <select id="selectClerkSaleInfoList" parameterType="ClerkSaleInfo" resultMap="ClerkSaleInfoResult">
-        <include refid="selectClerkSaleInfoVo"/>
+    <select id="selectNotClerkSaleInfoList" parameterType="NotClerkSaleInfo" resultMap="NotClerkSaleInfoResult">
+        <include refid="selectNotClerkSaleInfoVo"/>
         <where>
             <if test="modelNumber != null  and modelNumber != ''"> and model_number = #{modelNumber}</if>
             <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
             <if test="brand != null  and brand != ''"> and brand = #{brand}</if>
-            <if test="customerId != null "> and customer_id = #{customerId}</if>
             <if test="customer != null  and customer != ''"> and customer = #{customer}</if>
             <if test="sales != null  and sales != ''"> and sales = #{sales}</if>
             <if test="store != null  and store != ''"> and store = #{store}</if>
             <if test="refundAmount != null  and refundAmount != ''"> and refund_amount = #{refundAmount}</if>
             <if test="actualSales != null  and actualSales != ''"> and actual_sales = #{actualSales}</if>
-            <if test="lastGoods != null  and lastGoods != ''"> and last_goods = #{lastGoods}</if>
+            <if test="lastGoods != null "> and last_goods = #{lastGoods}</if>
             <if test="goodsFrequency != null  and goodsFrequency != ''"> and goods_frequency = #{goodsFrequency}</if>
         </where>
     </select>
 
-    <select id="selectClerkSaleInfoById" parameterType="Long" resultMap="ClerkSaleInfoResult">
-        <include refid="selectClerkSaleInfoVo"/>
+    <select id="selectNotClerkSaleInfoById" parameterType="Long" resultMap="NotClerkSaleInfoResult">
+        <include refid="selectNotClerkSaleInfoVo"/>
         where sale_id = #{saleId}
     </select>
 
-    <select id="getClerkSaleInfo" parameterType="java.lang.String" resultMap="ClerkSaleInfoResult">
-        <include refid="selectClerkSaleInfoVo"/>
-        <where>
-            <if test="customer != null  and customer != ''"> and customer = #{customer}</if>
-        </where>
-    </select>
-
-    <select id="getActualSalesInfo" parameterType="java.lang.Long" resultType="java.lang.Integer">
-        select
-            sum(actual_sales) as actualSales
-        from clerk_sale_info
-        where customer_id = #{customerId}
-    </select>
-
-    <insert id="insertClerkSaleInfo" parameterType="ClerkSaleInfo" useGeneratedKeys="true" keyProperty="saleId">
-        insert into clerk_sale_info
+    <insert id="insertNotClerkSaleInfo" parameterType="ClerkSaleInfo" useGeneratedKeys="true" keyProperty="saleId">
+        insert into not_clerk_sale_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="modelNumber != null">model_number,</if>
-            <if test="productName != null and productName != ''">product_name,</if>
+            <if test="productName != null">product_name,</if>
             <if test="brand != null">brand,</if>
-            <if test="customerId != null">customer_id,</if>
             <if test="customer != null">customer,</if>
             <if test="sales != null">sales,</if>
             <if test="store != null">store,</if>
@@ -84,9 +67,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="modelNumber != null">#{modelNumber},</if>
-            <if test="productName != null and productName != ''">#{productName},</if>
+            <if test="productName != null">#{productName},</if>
             <if test="brand != null">#{brand},</if>
-            <if test="customerId != null">#{customerId},</if>
             <if test="customer != null">#{customer},</if>
             <if test="sales != null">#{sales},</if>
             <if test="store != null">#{store},</if>
@@ -101,13 +83,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
     </insert>
 
-    <update id="updateClerkSaleInfo" parameterType="ClerkSaleInfo">
-        update clerk_sale_info
+    <update id="updateNotClerkSaleInfo" parameterType="NotClerkSaleInfo">
+        update not_clerk_sale_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="modelNumber != null">model_number = #{modelNumber},</if>
-            <if test="productName != null and productName != ''">product_name = #{productName},</if>
+            <if test="productName != null">product_name = #{productName},</if>
             <if test="brand != null">brand = #{brand},</if>
-            <if test="customerId != null">customer_id = #{customerId},</if>
             <if test="customer != null">customer = #{customer},</if>
             <if test="sales != null">sales = #{sales},</if>
             <if test="store != null">store = #{store},</if>
@@ -123,32 +104,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where sale_id = #{saleId}
     </update>
 
-    <update id="updateClerkSaleByCustomerId" parameterType="ClerkSaleInfo">
-        update clerk_sale_info
-        <trim prefix="SET" suffixOverrides=",">
-            <if test="modelNumber != null">model_number = #{modelNumber},</if>
-            <if test="productName != null and productName != ''">product_name = #{productName},</if>
-            <if test="brand != null">brand = #{brand},</if>
-            <if test="customer != null">customer = #{customer},</if>
-            <if test="sales != null">sales = #{sales},</if>
-            <if test="store != null">store = #{store},</if>
-            <if test="refundAmount != null">refund_amount = #{refundAmount},</if>
-            <if test="actualSales != null">actual_sales = #{actualSales},</if>
-            <if test="lastGoods != null">last_goods = #{lastGoods},</if>
-            <if test="goodsFrequency != null">goods_frequency = #{goodsFrequency},</if>
-            <if test="createBy != null">create_by = #{createBy},</if>
-            <if test="createTime != null">create_time = #{createTime},</if>
-            <if test="updateBy != null">update_by = #{updateBy},</if>
-            <if test="updateTime != null">update_time = #{updateTime},</if>
-        </trim>
-        where customer_id = #{customerId}
-    </update>
-    <delete id="deleteClerkSaleInfoById" parameterType="Long">
-        delete from clerk_sale_info where sale_id = #{saleId}
+    <delete id="deleteNotClerkSaleInfoById" parameterType="Long">
+        delete from not_clerk_sale_info where sale_id = #{saleId}
     </delete>
 
-    <delete id="deleteClerkSaleInfoByIds" parameterType="String">
-        delete from clerk_sale_info where sale_id in
+    <delete id="deleteNotClerkSaleInfoByIds" parameterType="String">
+        delete from not_clerk_sale_info where sale_id in
         <foreach item="saleId" collection="array" open="(" separator="," close=")">
             #{saleId}
         </foreach>

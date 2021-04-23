@@ -1,8 +1,8 @@
 package com.ruoyi.project.system.client.mapper;
 
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
-import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 
 import java.util.List;
 
@@ -80,7 +80,13 @@ public interface UserStatisticsInfoMapper
      * 定时计算积分
      * @return
      */
-    List<UserStatisticsInfoDto> getTimingInfo();
+    List<UserStatisticsInfoDto> getTimingInfo(TimeInfoParam param);
+
+    /**
+     * 定时计算所有额度
+     * @return
+     */
+    List<UserStatisticsInfoDto> getTimingSumInfo(TimeInfoParam param);
     /**
      * 新增门店数据
      *
@@ -90,12 +96,18 @@ public interface UserStatisticsInfoMapper
      int insertUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
 
     /**
+     * 一键减分
+     * @return
+     */
+    List<String> getScoreReduction();
+
+    /**
      * 修改门店数据
      *
      * @param userStatisticsInfo 门店数据
      * @return 结果
      */
-    public int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
+     int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
 
     /**
      * 删除门店数据

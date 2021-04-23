@@ -2,6 +2,7 @@ package com.ruoyi.project.system.client.service;
 
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 
 import java.util.List;
 
@@ -72,7 +73,13 @@ public interface IUserStatisticsInfoService
      * 定时计算积分
      * @return
      */
-    List<UserStatisticsInfoDto> getTimingInfo();
+    List<UserStatisticsInfoDto> getTimingInfo(TimeInfoParam param);
+
+    /**
+     * 定时计算所有额度
+     * @return
+     */
+    List<UserStatisticsInfoDto> getTimingSumInfo(TimeInfoParam param);
     /**
      * 新增门店数据
      *
@@ -88,6 +95,14 @@ public interface IUserStatisticsInfoService
      * @return 结果
      */
      int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
+
+    /**
+     * 升级特殊用户
+     *
+     * @param userStatisticsInfo 门店数据
+     * @return 结果
+     */
+    int updateSpecialUserInfo(UserStatisticsInfo userStatisticsInfo);
 
     /**
      * 批量删除门店数据
