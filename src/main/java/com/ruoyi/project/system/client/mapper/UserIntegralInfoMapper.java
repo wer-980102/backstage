@@ -1,6 +1,8 @@
 package com.ruoyi.project.system.client.mapper;
 
 import com.ruoyi.project.system.client.domain.UserIntegralInfo;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
+import io.swagger.models.auth.In;
 
 import java.util.List;
 

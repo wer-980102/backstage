@@ -1,6 +1,7 @@
 package com.ruoyi.project.system.client.service;
 
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
+import com.ruoyi.project.system.client.domain.dto.ClerkSaleInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
 
 import java.util.List;
@@ -27,8 +28,15 @@ public interface IClerkSaleInfoService
      * @param clerkSaleInfo 销售纪录
      * @return 销售纪录集合
      */
-    public List<ClerkSaleInfo> selectClerkSaleInfoList(ClerkSaleInfo clerkSaleInfo);
+     List<ClerkSaleInfo> selectClerkSaleInfoList(ClerkSaleInfo clerkSaleInfo);
 
+
+    /**
+     * 计算最后一次拿货时间
+     * @param customerId
+     * @return
+     */
+    ClerkSaleInfoDto getLastGoodsInfo(String customerId);
 
     /**
      * 新增销售纪录

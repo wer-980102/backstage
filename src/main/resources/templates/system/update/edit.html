@@ -30,13 +30,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">积分变动类型：</label>
                 <div class="col-sm-8">
-                    <select name="changeType" class="form-control m-b">
-                        <option value="">所有</option>
-                        <option value="初始化">初始化</option>
-                        <option value="年调整">年调整</option>
-                        <option value="月调整">月调整</option>
-                        <option value="日调整">日调整</option>
-                    </select>
+                    <input name="changeType" th:field="*{changeType}" class="form-control" type="text">
                 </div>
             </div>
             <div class="form-group">
@@ -48,7 +42,10 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">创建时间：</label>
                 <div class="col-sm-8">
-                    <input name="operatorTime" th:field="*{operatorTime}" class="form-control" type="text"  disabled="true">
+                    <div class="input-group date">
+                        <input name="operatorTime" th:value="${#dates.format(userIntegralInfo.operatorTime, 'yyyy-MM-dd')}" class="form-control" placeholder="yyyy-MM-dd" type="text">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
                 </div>
             </div>
         </form>
@@ -66,6 +63,12 @@
                 $.operate.save(prefix + "/edit", $('#form-update-edit').serialize());
             }
         }
+
+        $("input[name='operatorTime']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
     </script>
 </body>
 </html>

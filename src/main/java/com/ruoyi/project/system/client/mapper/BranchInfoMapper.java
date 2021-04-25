@@ -15,10 +15,19 @@ public interface BranchInfoMapper
     /**
      * 查询分店信息
      *
+     * @param userId 分店信息ID
+     * @return 分店信息
+     */
+     BranchInfo selectBranchInfoById(Long userId);
+
+
+    /**
+     * 查询分店信息
+     *
      * @param branchId 分店信息ID
      * @return 分店信息
      */
-    public BranchInfo selectBranchInfoById(Long branchId);
+    BranchInfo getBranchInfoById(Long branchId);
 
     /**
      * 查询分店信息列表
@@ -26,7 +35,7 @@ public interface BranchInfoMapper
      * @param branchInfo 分店信息
      * @return 分店信息集合
      */
-    public List<BranchInfo> selectBranchInfoList(BranchInfo branchInfo);
+     List<BranchInfo> selectBranchInfoList(BranchInfo branchInfo);
 
     /**
      * 新增分店信息
@@ -34,7 +43,7 @@ public interface BranchInfoMapper
      * @param branchInfo 分店信息
      * @return 结果
      */
-    public int insertBranchInfo(BranchInfo branchInfo);
+     int insertBranchInfo(BranchInfo branchInfo);
 
     /**
      * 修改分店信息
@@ -42,7 +51,7 @@ public interface BranchInfoMapper
      * @param branchInfo 分店信息
      * @return 结果
      */
-    public int updateBranchInfo(BranchInfo branchInfo);
+     int updateBranchInfo(BranchInfo branchInfo);
 
     /**
      * 删除分店信息

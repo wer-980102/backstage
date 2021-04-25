@@ -40,6 +40,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectBranchInfoById" parameterType="Long" resultMap="BranchInfoResult">
         <include refid="selectBranchInfoVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <select id="getBranchInfoById" parameterType="Long" resultMap="BranchInfoResult">
+        <include refid="selectBranchInfoVo"/>
         where branch_id = #{branchId}
     </select>
 

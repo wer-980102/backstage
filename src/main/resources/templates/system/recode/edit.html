@@ -29,7 +29,7 @@
             <div class="form-group">
                 <label class="col-sm-3 control-label">实销额：</label>
                 <div class="col-sm-8">
-                    <input name="actualSales" th:field="*{actualSales}" class="form-control" type="text">
+                    <input name="actualSales" th:field="*{actualSales}" class="form-control" type="text" disabled="true">
                 </div>
             </div>
             <div class="form-group">
@@ -45,9 +45,12 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3 control-label">拿货时间：</label>
+                <label class="col-sm-3 control-label">录入时间：</label>
                 <div class="col-sm-8">
-                    <input name="lastGoods" th:field="*{lastGoods}" class="form-control" type="text" disabled="true">
+                    <div class="input-group date">
+                        <input name="lastGoods" th:value="${#dates.format(userStatisticsInfo.lastGoods, 'yyyy-MM-dd hh:MM:ss')}" class="form-control" placeholder="yyyy-MM-dd hh:MM:ss" type="text" disabled="true">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
                 </div>
             </div>
         </form>
@@ -64,6 +67,12 @@
                 $.operate.save(prefix + "/edit", $('#form-recode-edit').serialize());
             }
         }
+
+        $("input[name='lastGoods']").datetimepicker({
+            format: "yyyy-mm-dd",
+            minView: "month",
+            autoclose: true
+        });
     </script>
 </body>
 </html>

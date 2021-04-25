@@ -24,13 +24,24 @@ public class BranchInfoServiceImpl implements IBranchInfoService
     /**
      * 查询分店信息
      *
+     * @param userId 分店信息ID
+     * @return 分店信息
+     */
+    @Override
+    public BranchInfo selectBranchInfoById(Long userId)
+    {
+        return branchInfoMapper.selectBranchInfoById(userId);
+    }
+
+    /**
+     * 查询分店信息
+     *
      * @param branchId 分店信息ID
      * @return 分店信息
      */
     @Override
-    public BranchInfo selectBranchInfoById(Long branchId)
-    {
-        return branchInfoMapper.selectBranchInfoById(branchId);
+    public BranchInfo getBranchInfoById(Long branchId) {
+        return branchInfoMapper.getBranchInfoById(branchId);
     }
 
     /**

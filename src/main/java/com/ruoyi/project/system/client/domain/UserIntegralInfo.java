@@ -69,8 +69,9 @@ public class UserIntegralInfo extends BaseEntity
     private String operator;
 
     /** 操作时间 */
-    @Excel(name = "操作时间")
-    private String operatorTime;
+    @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss")
+    @Excel(name = "录入时间", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date operatorTime;
 
     /** 类型控制 */
     private Integer type;

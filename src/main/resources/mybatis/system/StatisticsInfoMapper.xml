@@ -13,12 +13,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="refundAmountValue"    column="refund_amount_value"    />
         <result property="actualSalesValue"    column="actual_sales_value"    />
         <result property="goodsFrequencyValue"    column="goods_frequency_value"    />
+        <result property="lastGoods"    column="lastGoods"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateTime"    column="update_time"    />
     </resultMap>
 
     <sql id="selectStatisticsInfoVo">
-        select statistics_id, customer_id, sales_month_value, sales_value, store_value, refund_amount_value, actual_sales_value, goods_frequency_value, create_time, update_time from statistics_info
+        select statistics_id, customer_id, sales_month_value, sales_value, store_value, refund_amount_value, actual_sales_value, goods_frequency_value, lastGoods,create_time, update_time from statistics_info
     </sql>
 
     <select id="selectStatisticsInfoList" parameterType="StatisticsInfo" resultMap="StatisticsInfoResult">
@@ -34,9 +35,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="getStatisticsInfo" parameterType="java.lang.String" resultType="StatisticsInfo">
+        select  customer_id, sales_month_value, refund_amount_value, actual_sales_value, goods_frequency_value,lastGoods
+        from statistics_info
+        <where>
+            <if test="customerId != null "> and customer_id = #{customerId}</if>
+        </where>
+    </select>
+
     <select id="selectStatisticsInfoById" parameterType="Long" resultMap="StatisticsInfoResult">
         <include refid="selectStatisticsInfoVo"/>
-        where statistics_id = #{statisticsId}
+        where customer_id = #{customerId} limit 1
     </select>
 
     <insert id="insertStatisticsInfo" parameterType="StatisticsInfo" useGeneratedKeys="true" keyProperty="statisticsId">
@@ -49,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="refundAmountValue != null">refund_amount_value,</if>
             <if test="actualSalesValue != null">actual_sales_value,</if>
             <if test="goodsFrequencyValue != null">goods_frequency_value,</if>
+            <if test="lastGoods != null">lastGoods,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateTime != null">update_time,</if>
          </trim>
@@ -60,6 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="refundAmountValue != null">#{refundAmountValue},</if>
             <if test="actualSalesValue != null">#{actualSalesValue},</if>
             <if test="goodsFrequencyValue != null">#{goodsFrequencyValue},</if>
+            <if test="lastGoods != null">#{lastGoods},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateTime != null">#{updateTime},</if>
          </trim>
@@ -68,17 +79,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateStatisticsInfo" parameterType="StatisticsInfo">
         update statistics_info
         <trim prefix="SET" suffixOverrides=",">
-            <if test="customerId != null">customer_id = #{customerId},</if>
             <if test="salesMonthValue != null">sales_month_value = #{salesMonthValue},</if>
             <if test="salesValue != null">sales_value = #{salesValue},</if>
             <if test="storeValue != null">store_value = #{storeValue},</if>
             <if test="refundAmountValue != null">refund_amount_value = #{refundAmountValue},</if>
             <if test="actualSalesValue != null">actual_sales_value = #{actualSalesValue},</if>
             <if test="goodsFrequencyValue != null">goods_frequency_value = #{goodsFrequencyValue},</if>
+            <if test="lastGoods != null">lastGoods = #{lastGoods},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
-        where statistics_id = #{statisticsId}
+        where customer_id = #{customerId}
     </update>
 
     <delete id="deleteStatisticsInfoById" parameterType="Long">

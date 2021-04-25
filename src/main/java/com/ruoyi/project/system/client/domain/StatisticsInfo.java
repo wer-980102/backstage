@@ -1,5 +1,6 @@
 package com.ruoyi.project.system.client.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,8 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.framework.aspectj.lang.annotation.Excel;
 import com.ruoyi.framework.web.domain.BaseEntity;
+
+import java.util.Date;
 
 /**
  * 【请填写功能名称】对象 statistics_info
@@ -48,11 +51,13 @@ public class StatisticsInfo extends BaseEntity
 
     /** 累计销售额 */
     @Excel(name = "累计销售额")
-    private String actualSalesValue;
+    private Double actualSalesValue;
 
     /** 累计拿货次数 */
     @Excel(name = "累计拿货次数")
     private String goodsFrequencyValue;
 
-
+    /** 最后拿货时间**/
+    @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss")
+    private Date lastGoods;
 }

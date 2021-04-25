@@ -3,11 +3,10 @@ package com.ruoyi.project.system.client.controller;
 import java.util.List;
 
 import com.ruoyi.common.utils.CommonUtils;
-import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.service.IUserStatisticsInfoService;
-import com.ruoyi.project.system.user.domain.User;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -143,7 +142,7 @@ public class UserStatisticsInfoController extends BaseController
     }
 
     /**
-     * 升级用户
+     * 用户减分
      */
     @ResponseBody
     @RequiresPermissions("system:client:edit")
@@ -171,7 +170,7 @@ public class UserStatisticsInfoController extends BaseController
         if(CommonUtils.SPECIAL_USER.equals(specialUserById)){
             return error("修改用户'" + userStatisticsInfo.getName() + "'失败，该用户是特殊用户");
         }
-        return toAjax(userStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
+        return toAjax(userStatisticsInfoService.updateClerkSaleByCustomerId(userStatisticsInfo));
     }
 
     /**

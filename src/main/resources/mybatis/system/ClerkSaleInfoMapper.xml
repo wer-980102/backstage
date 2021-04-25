@@ -63,6 +63,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where customer_id = #{customerId}
     </select>
 
+    <select id="getLastGoodsInfo" parameterType="java.lang.String" resultType="ClerkSaleInfoDto">
+        SELECT customer_id AS customerId, max( last_goods ) AS lastGoods FROM clerk_sale_info where customer_id = #{customerId} GROUP BY customerId
+    </select>
+
     <insert id="insertClerkSaleInfo" parameterType="ClerkSaleInfo" useGeneratedKeys="true" keyProperty="saleId">
         insert into clerk_sale_info
         <trim prefix="(" suffix=")" suffixOverrides=",">

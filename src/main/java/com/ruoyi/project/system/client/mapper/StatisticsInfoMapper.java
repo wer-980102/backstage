@@ -15,10 +15,10 @@ public interface StatisticsInfoMapper
     /**
      * 查询【请填写功能名称】
      *
-     * @param statisticsId 【请填写功能名称】ID
+     * @param customerId 【请填写功能名称】ID
      * @return 【请填写功能名称】
      */
-    public StatisticsInfo selectStatisticsInfoById(Long statisticsId);
+     StatisticsInfo selectStatisticsInfoById(Long customerId);
 
     /**
      * 查询【请填写功能名称】列表
@@ -27,6 +27,13 @@ public interface StatisticsInfoMapper
      * @return 【请填写功能名称】集合
      */
     public List<StatisticsInfo> selectStatisticsInfoList(StatisticsInfo statisticsInfo);
+
+    /**
+     *  查询统计值与客户信息管理统计进行匹配
+     * @param customerId
+     * @return
+     */
+    StatisticsInfo getStatisticsInfo(String customerId);
 
     /**
      * 新增【请填写功能名称】
@@ -42,7 +49,7 @@ public interface StatisticsInfoMapper
      * @param statisticsInfo 【请填写功能名称】
      * @return 结果
      */
-    public int updateStatisticsInfo(StatisticsInfo statisticsInfo);
+     int updateStatisticsInfo(StatisticsInfo statisticsInfo);
 
     /**
      * 删除【请填写功能名称】

@@ -15,10 +15,10 @@ public interface IStatisticsInfoService
     /**
      * 查询【请填写功能名称】
      *
-     * @param statisticsId 【请填写功能名称】ID
+     * @param customerId 【请填写功能名称】ID
      * @return 【请填写功能名称】
      */
-    public StatisticsInfo selectStatisticsInfoById(Long statisticsId);
+     StatisticsInfo selectStatisticsInfoById(Long customerId);
 
     /**
      * 查询【请填写功能名称】列表
@@ -42,7 +42,7 @@ public interface IStatisticsInfoService
      * @param statisticsInfo 【请填写功能名称】
      * @return 结果
      */
-    public int updateStatisticsInfo(StatisticsInfo statisticsInfo);
+     int updateStatisticsInfo(StatisticsInfo statisticsInfo);
 
     /**
      * 批量删除【请填写功能名称】

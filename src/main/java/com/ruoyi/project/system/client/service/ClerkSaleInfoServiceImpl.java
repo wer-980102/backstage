@@ -5,9 +5,12 @@ import java.util.List;
 import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
+import com.ruoyi.project.system.client.domain.BranchInfo;
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
-import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
+import com.ruoyi.project.system.client.domain.dto.ClerkSaleInfoDto;
+import com.ruoyi.project.system.client.mapper.BranchInfoMapper;
 import com.ruoyi.project.system.client.mapper.ClerkSaleInfoMapper;
 import com.ruoyi.project.system.client.mapper.NotClerkSaleInfoMapper;
 import org.slf4j.Logger;
@@ -26,6 +29,8 @@ import com.ruoyi.common.utils.text.Convert;
 public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
 {
     private static final Logger log = LoggerFactory.getLogger(UserStatisticsInfoServiceImpl.class);
+    @Autowired
+    private BranchInfoMapper branchInfoMapper;
     @Autowired
     private ClerkSaleInfoMapper clerkSaleInfoMapper;
     @Autowired
@@ -55,6 +60,16 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
     public List<ClerkSaleInfo> selectClerkSaleInfoList(ClerkSaleInfo clerkSaleInfo)
     {
         return clerkSaleInfoMapper.selectClerkSaleInfoList(clerkSaleInfo);
+    }
+
+    /**
+     * 计算最后一次拿货时间
+     * @param customerId
+     * @return
+     */
+    @Override
+    public ClerkSaleInfoDto getLastGoodsInfo(String customerId) {
+        return clerkSaleInfoMapper.getLastGoodsInfo(customerId);
     }
 
 
@@ -122,6 +137,10 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
         if (StringUtils.isNull(saleInfoList) || saleInfoList.size() == 0)
         {
             throw new BusinessException("导入销售数据不能为空！");
+        }
+        BranchInfo branchInfo = branchInfoMapper.selectBranchInfoById(ShiroUtils.getUserId());
+        if(StringUtils.isNull(branchInfo)){
+            throw new BusinessException("该用户没有分店，请先增加分店！");
         }
         int successNum = 0;
         int failureNum = 0;

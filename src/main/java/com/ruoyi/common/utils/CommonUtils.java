@@ -17,6 +17,10 @@ import java.util.*;
 public class CommonUtils {
 
     /**
+     * 管理员
+     **/
+    public static final String USER_ADMIN = "admin";
+    /**
      * 正常用户normal
      **/
     public static final String NORMAL_USER = "0";
@@ -24,6 +28,11 @@ public class CommonUtils {
      * 特殊用户
      **/
     public static final String SPECIAL_USER = "1";
+
+    /**
+     * 参数拼接
+     **/
+    public static final String PARAM = "1";
 
     /**
      * 计算积分
@@ -67,6 +76,25 @@ public class CommonUtils {
         }
     }
 
+    public static  String getIntegralJudge(Integer param)  {
+        if(param>10000){
+            return "+";
+        }else if(param<=1000){
+            return "-";
+        }else if(param>8000){
+            return "+";
+        }else if(param<=8000){
+            return "-";
+        }else if(param>5000){
+            return "+";
+        }else if(param<=5000){
+            return "-";
+        }else if(param>3000){
+            return "+";
+        }else{
+            return "-";
+        }
+    }
 /** 获取*/
     /**
      * 计算两个集合差数

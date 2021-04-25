@@ -1,10 +1,13 @@
 package com.ruoyi.project.system.client.domain.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.ruoyi.framework.web.domain.BaseEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+import java.util.Date;
 
 @Data
 @Builder
@@ -30,12 +33,16 @@ public class UserStatisticsInfoDto extends BaseEntity {
     private String refundAmount;
     /** 累计拿货次数**/
     private String goodsFrequency;
+
     /** 最后拿货时间**/
-    private String lastGoods;
+    @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss")
+    private Date lastGoods;
+
     /** 分店名称**/
     private String store;
     /** 录入时间**/
-    private String operatorTime;
+    @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss")
+    private Date operatorTime;
     /** 操作人**/
     private String operator;
     /** 款号**/

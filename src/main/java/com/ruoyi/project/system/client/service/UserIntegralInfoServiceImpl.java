@@ -3,6 +3,7 @@ package com.ruoyi.project.system.client.service;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.project.system.client.domain.UserIntegralInfo;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.client.mapper.UserIntegralInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,7 @@ public class UserIntegralInfoServiceImpl implements IUserIntegralInfoService
     {
         return userIntegralInfoMapper.selectUserIntegralInfoById(integralId);
     }
+
 
     /**
      * 查询积分规则列表

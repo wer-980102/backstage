@@ -23,13 +23,13 @@ public class StatisticsInfoServiceImpl implements IStatisticsInfoService
     /**
      * 查询【请填写功能名称】
      *
-     * @param statisticsId 【请填写功能名称】ID
+     * @param customerId 【请填写功能名称】ID
      * @return 【请填写功能名称】
      */
     @Override
-    public StatisticsInfo selectStatisticsInfoById(Long statisticsId)
+    public StatisticsInfo selectStatisticsInfoById(Long customerId)
     {
-        return statisticsInfoMapper.selectStatisticsInfoById(statisticsId);
+        return statisticsInfoMapper.selectStatisticsInfoById(customerId);
     }
 
     /**

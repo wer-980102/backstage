@@ -57,7 +57,7 @@ public class BranchInfo extends BaseEntity
     private String operator;
 
     /** 录入时间 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
+    @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss")
     @Excel(name = "录入时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date operatorTime;
 
