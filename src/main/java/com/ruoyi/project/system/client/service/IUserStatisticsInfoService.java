@@ -27,7 +27,7 @@ public interface IUserStatisticsInfoService
      * @param statisticsId 门店数据ID
      * @return 门店数据
      */
-    public UserStatisticsInfoDto selectUserStatisticsInfoById(Long statisticsId);
+     UserStatisticsInfoDto selectUserStatisticsInfoById(Long statisticsId);
 
     /**
      * 查询门店数据列表

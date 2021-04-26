@@ -33,28 +33,6 @@ public class TimingController {
     private IUserIntegralInfoService iUserIntegralInfoService;
 
     /**
-     * 每月11:59:59同步统计数据
-     */
-    @Scheduled(cron = "${time.months}")
-    public void setMonthStallSum() {
-        System.out.println("......每月定时计算积分......");
-        List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(TimeInfoParam.builder().startTime(TimeUtils.getMonthMinTime()).endTime(TimeUtils.getMonthMaxTime()).build());
-        timingInfo.stream().forEach(info->{
-            UserIntegralInfo integralInfo = UserIntegralInfo.builder()
-                    .customerId(Long.parseLong(info.getStatisticsId()))
-                    .customerName(info.getName())
-                    .integral(CommonUtils.getPlusIntegralInfo(info.getActualSales().intValue()))
-                    .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
-                    .integralRemark("第一级：>10000 +1或者<=10000，第二级：>8000 +1或者<=8000，第三级：>5000 +1或者<=5000，第四级：>3000 +1或者<=3000")
-                    .changeSituation("")
-                    .changeType("")
-                    .changeName("")
-                    .operator(info.getOperator())
-                    .operatorTime(info.getLastGoods()).build();
-            iUserIntegralInfoService.updateUserIntegralInfo(integralInfo);
-        });
-    }
-    /**
      * 每天11:59:59同步统计数据
      */
     @Scheduled(cron = "${time.times}")
@@ -107,7 +85,7 @@ public class TimingController {
     //@PostConstruct
     public void initStallSum() {
         System.out.println("......初始化定时计算积分......");
-      /*  List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(new TimeInfoParam());
+        List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(new TimeInfoParam());
         if(null != timingInfo && timingInfo.size()>0){
             timingInfo.stream().forEach(info->{
                 List<UserIntegralInfo> userIntegralInfos = iUserIntegralInfoService.selectUserIntegralInfoList(UserIntegralInfo.builder().customerId(Long.parseLong(info.getStatisticsId())).build());
@@ -125,7 +103,7 @@ public class TimingController {
                     iUserIntegralInfoService.insertUserIntegralInfo(integralInfo);
                 }
             });
-        }*/
+        }
 
         //统计所有额度值
         List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(new TimeInfoParam());

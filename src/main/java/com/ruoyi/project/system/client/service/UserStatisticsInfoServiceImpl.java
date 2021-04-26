@@ -69,12 +69,20 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     {
         UserStatisticsInfoDto info = userStatisticsInfoMapper.selectUserStatisticsInfoById(statisticsId);
         if(null != info){
-            if(StringUtils.isNotNull(info.getActualSales())){
-                if(info.getActualSales()>=10000){
+            //统计积分表
+            StatisticsInfo statistics = statisticsInfoMapper.getStatisticsInfo(statisticsId.toString());
+            if(StringUtils.isNotNull(statistics)){
+                info.setSaleMonth(statistics.getSalesMonthValue());
+                info.setActualSales(statistics.getActualSalesValue());
+                info.setRefundAmount(statistics.getRefundAmountValue());
+                info.setGoodsFrequency(statistics.getGoodsFrequencyValue());
+                info.setLastGoods(statistics.getLastGoods());
+
+                if(statistics.getActualSalesValue()>=10000){
                     info.setMemberType("一级");
-                }else if(info.getActualSales()>=8000 && info.getActualSales()<=9999){
+                }else if(statistics.getActualSalesValue()>=8000 && statistics.getActualSalesValue()<=9999){
                     info.setMemberType("二级");
-                }else if(info.getActualSales()>=5000 && info.getActualSales()<=7999){
+                }else if(statistics.getActualSalesValue()>=5000 && statistics.getActualSalesValue()<=7999){
                     info.setMemberType("三级");
                 }else{
                     info.setMemberType("四级");
@@ -99,12 +107,22 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
             statisticsInfo.stream().forEach(info->{
                 //统计积分表
                 StatisticsInfo statistics = statisticsInfoMapper.getStatisticsInfo(info.getStatisticsId());
-                if(StringUtils.isNull(statistics)){
+                if(StringUtils.isNotNull(statistics)){
                     info.setSaleMonth(statistics.getSalesMonthValue());
                     info.setActualSales(statistics.getActualSalesValue());
                     info.setRefundAmount(statistics.getRefundAmountValue());
                     info.setGoodsFrequency(statistics.getGoodsFrequencyValue());
                     info.setLastGoods(statistics.getLastGoods());
+
+                    if(statistics.getActualSalesValue()>=10000){
+                        info.setMemberType("一级");
+                    }else if(statistics.getActualSalesValue()>=8000 && statistics.getActualSalesValue()<=9999){
+                        info.setMemberType("二级");
+                    }else if(statistics.getActualSalesValue()>=5000 && statistics.getActualSalesValue()<=7999){
+                        info.setMemberType("三级");
+                    }else{
+                        info.setMemberType("四级");
+                    }
                 }
                 if(StringUtils.isNotEmpty(info.getSpecialUser())){
                     if(info.getSpecialUser().equals(CommonUtils.NORMAL_USER)){
@@ -114,15 +132,6 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
                     }
                 }
 
-                if(info.getActualSales()>=10000){
-                    info.setMemberType("一级");
-                }else if(info.getActualSales()>=8000 && info.getActualSales()<=9999){
-                    info.setMemberType("二级");
-                }else if(info.getActualSales()>=5000 && info.getActualSales()<=7999){
-                    info.setMemberType("三级");
-                }else{
-                    info.setMemberType("四级");
-                }
             });
         }
         return statisticsInfo;
@@ -137,18 +146,27 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     @Override
     public List<UserStatisticsInfoDto> getSpecialUserInfo(UserStatisticsInfo userStatisticsInfo) {
         List<UserStatisticsInfoDto> specialUserInfo = userStatisticsInfoMapper.getSpecialUserInfo(userStatisticsInfo);
-        specialUserInfo.stream().forEach(info->{
+        if(null != specialUserInfo){
+            specialUserInfo.stream().forEach(info->{
+                //统计积分表
+                StatisticsInfo statistics = statisticsInfoMapper.getStatisticsInfo(info.getStatisticsId());
+                if(StringUtils.isNotNull(statistics)){
+                    info.setSaleMonth(statistics.getSalesMonthValue());
+                    info.setActualSales(statistics.getActualSalesValue());
+                    info.setLastGoods(statistics.getLastGoods());
 
-            if(info.getActualSales()>=10000){
-                info.setMemberType("一级");
-            }else if(info.getActualSales()>=8000 && info.getActualSales()<=9999){
-                info.setMemberType("二级");
-            }else if(info.getActualSales()>=5000 && info.getActualSales()<=7999){
-                info.setMemberType("三级");
-            }else{
-                info.setMemberType("四级");
-            }
-        });
+                    if(statistics.getActualSalesValue()>=10000){
+                        info.setMemberType("一级");
+                    }else if(statistics.getActualSalesValue()>=8000 && statistics.getActualSalesValue()<=9999){
+                        info.setMemberType("二级");
+                    }else if(statistics.getActualSalesValue()>=5000 && statistics.getActualSalesValue()<=7999){
+                        info.setMemberType("三级");
+                    }else{
+                        info.setMemberType("四级");
+                    }
+                }
+            });
+        }
         return specialUserInfo;
     }
 
@@ -159,7 +177,27 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
      */
     @Override
     public UserStatisticsInfoDto getSpecialUserByIdInfo(Long statisticsId) {
-        return userStatisticsInfoMapper.getSpecialUserByIdInfo(statisticsId);
+        UserStatisticsInfoDto info = userStatisticsInfoMapper.getSpecialUserByIdInfo(statisticsId);
+        if(null != info){
+            //统计积分表
+            StatisticsInfo statistics = statisticsInfoMapper.getStatisticsInfo(statisticsId.toString());
+            if(StringUtils.isNotNull(statistics)){
+                info.setSaleMonth(statistics.getSalesMonthValue());
+                info.setActualSales(statistics.getActualSalesValue());
+                info.setLastGoods(statistics.getLastGoods());
+
+                if(statistics.getActualSalesValue()>=10000){
+                    info.setMemberType("一级");
+                }else if(statistics.getActualSalesValue()>=8000 && statistics.getActualSalesValue()<=9999){
+                    info.setMemberType("二级");
+                }else if(statistics.getActualSalesValue()>=5000 && statistics.getActualSalesValue()<=7999){
+                    info.setMemberType("三级");
+                }else{
+                    info.setMemberType("四级");
+                }
+            }
+        }
+        return info;
     }
 
     /**

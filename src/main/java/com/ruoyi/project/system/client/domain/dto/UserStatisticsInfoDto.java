@@ -17,6 +17,10 @@ public class UserStatisticsInfoDto extends BaseEntity {
 
     /** 客户ID**/
     private String statisticsId;
+    /** 客户ID**/
+    private String customerId;
+    /** 客户名称**/
+    private String customer;
     /** 客户名称**/
     private String name;
     /** 手机号码**/

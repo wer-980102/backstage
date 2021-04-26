@@ -78,11 +78,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         usi.phone_number AS phoneNumber,
         usi.member_type AS memberType,
         usi.customer_type AS customerType,
-        t2.lastGoodsCount as saleMonth,
-        sum( csi.actual_sales ) AS actualSales,
-        sum( csi.refund_amount ) AS refundAmount,
-        sum( csi.goods_frequency ) AS goodsFrequency,
-        t1.lastGoods,
         usi.store,
         usi.Operator_time AS operatorTime,
         usi.operator,
@@ -90,40 +85,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM
         user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
-        INNER JOIN ( SELECT customer_id AS customerId, max( last_goods ) AS lastGoods FROM clerk_sale_info GROUP BY customerId ) t1 ON usi.statistics_id = t1.customerId
-        INNER JOIN (
-        SELECT
-        a.customerId,
-        sum( a.cs ) AS lastGoodsCount
-        FROM
-        (
-        SELECT
-        customer_id AS customerId,
-        DATE_FORMAT(last_goods,'%Y-%m') AS lastGoods,
-        count( DISTINCT customer_id ) AS cs
-        FROM
-        clerk_sale_info
-        GROUP BY
-        customer_id,
-        lastGoods
-        ) a
-        GROUP BY
-        a.customerId
-        ) t2 ON usi.statistics_id = t2.customerId
         <where>
             <if test="statisticsId!=null">
                 AND usi.statistics_id = #{statisticsId}
             </if>
         </where>
         GROUP BY
-        usi.statistics_id,
-        usi.NAME,
-        usi.phone_number,
-        usi.member_type,
-        usi.customer_type,
-        usi.store,
-        usi.Operator_time,
-        usi.operator
+        usi.statistics_id
     </select>
 
     <select id="getUserStatisticsInfo" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
@@ -133,11 +101,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             usi.phone_number AS phoneNumber,
             usi.member_type AS memberType,
             usi.customer_type AS customerType,
-            t2.lastGoodsCount as saleMonth,
-            sum( csi.actual_sales ) AS actualSales,
-            sum( csi.refund_amount ) AS refundAmount,
-            sum( csi.goods_frequency ) AS goodsFrequency,
-            t1.lastGoods,
             usi.store,
             usi.Operator_time AS operatorTime,
             usi.operator,
@@ -145,35 +108,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         FROM
             user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
-        INNER JOIN ( SELECT customer_id AS customerId, max( last_goods ) AS lastGoods FROM clerk_sale_info GROUP BY customerId ) t1 ON usi.statistics_id = t1.customerId
-        INNER JOIN (
-                SELECT
-                    a.customerId,
-                    sum( a.cs ) AS lastGoodsCount
-                FROM
-                    (
-                        SELECT
-                            customer_id AS customerId,
-                            DATE_FORMAT(last_goods,'%Y-%m') AS lastGoods,
-                            count( DISTINCT customer_id ) AS cs
-                        FROM
-                            clerk_sale_info
-                        GROUP BY
-                            customer_id,
-                            lastGoods
-                    ) a
-                GROUP BY
-                    a.customerId
-            ) t2 ON usi.statistics_id = t2.customerId
         <where>
             <if test="statisticsId!=null">
                 AND usi.statistics_id = #{statisticsId}
             </if>
             <if test="name!=null and name!=''">
-                AND usi.name like concat('%', #{name}, '%')
+                AND usi.name like concat(#{name}, '%')
             </if>
             <if test="phoneNumber!=null and phoneNumber!=''">
-                AND usi.phone_number like concat('%', #{phoneNumber}, '%')
+                AND usi.phone_number like concat( #{phoneNumber}, '%')
             </if>
             <if test="memberType!=null and memberType!=''">
                 AND usi.member_type=#{memberType}
@@ -183,15 +126,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
         GROUP BY
-            usi.statistics_id,
-            usi.NAME,
-            usi.phone_number,
-            usi.member_type,
-            usi.customer_type,
-            usi.store,
-            usi.Operator_time,
-            usi.operator
-        ORDER BY actualSales DESC
+            usi.statistics_id
+        ORDER BY usi.Operator_time DESC
     </select>
 
 
@@ -213,50 +149,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             usi.NAME AS name,
             usi.phone_number AS phoneNumber,
             usi.member_type AS memberType,
-            usi.customer_type AS customerType,
-            t2.lastGoodsCount AS saleMonth,
-            sum( csi.actual_sales ) AS actualSales,
-            t1.lastGoods
+            usi.customer_type AS customerType
         FROM
             user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
-        INNER JOIN ( SELECT customer_id AS customerId, max( last_goods ) AS lastGoods FROM clerk_sale_info GROUP BY customerId ) t1 ON usi.statistics_id = t1.customerId
-        INNER JOIN (
-                SELECT
-                    a.customerId,
-                    sum( a.cs ) AS lastGoodsCount
-                FROM
-                    (
-                        SELECT
-                            customer_id AS customerId,
-                            DATE_FORMAT(last_goods,'%Y-%m') AS lastGoods,
-                            count( DISTINCT customer_id ) AS cs
-                        FROM
-                            clerk_sale_info
-                        GROUP BY
-                            customer_id,
-                            lastGoods
-                    ) a
-                GROUP BY
-                    a.customerId
-            ) t2 ON usi.statistics_id = t2.customerId
         <where> usi.special_user = '1'
             <if test="name!=null and name!=''">
                 AND usi.name like concat(#{name}, '%')
             </if>
             <if test="phoneNumber!=null and phoneNumber!=''">
-                AND usi.phone_number like concat('%', #{phoneNumber}, '%')
+                AND usi.phone_number like concat(#{phoneNumber}, '%')
             </if>
             <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
                 and DATE_FORMAT(csi.last_goods,'%Y-%m-%d') between #{startTime} and #{endTime}
             </if>
         </where>
         GROUP BY
-            usi.statistics_id,
-            usi.NAME,
-            usi.phone_number,
-            usi.member_type,
-            usi.customer_type
+            usi.statistics_id
     </select>
 
     <select id="getSpecialUserByIdInfo" parameterType="java.lang.Long" resultType="UserStatisticsInfoDto">
@@ -265,113 +174,66 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         usi.NAME AS name,
         usi.phone_number AS phoneNumber,
         usi.member_type AS memberType,
-        usi.customer_type AS customerType,
-        t2.lastGoodsCount AS saleMonth,
-        sum( csi.actual_sales ) AS actualSales,
-        t1.lastGoods
+        usi.customer_type AS customerType
         FROM
         user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
-        INNER JOIN ( SELECT customer_id AS customerId, max( last_goods ) AS lastGoods FROM clerk_sale_info GROUP BY customerId ) t1 ON usi.statistics_id = t1.customerId
-        INNER JOIN (
-        SELECT
-        a.customerId,
-        sum( a.cs ) AS lastGoodsCount
-        FROM
-        (
-        SELECT
-        customer_id AS customerId,
-        DATE_FORMAT(last_goods,'%Y-%m') AS lastGoods,
-        count( DISTINCT customer_id ) AS cs
-        FROM
-        clerk_sale_info
-        GROUP BY
-        customer_id,
-        lastGoods
-        ) a
-        GROUP BY
-        a.customerId
-        ) t2 ON usi.statistics_id = t2.customerId
         <where> usi.special_user = '1'
             <if test="statisticsId!=null">
                 AND usi.statistics_id = #{statisticsId}
             </if>
         </where>
-        GROUP BY
-        usi.statistics_id,
-        usi.NAME,
-        usi.phone_number,
-        usi.member_type,
-        usi.customer_type
+        GROUP BY usi.statistics_id
     </select>
 
     <select id="getSaleRecordInfo" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
         SELECT
-            csi.sale_id as saleId,
-            usi.statistics_id AS statisticsId,
-            usi.NAME AS name,
-            csi.model_number AS modelNumber,
-            csi.product_name AS productName,
-            usi.customer_type AS customerType,
-            sum( csi.actual_sales ) AS actualSales,
-            sum( csi.refund_amount ) AS refundAmount,
-            sum( csi.goods_frequency ) AS goodsFrequency,
-            csi.last_goods as lastGoods
+        csi.sale_id AS saleId,
+        csi.customer_id AS customerId,
+        csi.customer AS customer,
+        csi.model_number AS modelNumber,
+        csi.product_name AS productName,
+        csi.actual_sales AS actualSales,
+        csi.refund_amount AS refundAmount,
+        csi.goods_frequency AS goodsFrequency,
+        csi.last_goods AS lastGoods
         FROM
-            user_statistics_info usi
-        INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
+        clerk_sale_info csi
         <where>
             <if test="name!=null and name!=''">
-                AND usi.name like concat(#{name}, '%')
+                AND csi.customer like concat(#{customer}, '%')
             </if>
             <if test="modelNumber!=null and modelNumber!=''">
-                AND csi.model_number like concat('%', #{modelNumber}, '%')
+                AND csi.model_number like concat(#{modelNumber}, '%')
             </if>
             <if test="productName!=null and productName!=''">
-                AND csi.product_name like concat('%', #{productName}, '%')
+                AND csi.product_name like concat(#{productName}, '%')
             </if>
             <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
                 and DATE_FORMAT(csi.last_goods,'%Y-%m-%d') between #{startTime} and #{endTime}
             </if>
         </where>
-        GROUP BY
-            usi.statistics_id,
-            usi.NAME,
-            csi.model_number,
-            csi.product_name,
-            usi.customer_type,
-            csi.last_goods
-        order by csi.last_goods desc,usi.statistics_id desc
+        order by csi.last_goods desc
     </select>
 
     <select id="getSaleRecordById" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
         SELECT
-        csi.sale_id as saleId,
-        usi.statistics_id AS statisticsId,
-        usi.NAME AS name,
+        csi.sale_id AS saleId,
+        csi.customer_id AS customerId,
+        csi.customer AS customer,
         csi.model_number AS modelNumber,
         csi.product_name AS productName,
-        usi.customer_type AS customerType,
-        sum( csi.actual_sales ) AS actualSales,
-        sum( csi.refund_amount ) AS refundAmount,
-        sum( csi.goods_frequency ) AS goodsFrequency,
-        csi.last_goods as lastGoods
+        csi.actual_sales AS actualSales,
+        csi.refund_amount AS refundAmount,
+        csi.goods_frequency AS goodsFrequency,
+        csi.last_goods AS lastGoods
         FROM
-        user_statistics_info usi
-        INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
+        clerk_sale_info csi
         <where>
             <if test="saleId!=null">
                 AND csi.sale_id = #{saleId}
             </if>
         </where>
-        GROUP BY
-        usi.statistics_id,
-        usi.NAME,
-        csi.model_number,
-        csi.product_name,
-        usi.customer_type,
-        csi.last_goods
-        order by csi.last_goods desc,usi.statistics_id desc
     </select>
 
     <select id="getTimingInfo" parameterType="TimeInfoParam" resultType="UserStatisticsInfoDto">

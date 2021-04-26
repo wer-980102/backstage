@@ -111,6 +111,8 @@ public class UserStatisticsInfo extends BaseEntity
     /** 操作时间 */
     @Excel(name = "操作时间")
     private String operatorTime;
+    /**用户姓名**/
+    private String customer;
     /**款号**/
     private String modelNumber;
     /**产品名称**/
