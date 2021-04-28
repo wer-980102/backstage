@@ -63,6 +63,7 @@ public interface IUserStatisticsInfoService
      */
     UserStatisticsInfo getUserById(String name);
 
+
     /**
      * 根据ID查询销售纪录
      * @param saleId

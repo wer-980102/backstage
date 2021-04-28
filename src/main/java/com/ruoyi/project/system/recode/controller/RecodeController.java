@@ -34,7 +34,6 @@ public class RecodeController extends BaseController
     @Autowired
     private IClerkSaleInfoService clerkSaleInfoService;
 
-    @RequiresPermissions("system:recode:view")
     @GetMapping()
     public String user()
     {
@@ -45,7 +44,6 @@ public class RecodeController extends BaseController
     /**
      * 查询销售纪录管理
      */
-    @RequiresPermissions("system:recode:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(UserStatisticsInfo userStatisticsInfo)
@@ -69,19 +67,17 @@ public class RecodeController extends BaseController
     /**
      * 修改销售纪录数据
      */
-    @RequiresPermissions("system:recode:edit")
     @Log(title = "修改特殊用户数据", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
     public AjaxResult editSave(UserStatisticsInfo userStatisticsInfo)
     {
-        return toAjax(iUserStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
+        return toAjax(clerkSaleInfoService.updateClerkSaleByIdInfo(userStatisticsInfo));
     }
 
     /**
      * 删除销售纪录
      */
-    @RequiresPermissions("system:recode:remove")
     @Log(title = "删除销售纪录", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

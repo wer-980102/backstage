@@ -36,7 +36,6 @@ public class UserIntegralInfoController extends BaseController
     @Autowired
     private IUserIntegralInfoService userIntegralInfoService;
 
-    @RequiresPermissions("system:update:view")
     @GetMapping()
     public String info()
     {
@@ -46,7 +45,6 @@ public class UserIntegralInfoController extends BaseController
     /**
      * 查询积分规则列表
      */
-    @RequiresPermissions("system:update:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(UserIntegralInfo userIntegralInfo)
@@ -59,7 +57,6 @@ public class UserIntegralInfoController extends BaseController
     /**
      * 导出积分规则列表
      */
-    @RequiresPermissions("system:update:export")
     @Log(title = "积分规则", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -89,7 +86,6 @@ public class UserIntegralInfoController extends BaseController
     /**
      * 修改保存积分规则
      */
-    @RequiresPermissions("system:update:edit")
     @Log(title = "积分规则", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -101,7 +97,6 @@ public class UserIntegralInfoController extends BaseController
     /**
      * 删除积分规则
      */
-    @RequiresPermissions("system:update:remove")
     @Log(title = "积分规则", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

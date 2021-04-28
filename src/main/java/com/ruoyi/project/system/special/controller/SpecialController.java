@@ -32,7 +32,6 @@ public class SpecialController extends BaseController
     private IUserStatisticsInfoService iUserStatisticsInfoService;
 
 
-    @RequiresPermissions("system:special:view")
     @GetMapping()
     public String user()
     {
@@ -42,7 +41,6 @@ public class SpecialController extends BaseController
     /**
      * 查询特殊用户
      */
-    @RequiresPermissions("system:special:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(UserStatisticsInfo userStatisticsInfo)
@@ -65,7 +63,6 @@ public class SpecialController extends BaseController
      * 用户降级
      */
     @ResponseBody
-    @RequiresPermissions("system:special:edit")
     @Log(title = "用户降级", businessType = BusinessType.UPDATE)
     @PostMapping("/specialUserEdit")
     public AjaxResult specialUserEdit(UserStatisticsInfo userStatisticsInfo)
@@ -77,7 +74,6 @@ public class SpecialController extends BaseController
     /**
      * 修改保存特殊用户数据
      */
-    @RequiresPermissions("system:special:edit")
     @Log(title = "修改特殊用户数据", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody

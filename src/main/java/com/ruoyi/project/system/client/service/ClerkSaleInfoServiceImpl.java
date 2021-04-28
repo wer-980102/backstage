@@ -22,7 +22,7 @@ import com.ruoyi.common.utils.text.Convert;
 /**
  * 销售纪录Service业务层处理
  *
- * @author ruoyi
+ * @author wer
  * @date 2021-04-16
  */
 @Service
@@ -84,6 +84,22 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
     {
         clerkSaleInfo.setCreateTime(DateUtils.getNowDate());
         return clerkSaleInfoMapper.insertClerkSaleInfo(clerkSaleInfo);
+    }
+
+    /**
+     * 修根据客户ID改销售纪录
+     *
+     * @param userStatisticsInfo 销售纪录
+     * @return 结果
+     */
+    @Override
+    public int updateClerkSaleByIdInfo(UserStatisticsInfo userStatisticsInfo)
+    {
+        ClerkSaleInfo clerkSaleInfo = ClerkSaleInfo.builder().customerId(userStatisticsInfo.getStatisticsId())
+                .modelNumber(userStatisticsInfo.getModelNumber())
+                .productName(userStatisticsInfo.getProductName()).build();
+        clerkSaleInfo.setUpdateTime(DateUtils.getNowDate());
+        return clerkSaleInfoMapper.updateClerkSaleInfo(clerkSaleInfo);
     }
 
     /**

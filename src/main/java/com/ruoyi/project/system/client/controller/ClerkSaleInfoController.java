@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * 销售纪录Controller
  *
- * @author ruoyi
+ * @author wer
  * @date 2021-04-16
  */
 @Controller
@@ -36,7 +36,6 @@ public class ClerkSaleInfoController extends BaseController
     @Autowired
     private IClerkSaleInfoService clerkSaleInfoService;
 
-    @RequiresPermissions("system:sale:view")
     @GetMapping()
     public String info()
     {
@@ -46,7 +45,6 @@ public class ClerkSaleInfoController extends BaseController
     /**
      * 查询销售纪录列表
      */
-    @RequiresPermissions("system:sale:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(ClerkSaleInfo clerkSaleInfo)
@@ -59,7 +57,6 @@ public class ClerkSaleInfoController extends BaseController
     /**
      * 导出销售纪录列表
      */
-    @RequiresPermissions("system:sale:export")
     @Log(title = "销售纪录", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -69,7 +66,6 @@ public class ClerkSaleInfoController extends BaseController
         ExcelUtil<ClerkSaleInfo> util = new ExcelUtil<ClerkSaleInfo>(ClerkSaleInfo.class);
         return util.exportExcel(list, "销售纪录数据");
     }
-    @RequiresPermissions("system:sale:view")
     @GetMapping("/saleimportTemplate")
     @ResponseBody
     public AjaxResult importTemplate()
@@ -79,7 +75,6 @@ public class ClerkSaleInfoController extends BaseController
     }
 
     @Log(title = "销售导入", businessType = BusinessType.IMPORT)
-    @RequiresPermissions("system:sale:import")
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
@@ -101,7 +96,6 @@ public class ClerkSaleInfoController extends BaseController
     /**
      * 新增保存销售纪录
      */
-    @RequiresPermissions("system:sale:add")
     @Log(title = "销售纪录", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -124,7 +118,6 @@ public class ClerkSaleInfoController extends BaseController
     /**
      * 修改保存销售纪录
      */
-    @RequiresPermissions("system:sale:edit")
     @Log(title = "销售纪录", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -136,7 +129,6 @@ public class ClerkSaleInfoController extends BaseController
     /**
      * 删除销售纪录
      */
-    @RequiresPermissions("system:sale:remove")
     @Log(title = "销售纪录", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

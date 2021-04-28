@@ -1,6 +1,7 @@
 package com.ruoyi.project.system.client.service;
 
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
+import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.ClerkSaleInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
 
@@ -9,7 +10,7 @@ import java.util.List;
 /**
  * 销售纪录Service接口
  *
- * @author ruoyi
+ * @author wer
  * @date 2021-04-16
  */
 public interface IClerkSaleInfoService
@@ -47,12 +48,20 @@ public interface IClerkSaleInfoService
     public int insertClerkSaleInfo(ClerkSaleInfo clerkSaleInfo);
 
     /**
+     * 修根据客户ID改销售纪录
+     *
+     * @param userStatisticsInfo 销售纪录
+     * @return 结果
+     */
+     int updateClerkSaleByIdInfo(UserStatisticsInfo userStatisticsInfo);
+
+    /**
      * 修改销售纪录
      *
      * @param clerkSaleInfo 销售纪录
      * @return 结果
      */
-    public int updateClerkSaleInfo(ClerkSaleInfo clerkSaleInfo);
+     int updateClerkSaleInfo(ClerkSaleInfo clerkSaleInfo);
 
     /**
      * 批量删除销售纪录

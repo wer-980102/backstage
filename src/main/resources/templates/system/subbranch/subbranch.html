@@ -13,11 +13,11 @@
 
                             <li>
                                 <label>分店名称：</label>
-                                <input type="text" name="branchName"/>
+                                <input type="text" name="deptName"/>
                             </li>
                             <li>
                                 <label>负责人名称：</label>
-                                <input type="text" name="chargeName"/>
+                                <input type="text" name="leader"/>
                             </li>
                             <li>
                                 <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
@@ -29,17 +29,11 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:subbranch:add">
+                <a class="btn btn-success" onclick="$.operate.add(100)" >
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:subbranch:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
                     <i class="fa fa-edit"></i> 修改
-                </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:subbranch:remove">
-                    <i class="fa fa-remove"></i> 删除
-                </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:subbranch:export">
-                    <i class="fa fa-download"></i> 导出
                 </a>
             </div>
             <div class="col-sm-12 select-table table-striped">
@@ -56,17 +50,21 @@
         $(function() {
             var options = {
                 url: prefix + "/list",
-                createUrl: prefix + "/add",
+                createUrl: prefix + "/add/{id}",
                 updateUrl: prefix + "/edit/{id}",
-                removeUrl: prefix + "/remove",
-                exportUrl: prefix + "/export",
+                removeUrl: prefix + "/remove/{id}",
                 modalName: "分店信息",
                 columns: [{
                     checkbox: true
                 },
                 {
-                    field: 'branchId',
+                    field: 'deptId',
                     title: '主键id',
+                    visible: false
+                },
+                {
+                    field: 'parentId',
+                    title: '父级ID',
                     visible: false
                 },
                 {
@@ -75,7 +73,7 @@
                     visible: false
                 },
                 {
-                    field: 'branchName',
+                    field: 'deptName',
                     title: '分店名称'
                 },
                 {
@@ -83,11 +81,11 @@
                     title: '分店地址'
                 },
                 {
-                    field: 'chargeName',
+                    field: 'leader',
                     title: '负责人名称'
                 },
                 {
-                    field: 'information',
+                    field: 'phone',
                     title: '负责人联系方式'
                 },
                 {
@@ -112,8 +110,8 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.branchId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.branchId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.deptId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="deleteSub(\'' + row.deptId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
@@ -124,23 +122,30 @@
         /* 状态显示 */
         function statusTools(row) {
             if (row.status == 1) {
-                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.branchId + '\')"></i> ';
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.deptId + '\')"></i> ';
             } else {
-                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.branchId + '\')"></i> ';
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.deptId + '\')"></i> ';
             }
         }
 
         /* 状态-停用 */
-        function disable(branchId) {
+        function disable(deptId) {
             $.modal.confirm("确认要停用该规则吗？", function() {
-                $.operate.post(prefix + "/edit", { "branchId": branchId, "status": 1 });
+                $.operate.post(prefix + "/editStatus", { "deptId": deptId, "status": 1 });
             })
         }
 
         /* 状态-启用 */
-        function enable(branchId) {
+        function enable(deptId) {
             $.modal.confirm("确认要启用该规则吗？", function() {
-                $.operate.post(prefix + "/edit", { "branchId": branchId, "status": 0 });
+                $.operate.post(prefix + "/editStatus", { "deptId": deptId, "status": 0 });
+            })
+        }
+
+        /* 升级用户*/
+        function deleteSub(deptId) {
+            $.modal.confirm("确认要删除该条积分规则吗？", function() {
+                $.operate.post(prefix + "/remove", { "deptId": deptId});
             })
         }
     </script>

@@ -39,7 +39,6 @@ public class UserStatisticsInfoController extends BaseController
     @Autowired
     private IUserStatisticsInfoService userStatisticsInfoService;
 
-    @RequiresPermissions("system:client:view")
     @GetMapping()
     public String info()
     {
@@ -49,7 +48,6 @@ public class UserStatisticsInfoController extends BaseController
     /**
      * 查询门店数据列表
      */
-    @RequiresPermissions("system:client:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(UserStatisticsInfo userStatisticsInfo)
@@ -59,7 +57,6 @@ public class UserStatisticsInfoController extends BaseController
         return getDataTable(list);
     }
 
-    @RequiresPermissions("system:client:view")
     @GetMapping("/importTemplate")
     @ResponseBody
     public AjaxResult importTemplate()
@@ -71,7 +68,6 @@ public class UserStatisticsInfoController extends BaseController
     /**
      * 导出门店数据列表
      */
-    @RequiresPermissions("system:client:export")
     @Log(title = "门店数据", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -83,7 +79,6 @@ public class UserStatisticsInfoController extends BaseController
     }
 
     @Log(title = "用户管理导入", businessType = BusinessType.IMPORT)
-    @RequiresPermissions("system:client:import")
     @PostMapping("/importData")
     @ResponseBody
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception
@@ -105,7 +100,6 @@ public class UserStatisticsInfoController extends BaseController
     /**
      * 新增保存门店数据
      */
-    @RequiresPermissions("system:client:add")
     @Log(title = "门店数据", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -128,7 +122,6 @@ public class UserStatisticsInfoController extends BaseController
      * 升级用户
      */
     @ResponseBody
-    @RequiresPermissions("system:client:edit")
     @Log(title = "用户升级", businessType = BusinessType.UPDATE)
     @PostMapping("/specialUserEdit")
     public AjaxResult specialUserEdit(UserStatisticsInfo userStatisticsInfo)
@@ -145,7 +138,6 @@ public class UserStatisticsInfoController extends BaseController
      * 用户减分
      */
     @ResponseBody
-    @RequiresPermissions("system:client:edit")
     @Log(title = "用户减分", businessType = BusinessType.UPDATE)
     @PostMapping("/scoreReduction")
     public AjaxResult ScoreReduction(UserStatisticsInfo userStatisticsInfo)
@@ -160,7 +152,6 @@ public class UserStatisticsInfoController extends BaseController
     /**
      * 修改保存门店数据
      */
-    @RequiresPermissions("system:client:edit")
     @Log(title = "门店数据", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -176,7 +167,6 @@ public class UserStatisticsInfoController extends BaseController
     /**
      * 删除门店数据
      */
-    @RequiresPermissions("system:client:remove")
     @Log(title = "门店数据", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody

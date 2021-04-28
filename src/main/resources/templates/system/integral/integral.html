@@ -6,77 +6,15 @@
 <body class="gray-bg">
      <div class="container-div">
         <div class="row">
-           <!-- <div class="col-sm-12 search-collapse">
-                <form id="formId">
-                    <div class="select-list">
-                        <ul>
-                            <li>
-                                <label>客户ID：</label>
-                                <input type="text" name="customerId"/>
-                            </li>
-                            <li>
-                                <label>客户：</label>
-                                <input type="text" name="customerName"/>
-                            </li>
-                            <li>
-                                <label>总积分：</label>
-                                <input type="text" name="integral"/>
-                            </li>
-                            <li>
-                                <label>积分规则：</label>
-                                <input type="text" name="integralRule"/>
-                            </li>
-                            <li>
-                                <label>规则描述：</label>
-                                <input type="text" name="integralRemark"/>
-                            </li>
-                            <li>
-                                <label>积分变动情况：</label>
-                                <input type="text" name="changeSituation"/>
-                            </li>
-                            <li>
-                                <label>积分变动类型：</label>
-                                <select name="changeType">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>积分变动名称：</label>
-                                <input type="text" name="changeName"/>
-                            </li>
-                            <li>
-                                <label>状态：</label>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>操作人：</label>
-                                <input type="text" name="operator"/>
-                            </li>
-                            <li>
-                                <label>操作时间：</label>
-                                <input type="text" class="time-input" placeholder="请选择操作时间" name="operatorTime"/>
-                            </li>
-                            <li>
-                                <a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
-                                <a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
-                            </li>
-                        </ul>
-                    </div>
-                </form>
-            </div>-->
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:integral:add">
+                <a class="btn btn-success" onclick="$.operate.add()" >
                     <i class="fa fa-plus"></i> 一键增加规则
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:integral:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:integral:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
                     <i class="fa fa-remove"></i> 删除
                 </a>
             </div>
@@ -146,8 +84,8 @@
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.integralId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="deleteIntegral(\'' + row.integralId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.integralId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="deleteIntegral(\'' + row.integralId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]

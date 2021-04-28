@@ -32,7 +32,6 @@ public class IntegralController extends BaseController
     private String prefix = "system/integral";
 
 
-    @RequiresPermissions("system:integral:view")
     @GetMapping()
     public String user()
     {
@@ -42,7 +41,6 @@ public class IntegralController extends BaseController
     /**
      * 查询积分规则列表
      */
-    @RequiresPermissions("system:integral:list")
     @PostMapping("/list")
     @ResponseBody
     public TableDataInfo list(UserIntegralInfo userIntegralInfo)
@@ -55,7 +53,6 @@ public class IntegralController extends BaseController
     /**
      * 导出积分规则列表
      */
-    @RequiresPermissions("system:integral:export")
     @Log(title = "积分规则", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     @ResponseBody
@@ -78,7 +75,6 @@ public class IntegralController extends BaseController
     /**
      * 新增保存积分规则
      */
-    @RequiresPermissions("system:integral:add")
     @Log(title = "积分规则", businessType = BusinessType.INSERT)
     @PostMapping("/add")
     @ResponseBody
@@ -116,7 +112,6 @@ public class IntegralController extends BaseController
     /**
      * 修改保存积分规则
      */
-    @RequiresPermissions("system:integral:edit")
     @Log(title = "积分规则", businessType = BusinessType.UPDATE)
     @PostMapping("/edit")
     @ResponseBody
@@ -128,7 +123,6 @@ public class IntegralController extends BaseController
     /**
      * 批量删除积分规则
      */
-    @RequiresPermissions("system:integral:remove")
     @Log(title = "积分规则", businessType = BusinessType.DELETE)
     @PostMapping( "/remove")
     @ResponseBody
@@ -140,7 +134,6 @@ public class IntegralController extends BaseController
     /**
      * 删除积分规则
      */
-    @RequiresPermissions("system:integral:remove")
     @Log(title = "积分规则", businessType = BusinessType.DELETE)
     @PostMapping( "/deleteIntegral")
     @ResponseBody

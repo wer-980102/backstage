@@ -7,11 +7,7 @@ import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.security.ShiroUtils;
-import com.ruoyi.project.system.client.domain.BranchInfo;
-import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
-import com.ruoyi.project.system.client.domain.StatisticsInfo;
-import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
-import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
+import com.ruoyi.project.system.client.domain.*;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.client.mapper.BranchInfoMapper;
@@ -28,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 /**
  * 门店数据Service业务层处理
  *
- * @author ruoyi
+ * @author wer
  * @date 2021-04-16
  */
 @Service
@@ -273,13 +269,13 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     @Transactional
     public int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo)
     {
-        //修改销售数据
-        ClerkSaleInfo saleInfo = ClerkSaleInfo.builder()
-                .saleId(userStatisticsInfo.getSaleId())
-                .modelNumber(StringUtils.isNotEmpty(userStatisticsInfo.getModelNumber())?userStatisticsInfo.getModelNumber():null)
-                .productName(StringUtils.isNotEmpty(userStatisticsInfo.getProductName())?userStatisticsInfo.getProductName():null).build();
-        saleInfo.setUpdateTime(DateUtils.getNowDate());
-        return clerkSaleInfoMapper.updateClerkSaleInfo(saleInfo);
+        UserStatisticsInfo info = UserStatisticsInfo.builder()
+                .phoneNumber(userStatisticsInfo.getPhoneNumber())
+                .customerType(userStatisticsInfo.getCustomerType())
+                .operator(StringUtils.isNotEmpty(userStatisticsInfo.getOperator())?userStatisticsInfo.getOperator():null)
+                .build();
+        info.setUpdateTime(DateUtils.getNowDate());
+        return userStatisticsInfoMapper.updateUserStatisticsInfo(info);
     }
 
     /**
@@ -343,6 +339,7 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
      * @return 结果
      */
     @Override
+    @Transactional
     public String importUser(List<UserStatisticsInfo> userList, Boolean isUpdateSupport)
     {
         if (StringUtils.isNull(userList) || userList.size() == 0)
@@ -353,6 +350,9 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
         if(StringUtils.isNull(branchInfo)){
             throw new BusinessException("该用户没有分店，请先增加分店！");
         }
+
+
+
         int successNum = 0;
         int failureNum = 0;
         StringBuilder successMsg = new StringBuilder();

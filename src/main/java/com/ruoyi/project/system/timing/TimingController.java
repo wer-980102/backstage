@@ -5,6 +5,7 @@ import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.TimeUtils;
 import com.ruoyi.project.system.client.domain.StatisticsInfo;
 import com.ruoyi.project.system.client.domain.UserIntegralInfo;
+import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.ClerkSaleInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
@@ -42,18 +43,36 @@ public class TimingController {
         List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(TimeInfoParam.builder().startTime(TimeUtils.getMinTime()).endTime(TimeUtils.getMaxTime()).build());
         if(StringUtils.isNotNull(timingInfo)){
             timingInfo.stream().forEach(info->{
+
+
+                //查询是否是新用户
+                UserStatisticsInfo userInfo = iUserStatisticsInfoService.getUserById(info.getName());
+                if(StringUtils.isNotNull(userInfo)){
                     UserIntegralInfo integralInfo = UserIntegralInfo.builder()
-                        .customerId(Long.parseLong(info.getStatisticsId()))
-                        .customerName(info.getName())
-                        .integral(CommonUtils.getPlusIntegralInfo(info.getActualSales().intValue()))
-                        .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
-                        .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")
-                        .changeSituation(CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
-                        .changeType(CommonUtils.getIntegralJudge(info.getActualSales().intValue()))
-                        .changeName("本月活跃用户积分"+CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
-                        .operator(info.getOperator())
-                        .operatorTime(info.getLastGoods()).build();
-                iUserIntegralInfoService.updateUserIntegralInfo(integralInfo);
+                            .customerId(Long.parseLong(info.getStatisticsId()))
+                            .customerName(info.getName())
+                            .integral(CommonUtils.getPlusIntegralInfo(info.getActualSales().intValue()))
+                            .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
+                            .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")
+                            .changeSituation(CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
+                            .changeType(CommonUtils.getIntegralJudge(info.getActualSales().intValue()))
+                            .changeName("本月活跃用户积分"+CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
+                            .operator(info.getOperator())
+                            .operatorTime(info.getLastGoods()).build();
+                    iUserIntegralInfoService.updateUserIntegralInfo(integralInfo);
+
+                }else{
+                    //新用户默认10分
+                    UserIntegralInfo integralInfo = UserIntegralInfo.builder()
+                            .customerId(Long.parseLong(info.getStatisticsId()))
+                            .customerName(info.getName())
+                            .integral(10)
+                            .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
+                            .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")
+                            .operator(info.getOperator())
+                            .operatorTime(info.getLastGoods()).build();
+                    iUserIntegralInfoService.insertUserIntegralInfo(integralInfo);
+                }
             });
         }
 

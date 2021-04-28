@@ -19,7 +19,7 @@ import com.ruoyi.project.system.role.domain.Role;
 
 /**
  * 部门管理 服务实现
- * 
+ *
  * @author ruoyi
  */
 @Service
@@ -30,7 +30,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 查询部门管理数据
-     * 
+     *
      * @param dept 部门信息
      * @return 部门信息集合
      */
@@ -43,7 +43,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 查询部门管理树
-     * 
+     *
      * @param dept 部门信息
      * @return 所有部门信息
      */
@@ -58,7 +58,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 查询部门管理树（排除下级）
-     * 
+     *
      * @param deptId 部门ID
      * @return 所有部门信息
      */
@@ -149,7 +149,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 查询部门人数
-     * 
+     *
      * @param parentId 部门ID
      * @return 结果
      */
@@ -163,7 +163,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 查询部门是否存在用户
-     * 
+     *
      * @param deptId 部门ID
      * @return 结果 true 存在 false 不存在
      */
@@ -176,7 +176,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 删除部门管理信息
-     * 
+     *
      * @param deptId 部门ID
      * @return 结果
      */
@@ -188,7 +188,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 新增保存部门信息
-     * 
+     *
      * @param dept 部门信息
      * @return 结果
      */
@@ -199,8 +199,9 @@ public class DeptServiceImpl implements IDeptService
         // 如果父节点不为"正常"状态,则不允许新增子节点
         if (!UserConstants.DEPT_NORMAL.equals(info.getStatus()))
         {
-            throw new BusinessException("部门停用，不允许新增");
+            throw new BusinessException("分店停用，不允许新增");
         }
+        dept.setUserId(ShiroUtils.getUserId());
         dept.setCreateBy(ShiroUtils.getLoginName());
         dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
         return deptMapper.insertDept(dept);
@@ -208,7 +209,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 修改保存部门信息
-     * 
+     *
      * @param dept 部门信息
      * @return 结果
      */
@@ -236,8 +237,32 @@ public class DeptServiceImpl implements IDeptService
     }
 
     /**
+     * 修改分部状态信息
+     *
+     * @param dept 部门信息
+     * @return 结果
+     */
+    @Override
+    public int updateStatus(Dept dept) {
+        int result = 0;
+        List<Dept> depts = deptMapper.selectChildrenDeptById(dept.getDeptId());
+        depts.add(Dept.builder().deptId(dept.getDeptId()).build());
+        if(null != depts && depts.size()>0){
+            for (Dept d : depts){
+                dept.setDeptId(d.getDeptId());
+                dept.setUpdateBy(ShiroUtils.getLoginName());
+                result = deptMapper.updateDept(dept);
+            }
+        }else{
+            dept.setUpdateBy(ShiroUtils.getLoginName());
+            result = deptMapper.updateDept(dept);
+        }
+        return result;
+    }
+
+    /**
      * 修改该部门的父级部门状态
-     * 
+     *
      * @param dept 当前部门
      */
     private void updateParentDeptStatus(Dept dept)
@@ -250,7 +275,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 修改子元素关系
-     * 
+     *
      * @param deptId 被修改的部门ID
      * @param newAncestors 新的父ID集合
      * @param oldAncestors 旧的父ID集合
@@ -270,7 +295,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 修改子元素关系
-     * 
+     *
      * @param deptId 部门ID
      * @param ancestors 元素列表
      */
@@ -291,7 +316,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 根据部门ID查询信息
-     * 
+     *
      * @param deptId 部门ID
      * @return 部门信息
      */
@@ -303,7 +328,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 根据ID查询所有子部门（正常状态）
-     * 
+     *
      * @param deptId 部门ID
      * @return 子部门数
      */
@@ -315,7 +340,7 @@ public class DeptServiceImpl implements IDeptService
 
     /**
      * 校验部门名称是否唯一
-     * 
+     *
      * @param dept 部门信息
      * @return 结果
      */
