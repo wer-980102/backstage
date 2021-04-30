@@ -109,16 +109,6 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
                     info.setRefundAmount(statistics.getRefundAmountValue());
                     info.setGoodsFrequency(statistics.getGoodsFrequencyValue());
                     info.setLastGoods(statistics.getLastGoods());
-
-                    if(statistics.getActualSalesValue()>=10000){
-                        info.setMemberType("一级");
-                    }else if(statistics.getActualSalesValue()>=8000 && statistics.getActualSalesValue()<=9999){
-                        info.setMemberType("二级");
-                    }else if(statistics.getActualSalesValue()>=5000 && statistics.getActualSalesValue()<=7999){
-                        info.setMemberType("三级");
-                    }else{
-                        info.setMemberType("四级");
-                    }
                 }
                 if(StringUtils.isNotEmpty(info.getSpecialUser())){
                     if(info.getSpecialUser().equals(CommonUtils.NORMAL_USER)){
@@ -270,12 +260,34 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     public int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo)
     {
         UserStatisticsInfo info = UserStatisticsInfo.builder()
+                .statisticsId(userStatisticsInfo.getStatisticsId())
                 .phoneNumber(userStatisticsInfo.getPhoneNumber())
                 .customerType(userStatisticsInfo.getCustomerType())
                 .operator(StringUtils.isNotEmpty(userStatisticsInfo.getOperator())?userStatisticsInfo.getOperator():null)
                 .build();
         info.setUpdateTime(DateUtils.getNowDate());
         return userStatisticsInfoMapper.updateUserStatisticsInfo(info);
+    }
+
+    /**
+     * 修改等级
+     * @param userStatisticsInfo
+     * @return
+     */
+    @Override
+    public int updateUserStatisticsGrade(UserStatisticsInfo userStatisticsInfo) {
+        userStatisticsInfo.setUpdateTime(DateUtils.getNowDate());
+        return userStatisticsInfoMapper.updateUserStatisticsGrade(userStatisticsInfo);
+    }
+
+    /**
+     * 用户降级
+     * @param userStatisticsInfo
+     * @return
+     */
+    @Override
+    public int updateUserStatisticsSpecialUser(UserStatisticsInfo userStatisticsInfo) {
+        return userStatisticsInfoMapper.updateUserStatisticsSpecialUser(userStatisticsInfo);
     }
 
     /**

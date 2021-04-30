@@ -68,7 +68,7 @@ public class SpecialController extends BaseController
     public AjaxResult specialUserEdit(UserStatisticsInfo userStatisticsInfo)
     {
         userStatisticsInfo.setSpecialUser(CommonUtils.NORMAL_USER);
-        return toAjax(iUserStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
+        return toAjax(iUserStatisticsInfoService.updateUserStatisticsSpecialUser(userStatisticsInfo));
     }
 
     /**

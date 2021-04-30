@@ -98,6 +98,21 @@ public interface IUserStatisticsInfoService
      */
      int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
 
+
+    /**
+     * 修改等级
+     * @param userStatisticsInfo
+     * @return
+     */
+    int updateUserStatisticsGrade(UserStatisticsInfo userStatisticsInfo);
+
+    /**
+     * 用户降级
+     * @param userStatisticsInfo
+     * @return
+     */
+    int updateUserStatisticsSpecialUser(UserStatisticsInfo userStatisticsInfo);
+
     /**
      * 根据客户ID修改销售纪录
      *

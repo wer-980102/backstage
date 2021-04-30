@@ -16,6 +16,9 @@
 							<li>
 								货号：<input type="text" name="modelNumber"/>
 							</li>
+							<li>
+								手机号：<input type="text" name="phoneNumber"/>
+							</li>
 							<li class="select-time">
 								<label>拿货时间： </label>
 								<input type="text" class="time-input" id="startTime" placeholder="开始时间" name="startTime"/>
@@ -68,6 +71,12 @@
 						title: '客户名称'
 					},
 					{
+						field: 'phoneNumber',
+						title: '手机号',
+						sortable: true,
+						align: 'center'
+					},
+					{
 						field: 'modelNumber',
 						title: '货号',
 						sortable: true,
@@ -100,6 +109,12 @@
 					{
 						field: 'lastGoods',
 						title: '拿货时间',
+						sortable: true,
+						align: 'center'
+					},
+					{
+						field: 'branchName',
+						title: '分店名称',
 						sortable: true,
 						align: 'center'
 					},

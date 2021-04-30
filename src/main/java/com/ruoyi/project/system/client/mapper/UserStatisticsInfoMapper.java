@@ -110,6 +110,19 @@ public interface UserStatisticsInfoMapper
      int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
 
     /**
+     * 修改等级
+     * @param userStatisticsInfo
+     * @return
+     */
+     int updateUserStatisticsGrade(UserStatisticsInfo userStatisticsInfo);
+
+    /**
+     * 用户降级
+     * @param userStatisticsInfo
+     * @return
+     */
+     int updateUserStatisticsSpecialUser(UserStatisticsInfo userStatisticsInfo);
+    /**
      * 删除门店数据
      *
      * @param statisticsId 门店数据ID

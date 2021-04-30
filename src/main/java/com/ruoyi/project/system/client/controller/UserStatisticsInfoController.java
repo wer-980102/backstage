@@ -161,7 +161,7 @@ public class UserStatisticsInfoController extends BaseController
         if(CommonUtils.SPECIAL_USER.equals(specialUserById)){
             return error("修改用户'" + userStatisticsInfo.getName() + "'失败，该用户是特殊用户");
         }
-        return toAjax(userStatisticsInfoService.updateClerkSaleByCustomerId(userStatisticsInfo));
+        return toAjax(userStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
     }
 
     /**

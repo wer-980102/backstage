@@ -36,14 +36,13 @@ public class TimingController {
     /**
      * 每天11:59:59同步统计数据
      */
-    @Scheduled(cron = "${time.times}")
+   // @Scheduled(cron = "${time.times}")
     @Transactional
     public void setDayStallSum() {
         System.out.println("......每天定时计算积分......");
         List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(TimeInfoParam.builder().startTime(TimeUtils.getMinTime()).endTime(TimeUtils.getMaxTime()).build());
         if(StringUtils.isNotNull(timingInfo)){
             timingInfo.stream().forEach(info->{
-
 
                 //查询是否是新用户
                 UserStatisticsInfo userInfo = iUserStatisticsInfoService.getUserById(info.getName());
@@ -60,7 +59,6 @@ public class TimingController {
                             .operator(info.getOperator())
                             .operatorTime(info.getLastGoods()).build();
                     iUserIntegralInfoService.updateUserIntegralInfo(integralInfo);
-
                 }else{
                     //新用户默认10分
                     UserIntegralInfo integralInfo = UserIntegralInfo.builder()
@@ -73,9 +71,21 @@ public class TimingController {
                             .operatorTime(info.getLastGoods()).build();
                     iUserIntegralInfoService.insertUserIntegralInfo(integralInfo);
                 }
+                //计算等级
+                UserStatisticsInfo statisticsInfo = new UserStatisticsInfo();
+                if(info.getActualSales()>=10000){
+                    statisticsInfo.setGrade("一级");
+                }else if(info.getActualSales()>=8000 && info.getActualSales()<=9999){
+                    statisticsInfo.setGrade("二级");
+                }else if(info.getActualSales()>=5000 && info.getActualSales()<=7999){
+                    statisticsInfo.setGrade("三级");
+                }else{
+                    statisticsInfo.setGrade("四级");
+                }
+                statisticsInfo.setStatisticsId(Long.parseLong(info.getStatisticsId()));
+                iUserStatisticsInfoService.updateUserStatisticsInfo(statisticsInfo);
             });
         }
-
 
         //统计所有额度值
         List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(TimeInfoParam.builder().startTime(TimeUtils.getMinTime()).endTime(TimeUtils.getMaxTime()).build());
@@ -121,6 +131,20 @@ public class TimingController {
                 }else{
                     iUserIntegralInfoService.insertUserIntegralInfo(integralInfo);
                 }
+
+                //计算等级
+                UserStatisticsInfo statisticsInfo = new UserStatisticsInfo();
+                if(info.getActualSales()>=10000){
+                    statisticsInfo.setGrade("一级");
+                }else if(info.getActualSales()>=8000 && info.getActualSales()<=9999){
+                    statisticsInfo.setGrade("二级");
+                }else if(info.getActualSales()>=5000 && info.getActualSales()<=7999){
+                    statisticsInfo.setGrade("三级");
+                }else{
+                    statisticsInfo.setGrade("四级");
+                }
+                statisticsInfo.setStatisticsId(Long.parseLong(info.getStatisticsId()));
+                iUserStatisticsInfoService.updateUserStatisticsGrade(statisticsInfo);
             });
         }
 

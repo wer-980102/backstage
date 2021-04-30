@@ -10,6 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="productName"    column="product_name"    />
         <result property="brand"    column="brand"    />
         <result property="customer"    column="customer"    />
+        <result property="userId"    column="user_id"    />
         <result property="sales"    column="sales"    />
         <result property="store"    column="store"    />
         <result property="refundAmount"    column="refund_amount"    />
@@ -23,7 +24,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectNotClerkSaleInfoVo">
-        select sale_id, model_number, product_name, brand, customer, sales, store, refund_amount, actual_sales, last_goods, goods_frequency, create_by, create_time, update_by, update_time from not_clerk_sale_info
+        select sale_id, model_number, product_name, brand, customer,user_id, sales, store, refund_amount, actual_sales, last_goods, goods_frequency, create_by, create_time, update_by, update_time from not_clerk_sale_info
     </sql>
 
     <select id="selectNotClerkSaleInfoList" parameterType="NotClerkSaleInfo" resultMap="NotClerkSaleInfoResult">
@@ -54,6 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productName != null">product_name,</if>
             <if test="brand != null">brand,</if>
             <if test="customer != null">customer,</if>
+            <if test="userId != null">user_id,</if>
             <if test="sales != null">sales,</if>
             <if test="store != null">store,</if>
             <if test="refundAmount != null">refund_amount,</if>
@@ -70,6 +72,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productName != null">#{productName},</if>
             <if test="brand != null">#{brand},</if>
             <if test="customer != null">#{customer},</if>
+            <if test="userId != null">#{userId},</if>
             <if test="sales != null">#{sales},</if>
             <if test="store != null">#{store},</if>
             <if test="refundAmount != null">#{refundAmount},</if>
@@ -90,6 +93,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="productName != null">product_name = #{productName},</if>
             <if test="brand != null">brand = #{brand},</if>
             <if test="customer != null">customer = #{customer},</if>
+            <if test="userId != null">user_id = #{userId},</if>
             <if test="sales != null">sales = #{sales},</if>
             <if test="store != null">store = #{store},</if>
             <if test="refundAmount != null">refund_amount = #{refundAmount},</if>

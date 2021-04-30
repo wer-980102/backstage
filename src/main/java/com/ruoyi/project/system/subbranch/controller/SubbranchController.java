@@ -62,12 +62,10 @@ public class SubbranchController extends BaseController
         List<Dept> list = null;
         //管理员查全部
         if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
-           // list = branchInfoService.selectBranchInfoList(branchInfo);
             list = iDeptService.selectDeptList(dept);
         }else{
             dept.setUserId(ShiroUtils.getUserId());
             list = iDeptService.selectDeptList(dept);
-           // list = branchInfoService.selectBranchInfoList(branchInfo);
 
         }
         return getDataTable(list);

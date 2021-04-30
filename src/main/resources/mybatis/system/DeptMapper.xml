@@ -45,6 +45,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="userId != null and userId != 0">
 			AND user_id = #{userId}
 		</if>
+		<if test="leader != null and leader != ''">
+			AND leader like concat('%', #{leader}, '%')
+		</if>
         <if test="parentId != null and parentId != 0">
 			AND parent_id = #{parentId}
 		</if>

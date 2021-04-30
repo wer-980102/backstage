@@ -45,6 +45,9 @@ public class ClerkSaleInfo extends BaseEntity
     @Excel(name = "客户")
     private String customer;
 
+    /** 用户ID*/
+    private Long userId;
+
     /** 销售数 */
     @Excel(name = "销售数")
     private String sales;

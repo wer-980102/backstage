@@ -57,4 +57,8 @@ public class UserStatisticsInfoDto extends BaseEntity {
     private String specialUser;
     /** 销售Id**/
     private String saleId;
+    /** 等级**/
+    private String grade;
+    /** 分店名称**/
+    private String branchName;
 }

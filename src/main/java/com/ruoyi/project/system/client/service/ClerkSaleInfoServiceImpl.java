@@ -95,7 +95,8 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
     @Override
     public int updateClerkSaleByIdInfo(UserStatisticsInfo userStatisticsInfo)
     {
-        ClerkSaleInfo clerkSaleInfo = ClerkSaleInfo.builder().customerId(userStatisticsInfo.getStatisticsId())
+        ClerkSaleInfo clerkSaleInfo = ClerkSaleInfo.builder()
+                .saleId(userStatisticsInfo.getSaleId())
                 .modelNumber(userStatisticsInfo.getModelNumber())
                 .productName(userStatisticsInfo.getProductName()).build();
         clerkSaleInfo.setUpdateTime(DateUtils.getNowDate());
@@ -177,6 +178,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
                         if(StringUtils.isNotEmpty(sale.getLastGoods())){
                             sale.setLastGoods("20"+sale.getLastGoods());
                         }
+                        sale.setUserId(ShiroUtils.getUserId());
                         sale.setCreateBy(user.getOperator());
                         sale.setCustomerId(user.getStatisticsId());
                         this.insertClerkSaleInfo(sale);
@@ -201,6 +203,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
                     if(StringUtils.isNotEmpty(sale.getLastGoods())){
                         sale.setLastGoods("20"+sale.getLastGoods());
                     }
+                    sale.setUserId(ShiroUtils.getUserId());
                     sale.setCreateBy("admin");
                     notClerkSaleInfoMapper.insertNotClerkSaleInfo(sale);
 

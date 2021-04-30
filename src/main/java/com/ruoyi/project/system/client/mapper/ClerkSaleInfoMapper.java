@@ -56,7 +56,7 @@ public interface ClerkSaleInfoMapper
      * @param clerkSaleInfo 销售纪录
      * @return 结果
      */
-    public int insertClerkSaleInfo(ClerkSaleInfo clerkSaleInfo);
+     int insertClerkSaleInfo(ClerkSaleInfo clerkSaleInfo);
 
     /**
      * 修改销售纪录

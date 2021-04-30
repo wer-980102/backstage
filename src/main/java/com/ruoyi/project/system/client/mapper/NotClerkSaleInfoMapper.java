@@ -32,7 +32,7 @@ public interface NotClerkSaleInfoMapper
     /**
      * 新增未注册人的销售纪录
      *
-     * @param notClerkSaleInfo 未注册人的销售纪录
+     * @param clerkSaleInfo 未注册人的销售纪录
      * @return 结果
      */
      int insertNotClerkSaleInfo(ClerkSaleInfo clerkSaleInfo);
