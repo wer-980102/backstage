@@ -10,10 +10,7 @@ import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.client.domain.*;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
-import com.ruoyi.project.system.client.mapper.BranchInfoMapper;
-import com.ruoyi.project.system.client.mapper.ClerkSaleInfoMapper;
-import com.ruoyi.project.system.client.mapper.StatisticsInfoMapper;
-import com.ruoyi.project.system.client.mapper.UserStatisticsInfoMapper;
+import com.ruoyi.project.system.client.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,6 +41,9 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
 
     @Autowired
     private ClerkSaleInfoMapper clerkSaleInfoMapper;
+
+    @Autowired
+    private NotClerkSaleInfoMapper notClerkSaleInfoMapper;
     /**
      * 判断是否是特殊用户
      * @param statisticsId
@@ -140,16 +140,6 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
                     info.setSaleMonth(statistics.getSalesMonthValue());
                     info.setActualSales(statistics.getActualSalesValue());
                     info.setLastGoods(statistics.getLastGoods());
-
-                    if(statistics.getActualSalesValue()>=10000){
-                        info.setMemberType("一级");
-                    }else if(statistics.getActualSalesValue()>=8000 && statistics.getActualSalesValue()<=9999){
-                        info.setMemberType("二级");
-                    }else if(statistics.getActualSalesValue()>=5000 && statistics.getActualSalesValue()<=7999){
-                        info.setMemberType("三级");
-                    }else{
-                        info.setMemberType("四级");
-                    }
                 }
             });
         }
@@ -417,5 +407,15 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
             successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条，数据如下：");
         }
         return successMsg.toString();
+    }
+
+
+    /**
+     * 查询没有客户信息没有的用户
+     * @return
+     */
+    @Override
+    public List<NotClerkSaleInfo> getCustomerInfo(TimeInfoParam param) {
+        return notClerkSaleInfoMapper.getCustomerInfo(param);
     }
 }

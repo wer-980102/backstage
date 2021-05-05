@@ -53,7 +53,15 @@ public class UserStatisticsInfoController extends BaseController
     public TableDataInfo list(UserStatisticsInfo userStatisticsInfo)
     {
         startPage();
-        List<UserStatisticsInfoDto> list = userStatisticsInfoService.selectUserStatisticsInfoList(userStatisticsInfo);
+        List<UserStatisticsInfoDto> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = userStatisticsInfoService.selectUserStatisticsInfoList(userStatisticsInfo);
+        }else{
+            userStatisticsInfo.setUserId(ShiroUtils.getUserId());
+            list = userStatisticsInfoService.selectUserStatisticsInfoList(userStatisticsInfo);
+
+        }
         return getDataTable(list);
     }
 

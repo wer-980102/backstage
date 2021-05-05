@@ -21,7 +21,7 @@
                 </div>
                 <div class="col-sm-6">
                     <div class="form-group">
-                        <label class="col-sm-4 control-label">归属部门：</label>
+                        <label class="col-sm-4 control-label">归属分店：</label>
                         <div class="col-sm-8">
                             <div class="input-group">
                                 <input class="form-control" type="text" name="deptName" onclick="selectDeptTree()" id="treeName" th:field="*{dept.deptName}">
@@ -133,7 +133,7 @@
 	<th:block th:include="include :: select2-js" />
 	<script type="text/javascript">
         var prefix = ctx + "system/user";
-        
+
         $("#form-user-edit").validate({
         	onkeyup: false,
         	rules:{
@@ -186,7 +186,7 @@
             },
             focusCleanup: true
         });
-        
+
         function submitHandler() {
 	        if ($.validate.form()) {
 	        	var data = $("#form-user-edit").serializeArray();
@@ -212,7 +212,7 @@
 			};
 			$.modal.openOptions(options);
 		}
-		
+
 		function doSubmit(index, layero){
 			var tree = layero.find("iframe")[0].contentWindow.$._tree;
    			var body = layer.getChildFrame('body', index);

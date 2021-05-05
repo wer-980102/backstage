@@ -9,7 +9,7 @@ import com.ruoyi.framework.web.domain.BaseEntity;
 
 /**
  * 角色表 sys_role
- * 
+ *
  * @author ruoyi
  */
 public class Role extends BaseEntity
@@ -51,6 +51,9 @@ public class Role extends BaseEntity
 
     /** 部门组（数据权限） */
     private Long[] deptIds;
+
+    /** 用户ID */
+    private Long userId;
 
     public Role()
     {
@@ -177,6 +180,14 @@ public class Role extends BaseEntity
         this.deptIds = deptIds;
     }
 
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -192,6 +203,7 @@ public class Role extends BaseEntity
             .append("updateBy", getUpdateBy())
             .append("updateTime", getUpdateTime())
             .append("remark", getRemark())
+            .append("userId", getUserId())
             .toString();
     }
 }

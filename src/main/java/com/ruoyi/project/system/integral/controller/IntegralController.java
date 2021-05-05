@@ -1,7 +1,9 @@
 package com.ruoyi.project.system.integral.controller;
 
+import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.framework.web.controller.BaseController;
@@ -46,7 +48,15 @@ public class IntegralController extends BaseController
     public TableDataInfo list(UserIntegralInfo userIntegralInfo)
     {
         startPage();
-        List<UserIntegralInfo> list = userIntegralInfoService.selectUserIntegralInfoList(userIntegralInfo);
+        List<UserIntegralInfo> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = userIntegralInfoService.selectUserIntegralInfoList(userIntegralInfo);
+        }else{
+            userIntegralInfo.setUserId(ShiroUtils.getUserId());
+            list = userIntegralInfoService.selectUserIntegralInfoList(userIntegralInfo);
+
+        }
         return getDataTable(list);
     }
 

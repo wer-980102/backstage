@@ -2,6 +2,7 @@ package com.ruoyi.project.system.client.mapper;
 
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.NotClerkSaleInfo;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 
 import java.util.List;
 
@@ -20,6 +21,12 @@ public interface NotClerkSaleInfoMapper
      * @return 未注册人的销售纪录
      */
     public NotClerkSaleInfo selectNotClerkSaleInfoById(Long saleId);
+
+    /**
+     * 查询没有客户信息没有的用户
+     * @return
+     */
+    List<NotClerkSaleInfo> getCustomerInfo(TimeInfoParam param);
 
     /**
      * 查询未注册人的销售纪录列表

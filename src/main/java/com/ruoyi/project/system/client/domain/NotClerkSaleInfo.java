@@ -61,7 +61,7 @@ public class NotClerkSaleInfo extends BaseEntity
 
     /** 实销额 */
     @Excel(name = "实销额")
-    private String actualSales;
+    private Integer actualSales;
 
     /** 最后一次拿货 */
     @JsonFormat(pattern = "yyyy-MM-dd")

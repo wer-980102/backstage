@@ -48,6 +48,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where sale_id = #{saleId}
     </select>
 
+    <select id="getCustomerInfo" parameterType="TimeInfoParam" resultType="NotClerkSaleInfo">
+        select customer,IFNULL(sum(actual_sales),0) as actualSales from not_clerk_sale_info
+        <where>
+            <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+                and create_time between #{startTime} and #{endTime}
+            </if>
+        </where>
+        group by customer
+    </select>
+
     <insert id="insertNotClerkSaleInfo" parameterType="ClerkSaleInfo" useGeneratedKeys="true" keyProperty="saleId">
         insert into not_clerk_sale_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -60,7 +70,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="store != null">store,</if>
             <if test="refundAmount != null">refund_amount,</if>
             <if test="actualSales != null">actual_sales,</if>
-            <if test="lastGoods != null">last_goods,</if>
+            <if test="lastGoods != null and lastGoods != ''">last_goods,</if>
             <if test="goodsFrequency != null">goods_frequency,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -77,7 +87,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="store != null">#{store},</if>
             <if test="refundAmount != null">#{refundAmount},</if>
             <if test="actualSales != null">#{actualSales},</if>
-            <if test="lastGoods != null">#{lastGoods},</if>
+            <if test="lastGoods != null and lastGoods != ''">#{lastGoods},</if>
             <if test="goodsFrequency != null">#{goodsFrequency},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>

@@ -148,6 +148,6 @@ gen:
   tablePrefix: sys_
 
 time:
-  times: 59 59 23 * * ?
+  times: 00 30 23 * * ?
   months: 0 59 23 28-31 * ?
 

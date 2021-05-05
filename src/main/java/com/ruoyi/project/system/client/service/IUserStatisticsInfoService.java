@@ -1,6 +1,6 @@
 package com.ruoyi.project.system.client.service;
 
-import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
+import com.ruoyi.project.system.client.domain.NotClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
@@ -88,7 +88,7 @@ public interface IUserStatisticsInfoService
      * @param userStatisticsInfo 门店数据
      * @return 结果
      */
-    public int insertUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
+     int insertUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
 
     /**
      * 修改门店数据
@@ -153,5 +153,11 @@ public interface IUserStatisticsInfoService
      * @return 结果
      */
      String importUser(List<UserStatisticsInfo> userList, Boolean isUpdateSupport);
+
+    /**
+     * 查询没有客户信息没有的用户
+     * @return
+     */
+    List<NotClerkSaleInfo> getCustomerInfo(TimeInfoParam param);
 
 }

@@ -1,6 +1,9 @@
 package com.ruoyi.project.system.role.controller;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.CommonUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -27,7 +30,7 @@ import com.ruoyi.project.system.user.service.IUserService;
 
 /**
  * 角色信息
- * 
+ *
  * @author ruoyi
  */
 @Controller
@@ -55,7 +58,15 @@ public class RoleController extends BaseController
     public TableDataInfo list(Role role)
     {
         startPage();
-        List<Role> list = roleService.selectRoleList(role);
+        List<Role> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = roleService.selectRoleList(role);
+        }else{
+            role.setUserId(ShiroUtils.getUserId());
+            list = roleService.selectRoleList(role);
+
+        }
         return getDataTable(list);
     }
 

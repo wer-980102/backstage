@@ -1,5 +1,7 @@
 package com.ruoyi.project.system.recode.controller;
 
+import com.ruoyi.common.utils.CommonUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.framework.aspectj.lang.annotation.Log;
 import com.ruoyi.framework.aspectj.lang.enums.BusinessType;
 import com.ruoyi.framework.web.controller.BaseController;
@@ -49,7 +51,15 @@ public class RecodeController extends BaseController
     public TableDataInfo list(UserStatisticsInfo userStatisticsInfo)
     {
         startPage();
-        List<UserStatisticsInfoDto> list = iUserStatisticsInfoService.getSaleRecordInfo(userStatisticsInfo);
+        List<UserStatisticsInfoDto> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = iUserStatisticsInfoService.getSaleRecordInfo(userStatisticsInfo);
+        }else{
+            userStatisticsInfo.setUserId(ShiroUtils.getUserId());
+            list = iUserStatisticsInfoService.getSaleRecordInfo(userStatisticsInfo);
+
+        }
         return getDataTable(list);
     }
 

@@ -24,6 +24,9 @@ public class UserStatisticsInfo extends BaseEntity
     /** 主键id */
     private Long statisticsId;
 
+    /** 用户ID */
+    private Long userId;
+
     /** 用户名 */
     @Excel(name = "名称")
     private String name;

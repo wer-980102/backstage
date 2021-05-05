@@ -28,6 +28,9 @@ public class UserIntegralInfo extends BaseEntity
     /** 主键id */
     private Long integralId;
 
+    /** 用户ID */
+    private Long userId;
+
     /** 客户ID */
     @Excel(name = "客户ID")
     private Long customerId;

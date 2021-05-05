@@ -2,8 +2,10 @@ package com.ruoyi.project.system.client.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.client.domain.UserIntegralInfo;
 import com.ruoyi.project.system.client.service.IUserIntegralInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -50,7 +52,15 @@ public class UserIntegralInfoController extends BaseController
     public TableDataInfo list(UserIntegralInfo userIntegralInfo)
     {
         startPage();
-        List<UserIntegralInfo> list = userIntegralInfoService.selectUserIntegralInfoList(userIntegralInfo);
+        List<UserIntegralInfo> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = userIntegralInfoService.selectUserIntegralInfoList(userIntegralInfo);
+        }else{
+            userIntegralInfo.setUserId(ShiroUtils.getUserId());
+            list = userIntegralInfoService.selectUserIntegralInfoList(userIntegralInfo);
+
+        }
         return getDataTable(list);
     }
 

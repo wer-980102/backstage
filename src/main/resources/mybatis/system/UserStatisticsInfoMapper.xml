@@ -111,6 +111,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
         <where>
+            <if test="userId != null">
+                AND csi.user_id = #{userId}
+            </if>
             <if test="statisticsId!=null">
                 AND usi.statistics_id = #{statisticsId}
             </if>
@@ -147,15 +150,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="getSpecialUserInfo" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
         SELECT
-            usi.statistics_id AS statisticsId,
+            distinct usi.statistics_id AS statisticsId,
             usi.NAME AS name,
             usi.phone_number AS phoneNumber,
             usi.member_type AS memberType,
-            usi.customer_type AS customerType
+            usi.customer_type AS customerType,
+            usi.grade
         FROM
             user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
         <where> usi.special_user = '1'
+            <if test="userId != null">
+                AND csi.user_id = #{userId}
+            </if>
             <if test="name!=null and name!=''">
                 AND usi.name like concat(#{name}, '%')
             </if>
@@ -166,8 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 and DATE_FORMAT(csi.last_goods,'%Y-%m-%d') between #{startTime} and #{endTime}
             </if>
         </where>
-        GROUP BY
-            usi.statistics_id
+        ORDER BY usi.grade
     </select>
 
     <select id="getSpecialUserByIdInfo" parameterType="java.lang.Long" resultType="UserStatisticsInfoDto">
@@ -206,6 +212,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         left join user_statistics_info usi on csi.customer_id = usi.statistics_id
         left join branch_info bi on csi.user_id = bi.user_id
         <where>
+            <if test="userId != null">
+                AND csi.user_id = #{userId}
+            </if>
             <if test="customer!=null and customer!=''">
                 AND csi.customer like concat(#{customer}, '%')
             </if>

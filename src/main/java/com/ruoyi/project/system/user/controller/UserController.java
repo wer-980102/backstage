@@ -2,6 +2,8 @@ package com.ruoyi.project.system.user.controller;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import com.ruoyi.common.utils.CommonUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,7 +32,7 @@ import com.ruoyi.project.system.user.service.IUserService;
 
 /**
  * 用户信息
- * 
+ *
  * @author ruoyi
  */
 @Controller
@@ -61,7 +63,15 @@ public class UserController extends BaseController
     public TableDataInfo list(User user)
     {
         startPage();
-        List<User> list = userService.selectUserList(user);
+        List<User> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = userService.selectUserList(user);
+        }else{
+            user.setUserId(ShiroUtils.getUserId());
+            list = userService.selectUserList(user);
+
+        }
         return getDataTable(list);
     }
 

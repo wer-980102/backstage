@@ -8,6 +8,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="integralId"    column="integral_id"    />
         <result property="customerId"    column="customer_id"    />
         <result property="customerName"    column="customer_name"    />
+        <result property="userId"    column="user_id"    />
         <result property="integral"    column="integral"    />
         <result property="integralRule"    column="integral_rule"    />
         <result property="integralRemark"    column="integral_remark"    />
@@ -24,12 +25,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectUserIntegralInfoVo">
-        select integral_id, customer_id, customer_name, integral, integral_rule, integral_remark, change_situation, change_type, change_name, status, operator, Operator_time, create_by, create_time, update_by, update_time from user_integral_info
+        select integral_id, customer_id, customer_name,user_id, integral, integral_rule, integral_remark, change_situation, change_type, change_name, status, operator, Operator_time, create_by, create_time, update_by, update_time from user_integral_info
     </sql>
 
     <select id="selectUserIntegralInfoList" parameterType="UserIntegralInfo" resultMap="UserIntegralInfoResult">
         <include refid="selectUserIntegralInfoVo"/>
         <where> status = '0'
+            <if test="userId != null"> AND user_id = #{userId} </if>
             <if test="customerId != null "> and customer_id = #{customerId}</if>
             <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
             <if test="integral != null "> and integral = #{integral}</if>
@@ -43,6 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operatorTime != null "> and Operator_time = #{operatorTime}</if>
             <if test="type == 1 "> and integral_rule = '' or integral_rule is null or integral_remark = '' or integral_remark is null</if>
         </where>
+        order by Operator_time desc
     </select>
 
     <select id="selectUserIntegralInfoById" parameterType="Long" resultMap="UserIntegralInfoResult">
@@ -55,6 +58,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="customerId != null">customer_id,</if>
             <if test="customerName != null">customer_name,</if>
+            <if test="userId != null">user_id,</if>
             <if test="integral != null">integral,</if>
             <if test="integralRule != null">integral_rule,</if>
             <if test="integralRemark != null">integral_remark,</if>
@@ -72,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="customerId != null">#{customerId},</if>
             <if test="customerName != null">#{customerName},</if>
+            <if test="userId != null">#{userId},</if>
             <if test="integral != null">#{integral},</if>
             <if test="integralRule != null">#{integralRule},</if>
             <if test="integralRemark != null">#{integralRemark},</if>
@@ -93,6 +98,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="customerId != null">customer_id = #{customerId},</if>
             <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="userId != null">user_id = #{userId},</if>
             <if test="integral != null">integral = #{integral},</if>
             <if test="integralRule != null">integral_rule = #{integralRule},</if>
             <if test="integralRemark != null">integral_remark = #{integralRemark},</if>

@@ -3,6 +3,7 @@ package com.ruoyi.project.system.timing;
 import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.TimeUtils;
+import com.ruoyi.project.system.client.domain.NotClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.StatisticsInfo;
 import com.ruoyi.project.system.client.domain.UserIntegralInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -36,7 +39,7 @@ public class TimingController {
     /**
      * 每天11:59:59同步统计数据
      */
-   // @Scheduled(cron = "${time.times}")
+    @Scheduled(cron = "${time.times}")
     @Transactional
     public void setDayStallSum() {
         System.out.println("......每天定时计算积分......");
@@ -83,7 +86,7 @@ public class TimingController {
                     statisticsInfo.setGrade("四级");
                 }
                 statisticsInfo.setStatisticsId(Long.parseLong(info.getStatisticsId()));
-                iUserStatisticsInfoService.updateUserStatisticsInfo(statisticsInfo);
+                iUserStatisticsInfoService.updateUserStatisticsGrade(statisticsInfo);
             });
         }
 
@@ -107,11 +110,44 @@ public class TimingController {
                 iStatisticsInfoService.insertStatisticsInfo(info);
             });
         }
+
+        //从销售纪录查询客户表没有的客户
+        List<NotClerkSaleInfo> customerInfo = iUserStatisticsInfoService.getCustomerInfo(TimeInfoParam.builder().startTime(TimeUtils.getMinTime()).endTime(TimeUtils.getMaxTime()).build());
+        if(StringUtils.isNotNull(customerInfo)){
+            //每天定时插入
+            customerInfo.stream().forEach(NotClerkSaleInfo->{
+                UserStatisticsInfo statistics = UserStatisticsInfo.builder()
+                        .name(NotClerkSaleInfo.getCustomer())
+                        .store("部落")
+                        .discount("1")
+                        .customerType("零批客户")
+                        .applicablePrice("无")
+                        .residualIntegral("0")
+                        .balance("0")
+                        .specialUser("0")
+                        .memberType("普通会员")
+                        .quota("0")
+                        .pickDays("0")
+                        .operator("晓（18273261939）")
+                        .operatorTime(TimeUtils.getMinTime()).build();
+                if(NotClerkSaleInfo.getActualSales()>=10000){
+                    statistics.setGrade("一级");
+                }else if(NotClerkSaleInfo.getActualSales()>=8000 && NotClerkSaleInfo.getActualSales()<=9999){
+                    statistics.setGrade("二级");
+                }else if(NotClerkSaleInfo.getActualSales()>=5000 && NotClerkSaleInfo.getActualSales()<=7999){
+                    statistics.setGrade("三级");
+                }else{
+                    statistics.setGrade("四级");
+                }
+                iUserStatisticsInfoService.insertUserStatisticsInfo(statistics);
+            });
+        }
     }
+
     /**
      * 初始化的时候计算积分
      */
-    //@PostConstruct
+   // @PostConstruct
     public void initStallSum() {
         System.out.println("......初始化定时计算积分......");
         List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(new TimeInfoParam());

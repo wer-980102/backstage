@@ -1,6 +1,7 @@
 package com.ruoyi.project.system.dept.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import org.apache.commons.lang3.ArrayUtils;
@@ -202,6 +203,7 @@ public class DeptServiceImpl implements IDeptService
             throw new BusinessException("分店停用，不允许新增");
         }
         dept.setUserId(ShiroUtils.getUserId());
+        dept.setOperatorTime(new Date());
         dept.setCreateBy(ShiroUtils.getLoginName());
         dept.setAncestors(info.getAncestors() + "," + dept.getParentId());
         return deptMapper.insertDept(dept);
