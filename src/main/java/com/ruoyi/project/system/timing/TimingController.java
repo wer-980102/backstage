@@ -164,7 +164,7 @@ public class TimingController {
     /**
      * 初始化的时候计算积分
      */
-   // @PostConstruct
+    //@PostConstruct
     public void initStallSum() {
         System.out.println("......初始化定时计算积分......");
         List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(new TimeInfoParam());
@@ -174,7 +174,7 @@ public class TimingController {
                 UserIntegralInfo integralInfo = UserIntegralInfo.builder()
                         .customerId(Long.parseLong(info.getStatisticsId()))
                         .customerName(info.getName())
-                        .integral(CommonUtils.getPlusIntegralInfo(info.getActualSales().intValue()))
+                        .integral(CommonUtils.getIntegralInfo(info.getActualSales().intValue()))
                         .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
                         .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")
                         .operator(info.getOperator())
@@ -201,7 +201,7 @@ public class TimingController {
             });
         }
         //统计所有额度值
-        List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(new TimeInfoParam());
+       /* List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(new TimeInfoParam());
         if(null != statisticsInfoDtos && statisticsInfoDtos.size()>0){
             //定时插入
             statisticsInfoDtos.stream().forEach(statisticsInfo->{
@@ -236,7 +236,7 @@ public class TimingController {
                 }
 
             });
-        }
+        }*/
 
     }
 

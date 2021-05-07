@@ -3,7 +3,9 @@ package com.ruoyi.project.system.client.service;
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.ClerkSaleInfoDto;
+import com.ruoyi.project.system.client.domain.dto.UserIntegralInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserMonthInfoDto;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 
 import java.util.List;
 
@@ -45,6 +47,14 @@ public interface IClerkSaleInfoService
      * @return
      */
     List<ClerkSaleInfo> getUserClerkSaleInfo(String customerId);
+
+    /**
+     * 查询不是本月活跃用户
+     * @param param
+     * @return
+     */
+    List<UserIntegralInfoDto> getInactiveUserInfo(TimeInfoParam param);
+
     /**
      * 新增销售纪录
      *

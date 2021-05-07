@@ -10,6 +10,8 @@ import com.ruoyi.project.system.client.domain.BranchInfo;
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.ClerkSaleInfoDto;
+import com.ruoyi.project.system.client.domain.dto.UserIntegralInfoDto;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.client.mapper.BranchInfoMapper;
 import com.ruoyi.project.system.client.mapper.ClerkSaleInfoMapper;
 import com.ruoyi.project.system.client.mapper.NotClerkSaleInfoMapper;
@@ -80,6 +82,16 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
     @Override
     public List<ClerkSaleInfo> getUserClerkSaleInfo(String customerId) {
         return clerkSaleInfoMapper.getUserClerkSaleInfo(customerId);
+    }
+
+    /**
+     * 查询不是本月活跃用户
+     * @param param
+     * @return
+     */
+    @Override
+    public List<UserIntegralInfoDto> getInactiveUserInfo(TimeInfoParam param) {
+        return clerkSaleInfoMapper.getInactiveUserInfo(param);
     }
 
 

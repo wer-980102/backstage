@@ -3,11 +3,16 @@ package com.ruoyi.project.system.client.controller;
 import java.util.List;
 
 import com.ruoyi.common.utils.CommonUtils;
+import com.ruoyi.common.utils.TimeUtils;
 import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
+import com.ruoyi.project.system.client.domain.UserIntegralInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.dto.UserIntegralInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.client.service.IClerkSaleInfoService;
+import com.ruoyi.project.system.client.service.IUserIntegralInfoService;
 import com.ruoyi.project.system.client.service.IUserStatisticsInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +47,8 @@ public class UserStatisticsInfoController extends BaseController
     private IUserStatisticsInfoService userStatisticsInfoService;
     @Autowired
     private IClerkSaleInfoService iClerkSaleInfoService;
+    @Autowired
+    private IUserIntegralInfoService   iUserIntegralInfoService;
 
     @GetMapping()
     public String info()
@@ -142,6 +149,11 @@ public class UserStatisticsInfoController extends BaseController
         return prefix + "/detai";
     }
 
+    /**
+     *  客户下销售纪录明细
+     * @param userStatisticsInfo
+     * @return
+     */
     @PostMapping({"/userList"})
     @ResponseBody
     public TableDataInfo userList(UserStatisticsInfo userStatisticsInfo)
@@ -161,26 +173,31 @@ public class UserStatisticsInfoController extends BaseController
     {
         String specialUserById = userStatisticsInfoService.getSpecialUserById(userStatisticsInfo.getStatisticsId());
         if(CommonUtils.SPECIAL_USER.equals(specialUserById)){
-            return error("升级用户'" + userStatisticsInfo.getName() + "'失败，该用户是特殊用户");
+            return error("升级用户'" + userStatisticsInfo.getName() + "'失败，该用户已是特殊用户");
         }
         userStatisticsInfo.setSpecialUser(CommonUtils.SPECIAL_USER);
         return toAjax(userStatisticsInfoService.updateSpecialUserInfo(userStatisticsInfo));
     }
 
     /**
-     * 用户减分
+     * 一键减分
      */
     @ResponseBody
-    @Log(title = "用户减分", businessType = BusinessType.UPDATE)
+    @Log(title = "一键减分", businessType = BusinessType.UPDATE)
     @PostMapping("/scoreReduction")
-    public AjaxResult ScoreReduction(UserStatisticsInfo userStatisticsInfo)
+    public AjaxResult ScoreReduction()
     {
-        String specialUserById = userStatisticsInfoService.getSpecialUserById(userStatisticsInfo.getStatisticsId());
-        if(CommonUtils.SPECIAL_USER.equals(specialUserById)){
-            return error("减分用户'" + userStatisticsInfo.getName() + "'失败，该用户是特殊用户");
-        }
-        userStatisticsInfo.setSpecialUser(CommonUtils.SPECIAL_USER);
-        return toAjax(userStatisticsInfoService.updateUserStatisticsInfo(userStatisticsInfo));
+        int i= 0;
+        List<UserIntegralInfoDto> inactiveUserInfo = iClerkSaleInfoService.getInactiveUserInfo(TimeInfoParam.builder().startTime(TimeUtils.getMonthMinTime()).endTime(TimeUtils.getMonthMaxTime()).build());
+       if(null != inactiveUserInfo){
+           for (UserIntegralInfoDto dto : inactiveUserInfo){
+               if(dto.getIntegral()>0){
+                   i = iUserIntegralInfoService.updateUserIntegralInfo(UserIntegralInfo.builder().customerId(dto.getCustomerId()).integral(dto.getIntegral() - 1).build());
+               }
+
+           }
+       }
+        return toAjax(i);
     }
     /**
      * 修改保存门店数据

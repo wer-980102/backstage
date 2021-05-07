@@ -96,7 +96,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateUserIntegralInfo" parameterType="UserIntegralInfo">
         update user_integral_info
         <trim prefix="SET" suffixOverrides=",">
-            <if test="customerId != null">customer_id = #{customerId},</if>
             <if test="customerName != null">customer_name = #{customerName},</if>
             <if test="userId != null">user_id = #{userId},</if>
             <if test="integral != null">integral = #{integral},</if>
