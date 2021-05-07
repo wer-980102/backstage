@@ -35,6 +35,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
+    <select id="getUserStatisticsInfo" parameterType="java.lang.String" resultMap="StatisticsInfoResult">
+        <include refid="selectStatisticsInfoVo"/>
+        <where>
+            <if test="customerId != null "> and customer_id = #{customerId}</if>
+        </where>
+    </select>
+
     <select id="getStatisticsInfo" parameterType="java.lang.String" resultMap="StatisticsInfoResult">
         select distinct customer_id , sales_month_value, refund_amount_value, actual_sales_value, goods_frequency_value,lastGoods
         from statistics_info

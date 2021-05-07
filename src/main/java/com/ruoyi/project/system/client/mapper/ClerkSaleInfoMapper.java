@@ -50,6 +50,13 @@ public interface ClerkSaleInfoMapper
      * @return
      */
     ClerkSaleInfoDto getLastGoodsInfo(String customerId);
+
+    /**
+     * 计算用户的销售纪录
+     * @param customerId
+     * @return
+     */
+    List<ClerkSaleInfo> getUserClerkSaleInfo(String customerId);
     /**
      * 新增销售纪录
      *

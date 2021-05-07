@@ -45,6 +45,16 @@ public class StatisticsInfoServiceImpl implements IStatisticsInfoService
     }
 
     /**
+     * 查询存不存在这个客户
+     * @param customerId
+     * @return
+     */
+    @Override
+    public StatisticsInfo getUserStatisticsInfo(String customerId) {
+        return statisticsInfoMapper.getUserStatisticsInfo(customerId);
+    }
+
+    /**
      * 新增【请填写功能名称】
      *
      * @param statisticsInfo 【请填写功能名称】

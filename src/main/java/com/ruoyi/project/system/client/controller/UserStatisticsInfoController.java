@@ -4,8 +4,10 @@ import java.util.List;
 
 import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.security.ShiroUtils;
+import com.ruoyi.project.system.client.domain.ClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
+import com.ruoyi.project.system.client.service.IClerkSaleInfoService;
 import com.ruoyi.project.system.client.service.IUserStatisticsInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +40,8 @@ public class UserStatisticsInfoController extends BaseController
 
     @Autowired
     private IUserStatisticsInfoService userStatisticsInfoService;
+    @Autowired
+    private IClerkSaleInfoService iClerkSaleInfoService;
 
     @GetMapping()
     public String info()
@@ -126,6 +130,27 @@ public class UserStatisticsInfoController extends BaseController
         mmap.put("userStatisticsInfo", userStatisticsInfo);
         return prefix + "/edit";
     }
+
+    /**
+     * 详情
+     */
+    @GetMapping("/detai/{statisticsId}")
+    public String detai(@PathVariable("statisticsId") Long statisticsId, ModelMap mmap)
+    {
+        UserStatisticsInfoDto userStatisticsInfo = userStatisticsInfoService.selectUserStatisticsInfoById(statisticsId);
+        mmap.put("userStatisticsInfo", userStatisticsInfo);
+        return prefix + "/detai";
+    }
+
+    @PostMapping({"/userList"})
+    @ResponseBody
+    public TableDataInfo userList(UserStatisticsInfo userStatisticsInfo)
+    {
+        startPage();
+        List<ClerkSaleInfo> list = this.iClerkSaleInfoService.getUserClerkSaleInfo(userStatisticsInfo.getStatisticsId().toString());
+        return getDataTable(list);
+    }
+
     /**
      * 升级用户
      */

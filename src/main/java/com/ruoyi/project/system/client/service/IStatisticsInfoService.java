@@ -26,7 +26,14 @@ public interface IStatisticsInfoService
      * @param statisticsInfo 【请填写功能名称】
      * @return 【请填写功能名称】集合
      */
-    public List<StatisticsInfo> selectStatisticsInfoList(StatisticsInfo statisticsInfo);
+     List<StatisticsInfo> selectStatisticsInfoList(StatisticsInfo statisticsInfo);
+
+    /**
+     * 查询存不存在这个客户
+     * @param customerId
+     * @return
+     */
+    StatisticsInfo getUserStatisticsInfo(String customerId);
 
     /**
      * 新增【请填写功能名称】

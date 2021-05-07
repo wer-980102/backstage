@@ -72,6 +72,16 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
         return clerkSaleInfoMapper.getLastGoodsInfo(customerId);
     }
 
+    /**
+     * 计算用户的销售纪录
+     * @param customerId
+     * @return
+     */
+    @Override
+    public List<ClerkSaleInfo> getUserClerkSaleInfo(String customerId) {
+        return clerkSaleInfoMapper.getUserClerkSaleInfo(customerId);
+    }
+
 
     /**
      * 新增销售纪录

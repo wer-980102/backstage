@@ -93,21 +93,38 @@ public class TimingController {
         //统计所有额度值
         List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(TimeInfoParam.builder().startTime(TimeUtils.getMinTime()).endTime(TimeUtils.getMaxTime()).build());
         if(StringUtils.isNotNull(statisticsInfoDtos)){
+
             //每天定时插入
             statisticsInfoDtos.stream().forEach(statisticsInfo->{
-
-                StatisticsInfo info = StatisticsInfo.builder()
-                        .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
-                        .salesMonthValue(statisticsInfo.getSaleMonth())
-                        .refundAmountValue(statisticsInfo.getRefundAmount())
-                        .actualSalesValue(statisticsInfo.getActualSales())
-                        .goodsFrequencyValue(statisticsInfo.getGoodsFrequency()).build();
-                ClerkSaleInfoDto lastGoodsInfo = iClerkSaleInfoService.getLastGoodsInfo(statisticsInfo.getStatisticsId());
-                //匹配拿货时间
-                if(StringUtils.isNotNull(lastGoodsInfo)){
-                    info.setLastGoods(lastGoodsInfo.getLastGoods());
+                //查询是否存在该客户
+                StatisticsInfo statisticsInfos = iStatisticsInfoService.getUserStatisticsInfo(statisticsInfo.getStatisticsId());
+                if(StringUtils.isNotNull(statisticsInfos)){
+                    StatisticsInfo info = StatisticsInfo.builder()
+                            .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
+                            .salesMonthValue(String.valueOf(Integer.valueOf(statisticsInfos.getSalesMonthValue())+Integer.valueOf(statisticsInfo.getSaleMonth())))
+                            .refundAmountValue(String.valueOf(Integer.valueOf(statisticsInfos.getRefundAmountValue())+Integer.valueOf(statisticsInfo.getRefundAmount())))
+                            .actualSalesValue(statisticsInfos.getActualSalesValue()+statisticsInfo.getActualSales())
+                            .goodsFrequencyValue(String.valueOf(Integer.valueOf(statisticsInfos.getGoodsFrequencyValue())+Integer.valueOf(statisticsInfo.getGoodsFrequency()))).build();
+                    ClerkSaleInfoDto lastGoodsInfo = iClerkSaleInfoService.getLastGoodsInfo(statisticsInfo.getStatisticsId());
+                    //匹配拿货时间
+                    if (StringUtils.isNotNull(lastGoodsInfo)) {
+                        info.setLastGoods(lastGoodsInfo.getLastGoods());
+                    }
+                    iStatisticsInfoService.updateStatisticsInfo(info);
+                }else {
+                    StatisticsInfo info = StatisticsInfo.builder()
+                            .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
+                            .salesMonthValue(statisticsInfo.getSaleMonth())
+                            .refundAmountValue(statisticsInfo.getRefundAmount())
+                            .actualSalesValue(statisticsInfo.getActualSales())
+                            .goodsFrequencyValue(statisticsInfo.getGoodsFrequency()).build();
+                    ClerkSaleInfoDto lastGoodsInfo = iClerkSaleInfoService.getLastGoodsInfo(statisticsInfo.getStatisticsId());
+                    //匹配拿货时间
+                    if (StringUtils.isNotNull(lastGoodsInfo)) {
+                        info.setLastGoods(lastGoodsInfo.getLastGoods());
+                    }
+                    iStatisticsInfoService.insertStatisticsInfo(info);
                 }
-                iStatisticsInfoService.insertStatisticsInfo(info);
             });
         }
 
@@ -183,7 +200,6 @@ public class TimingController {
                 iUserStatisticsInfoService.updateUserStatisticsGrade(statisticsInfo);
             });
         }
-
         //统计所有额度值
         List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(new TimeInfoParam());
         if(null != statisticsInfoDtos && statisticsInfoDtos.size()>0){
@@ -191,20 +207,31 @@ public class TimingController {
             statisticsInfoDtos.stream().forEach(statisticsInfo->{
                 StatisticsInfo infoCount = iStatisticsInfoService.selectStatisticsInfoById(Long.parseLong(statisticsInfo.getStatisticsId()));
                 ClerkSaleInfoDto lastGoodsInfo = iClerkSaleInfoService.getLastGoodsInfo(statisticsInfo.getStatisticsId());
-                StatisticsInfo info = StatisticsInfo.builder()
-                        .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
-                        .salesMonthValue(statisticsInfo.getSaleMonth())
-                        .refundAmountValue(statisticsInfo.getRefundAmount())
-                        .actualSalesValue(statisticsInfo.getActualSales())
-                        .goodsFrequencyValue(statisticsInfo.getGoodsFrequency()).build();
-                //匹配拿货时间
-                if(StringUtils.isNotNull(lastGoodsInfo)){
-                    info.setLastGoods(lastGoodsInfo.getLastGoods());
-                }
+
                 //判断统计表是否有该值
                 if(StringUtils.isNotNull(infoCount)){
+                    StatisticsInfo info = StatisticsInfo.builder()
+                            .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
+                            .salesMonthValue(String.valueOf(Integer.valueOf(infoCount.getSalesMonthValue())+Integer.valueOf(statisticsInfo.getSaleMonth())))
+                            .refundAmountValue(String.valueOf(Integer.valueOf(infoCount.getRefundAmountValue())+Integer.valueOf(statisticsInfo.getRefundAmount())))
+                            .actualSalesValue(infoCount.getActualSalesValue()+statisticsInfo.getActualSales())
+                            .goodsFrequencyValue(String.valueOf(Integer.valueOf(infoCount.getGoodsFrequencyValue())+Integer.valueOf(statisticsInfo.getGoodsFrequency()))).build();
+                    //匹配拿货时间
+                    if(StringUtils.isNotNull(lastGoodsInfo)){
+                        info.setLastGoods(lastGoodsInfo.getLastGoods());
+                    }
                     iStatisticsInfoService.updateStatisticsInfo(info);
                 }else{
+                    StatisticsInfo info = StatisticsInfo.builder()
+                            .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
+                            .salesMonthValue(statisticsInfo.getSaleMonth())
+                            .refundAmountValue(statisticsInfo.getRefundAmount())
+                            .actualSalesValue(statisticsInfo.getActualSales())
+                            .goodsFrequencyValue(statisticsInfo.getGoodsFrequency()).build();
+                    //匹配拿货时间
+                    if(StringUtils.isNotNull(lastGoodsInfo)){
+                        info.setLastGoods(lastGoodsInfo.getLastGoods());
+                    }
                     iStatisticsInfoService.insertStatisticsInfo(info);
                 }
 
