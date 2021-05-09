@@ -3,11 +3,13 @@ package com.ruoyi.project.system.timing;
 import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.TimeUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.client.domain.NotClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.StatisticsInfo;
 import com.ruoyi.project.system.client.domain.UserIntegralInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
 import com.ruoyi.project.system.client.domain.dto.ClerkSaleInfoDto;
+import com.ruoyi.project.system.client.domain.dto.UserIntegralCalculationDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.client.service.*;
@@ -43,25 +45,29 @@ public class TimingController {
     @Transactional
     public void setDayStallSum() {
         System.out.println("......每天定时计算积分......");
-        List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(TimeInfoParam.builder().startTime(TimeUtils.getMinTime()).endTime(TimeUtils.getMaxTime()).build());
+        List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(TimeInfoParam.builder().startTime(TimeUtils.getYesterdayMinTime()).endTime(TimeUtils.getYesterdayMaxTime()).build());
         if(StringUtils.isNotNull(timingInfo)){
             timingInfo.stream().forEach(info->{
 
                 //查询是否是新用户
                 UserStatisticsInfo userInfo = iUserStatisticsInfoService.getUserById(info.getName());
                 if(StringUtils.isNotNull(userInfo)){
-                    UserIntegralInfo integralInfo = UserIntegralInfo.builder()
-                            .customerId(Long.parseLong(info.getStatisticsId()))
-                            .customerName(info.getName())
-                            .integral(CommonUtils.getPlusIntegralInfo(info.getActualSales().intValue()))
-                            .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
-                            .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")
-                            .changeSituation(CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
-                            .changeType(CommonUtils.getIntegralJudge(info.getActualSales().intValue()))
-                            .changeName("本月活跃用户积分"+CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
-                            .operator(info.getOperator())
-                            .operatorTime(info.getLastGoods()).build();
-                    iUserIntegralInfoService.updateUserIntegralInfo(integralInfo);
+                    //查询该老用户积分
+                    UserIntegralCalculationDto integralCalculation = iUserStatisticsInfoService.getIntegralCalculation(TimeInfoParam.builder().customerId(userInfo.getStatisticsId()).build());
+                    if(StringUtils.isNotNull(integralCalculation)){
+                        UserIntegralInfo integralInfo = UserIntegralInfo.builder()
+                                .customerId(Long.parseLong(info.getStatisticsId()))
+                                .customerName(info.getName())
+                                .integral(CommonUtils.getPlusIntegralInfo(integralCalculation.getIntegral(),info.getActualSales().intValue()))
+                                .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
+                                .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")
+                                .changeSituation(CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
+                                .changeType(CommonUtils.getIntegralJudge(info.getActualSales().intValue()))
+                                .changeName("本月活跃用户积分"+CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
+                                .operator(info.getOperator())
+                                .operatorTime(info.getLastGoods()).build();
+                        iUserIntegralInfoService.updateUserIntegralInfo(integralInfo);
+                    }
                 }else{
                     //新用户默认10分
                     UserIntegralInfo integralInfo = UserIntegralInfo.builder()
@@ -91,7 +97,7 @@ public class TimingController {
         }
 
         //统计所有额度值
-        List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(TimeInfoParam.builder().startTime(TimeUtils.getMinTime()).endTime(TimeUtils.getMaxTime()).build());
+        List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(TimeInfoParam.builder().startTime(TimeUtils.getYesterdayMinTime()).endTime(TimeUtils.getYesterdayMaxTime()).build());
         if(StringUtils.isNotNull(statisticsInfoDtos)){
 
             //每天定时插入
@@ -129,7 +135,7 @@ public class TimingController {
         }
 
         //从销售纪录查询客户表没有的客户
-        List<NotClerkSaleInfo> customerInfo = iUserStatisticsInfoService.getCustomerInfo(TimeInfoParam.builder().startTime(TimeUtils.getMinTime()).endTime(TimeUtils.getMaxTime()).build());
+        List<NotClerkSaleInfo> customerInfo = iUserStatisticsInfoService.getCustomerInfo(TimeInfoParam.builder().startTime(TimeUtils.getYesterdayMinTime()).endTime(TimeUtils.getYesterdayMaxTime()).build());
         if(StringUtils.isNotNull(customerInfo)){
             //每天定时插入
             customerInfo.stream().forEach(NotClerkSaleInfo->{
@@ -159,6 +165,9 @@ public class TimingController {
                 iUserStatisticsInfoService.insertUserStatisticsInfo(statistics);
             });
         }
+
+
+
     }
 
     /**
@@ -174,6 +183,7 @@ public class TimingController {
                 UserIntegralInfo integralInfo = UserIntegralInfo.builder()
                         .customerId(Long.parseLong(info.getStatisticsId()))
                         .customerName(info.getName())
+                        .userId(ShiroUtils.getUserId())
                         .integral(CommonUtils.getIntegralInfo(info.getActualSales().intValue()))
                         .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
                         .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")

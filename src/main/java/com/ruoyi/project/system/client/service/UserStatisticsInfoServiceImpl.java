@@ -6,10 +6,13 @@ import com.ruoyi.common.exception.BusinessException;
 import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.StringUtils;
+import com.ruoyi.common.utils.TimeUtils;
 import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.client.domain.*;
+import com.ruoyi.project.system.client.domain.dto.UserIntegralCalculationDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
+import com.ruoyi.project.system.client.domain.param.UserInByIdParam;
 import com.ruoyi.project.system.client.mapper.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,16 +76,6 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
                 info.setRefundAmount(statistics.getRefundAmountValue());
                 info.setGoodsFrequency(statistics.getGoodsFrequencyValue());
                 info.setLastGoods(statistics.getLastGoods());
-
-                if(statistics.getActualSalesValue()>=10000){
-                    info.setMemberType("一级");
-                }else if(statistics.getActualSalesValue()>=8000 && statistics.getActualSalesValue()<=9999){
-                    info.setMemberType("二级");
-                }else if(statistics.getActualSalesValue()>=5000 && statistics.getActualSalesValue()<=7999){
-                    info.setMemberType("三级");
-                }else{
-                    info.setMemberType("四级");
-                }
             }
         }
         return info;
@@ -147,6 +140,28 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     }
 
     /**
+     * 查询会员情况
+     * @param userStatisticsInfo
+     * @return
+     */
+    @Override
+    public List<UserStatisticsInfoDto> getMemberUserInfo(UserStatisticsInfo userStatisticsInfo) {
+        List<UserStatisticsInfoDto> memberUserInfo = userStatisticsInfoMapper.getMemberUserInfo(userStatisticsInfo);
+        if(null != memberUserInfo){
+            memberUserInfo.stream().forEach(info->{
+                //统计积分表
+                StatisticsInfo statistics = statisticsInfoMapper.getStatisticsInfo(info.getStatisticsId());
+                if(StringUtils.isNotNull(statistics)){
+                    info.setSaleMonth(statistics.getSalesMonthValue());
+                    info.setActualSales(statistics.getActualSalesValue());
+                    info.setLastGoods(statistics.getLastGoods());
+                }
+            });
+        }
+        return memberUserInfo;
+    }
+
+    /**
      * 根据ID查询特殊用户
      * @param statisticsId
      * @return
@@ -161,16 +176,26 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
                 info.setSaleMonth(statistics.getSalesMonthValue());
                 info.setActualSales(statistics.getActualSalesValue());
                 info.setLastGoods(statistics.getLastGoods());
+            }
+        }
+        return info;
+    }
 
-                if(statistics.getActualSalesValue()>=10000){
-                    info.setMemberType("一级");
-                }else if(statistics.getActualSalesValue()>=8000 && statistics.getActualSalesValue()<=9999){
-                    info.setMemberType("二级");
-                }else if(statistics.getActualSalesValue()>=5000 && statistics.getActualSalesValue()<=7999){
-                    info.setMemberType("三级");
-                }else{
-                    info.setMemberType("四级");
-                }
+    /**
+     * 根据ID查询会员信息
+     * @param statisticsId
+     * @return
+     */
+    @Override
+    public UserStatisticsInfoDto getMemberUserByIdInfo(Long statisticsId) {
+        UserStatisticsInfoDto info = userStatisticsInfoMapper.getMemberUserByIdInfo(statisticsId);
+        if(null != info){
+            //统计积分表
+            StatisticsInfo statistics = statisticsInfoMapper.getStatisticsInfo(statisticsId.toString());
+            if(StringUtils.isNotNull(statistics)){
+                info.setSaleMonth(statistics.getSalesMonthValue());
+                info.setActualSales(statistics.getActualSalesValue());
+                info.setLastGoods(statistics.getLastGoods());
             }
         }
         return info;
@@ -194,7 +219,7 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
      */
     @Override
     public UserStatisticsInfo getUserById(String name) {
-        return userStatisticsInfoMapper.getUserById(name);
+        return userStatisticsInfoMapper.getUserById(UserInByIdParam.builder().name(name).startTime(TimeUtils.getYesterdayMinTime()).build());
     }
 
     /**
@@ -227,6 +252,16 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     }
 
     /**
+     * 查看积分计算等级
+     * @param param
+     * @return
+     */
+    @Override
+    public UserIntegralCalculationDto getIntegralCalculation(TimeInfoParam param) {
+        return userStatisticsInfoMapper.getIntegralCalculation(param);
+    }
+
+    /**
      * 新增门店数据
      *
      * @param userStatisticsInfo 门店数据
@@ -249,11 +284,20 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     @Transactional
     public int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo)
     {
+        if(StringUtils.isNotEmpty(userStatisticsInfo.getMember())){
+            if("on".equals(userStatisticsInfo.getMember())){
+                userStatisticsInfo.setMember("0");
+            }else{
+                userStatisticsInfo.setMember("1");
+            }
+
+        }
         UserStatisticsInfo info = UserStatisticsInfo.builder()
                 .statisticsId(userStatisticsInfo.getStatisticsId())
                 .phoneNumber(userStatisticsInfo.getPhoneNumber())
                 .customerType(userStatisticsInfo.getCustomerType())
                 .operator(StringUtils.isNotEmpty(userStatisticsInfo.getOperator())?userStatisticsInfo.getOperator():null)
+                .member(StringUtils.isNotEmpty(userStatisticsInfo.getMember())?userStatisticsInfo.getMember():null)
                 .build();
         info.setUpdateTime(DateUtils.getNowDate());
         return userStatisticsInfoMapper.updateUserStatisticsInfo(info);
@@ -268,6 +312,17 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     public int updateUserStatisticsGrade(UserStatisticsInfo userStatisticsInfo) {
         userStatisticsInfo.setUpdateTime(DateUtils.getNowDate());
         return userStatisticsInfoMapper.updateUserStatisticsGrade(userStatisticsInfo);
+    }
+
+    /**
+     * 修改会员状态
+     * @param userStatisticsInfo
+     * @return
+     */
+    @Override
+    public int updateUserStatisticsMember(UserStatisticsInfo userStatisticsInfo) {
+        userStatisticsInfo.setUpdateTime(DateUtils.getNowDate());
+        return userStatisticsInfoMapper.updateUserStatisticsMember(userStatisticsInfo);
     }
 
     /**

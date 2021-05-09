@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class TimeInfoParam {
+public class UserInByIdParam {
+
     /** 开始时间**/
     private String startTime;
-    /** 结束时间**/
-    private String endTime;
-    /** 客户Id**/
-    private Long customerId;
+    /** 姓名**/
+    private String name;
 }

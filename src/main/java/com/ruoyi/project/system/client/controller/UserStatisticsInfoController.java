@@ -215,6 +215,17 @@ public class UserStatisticsInfoController extends BaseController
     }
 
     /**
+     * 修改会员数据
+     */
+    @Log(title = "修改会员数据", businessType = BusinessType.UPDATE)
+    @PostMapping("/editUser")
+    @ResponseBody
+    public AjaxResult editUser(UserStatisticsInfo userStatisticsInfo)
+    {
+        return toAjax(userStatisticsInfoService.updateUserStatisticsMember(userStatisticsInfo));
+    }
+
+    /**
      * 删除门店数据
      */
     @Log(title = "门店数据", businessType = BusinessType.DELETE)

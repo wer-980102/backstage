@@ -61,4 +61,6 @@ public class UserStatisticsInfoDto extends BaseEntity {
     private String grade;
     /** 分店名称**/
     private String branchName;
+    /** 是否是会员: 0 否 1是 **/
+    private String member;
 }

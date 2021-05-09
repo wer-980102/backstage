@@ -128,8 +128,8 @@ public class UserStatisticsInfo extends BaseEntity
     private String endTime;
     /** 销售Id**/
     private Long saleId;
-
-
+    /** 是否是会员: 0 是 1否 */
+    private String member;
     /** 等级 */
     private String grade;
 }

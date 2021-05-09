@@ -27,6 +27,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="quota"    column="quota"    />
         <result property="pickDays"    column="pick_days"    />
         <result property="grade"    column="grade"    />
+        <result property="member"    column="member"    />
         <result property="specialUser"    column="special_user"    />
         <result property="operator"    column="operator"    />
         <result property="operatorTime"    column="Operator_time"    />
@@ -38,7 +39,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectUserStatisticsInfoVo">
-        select statistics_id, name, phone_number, address, store_remark,specialUser, region, store, clerk, code, discount, fixed_offer, fax_number, customer_type, applicable_price, birthday, residual_integral, balance, parent_customer, member_type,quota, pick_days,grade, operator, Operator_time, create_by, create_time, update_by, update_time, remark from user_statistics_info
+        select statistics_id, name, phone_number, address, store_remark,specialUser, region, store, clerk, code, discount, fixed_offer, fax_number, customer_type, applicable_price, birthday, residual_integral, balance, parent_customer, member_type,quota, pick_days,grade,member,operator, Operator_time, create_by, create_time, update_by, update_time, remark from user_statistics_info
     </sql>
 
     <select id="selectUserStatisticsInfoList" parameterType="UserStatisticsInfo" resultMap="UserStatisticsInfoResult">
@@ -82,7 +83,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         usi.store,
         usi.Operator_time AS operatorTime,
         usi.operator,
-        usi.special_user as specialUser
+        usi.special_user as specialUser,
+        usi.grade,
+        usi.member
         FROM
         user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
@@ -106,7 +109,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             usi.Operator_time AS operatorTime,
             usi.operator,
             usi.special_user as specialUser,
-            usi.grade
+            usi.grade,
+            usi.member
         FROM
             user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
@@ -127,7 +131,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND usi.grade=#{grade}
             </if>
             <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
-                and DATE_FORMAT(usi.Operator_time,'%Y-%m-%d') between #{startTime} and #{endTime}
+                and usi.Operator_time between #{startTime} and #{endTime}
             </if>
         </where>
         GROUP BY
@@ -136,7 +140,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
 
-    <select id="getUserById" parameterType="java.lang.String" resultMap="UserStatisticsInfoResult">
+    <select id="getUserById" parameterType="UserInByIdParam" resultMap="UserStatisticsInfoResult">
         select
                statistics_id,
                name,
@@ -144,6 +148,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from user_statistics_info
         <where>
             <if test="name != null  and name != ''">AND name like concat(#{name}, '%')</if>
+            <if test="startTime!=null and startTime!=''">
+                and create_time &lt; #{startTime}
+            </if>
         </where>
         limit 1
     </select>
@@ -176,17 +183,67 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         ORDER BY usi.grade
     </select>
 
+    <select id="getMemberUserInfo" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
+        SELECT
+        distinct usi.statistics_id AS statisticsId,
+        usi.NAME AS name,
+        usi.phone_number AS phoneNumber,
+        usi.member_type AS memberType,
+        usi.customer_type AS customerType,
+        usi.grade,
+        usi.member
+        FROM
+        user_statistics_info usi
+        INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
+        <where> usi.member = '1'
+            <if test="userId != null">
+                AND csi.user_id = #{userId}
+            </if>
+            <if test="name!=null and name!=''">
+                AND usi.name like concat(#{name}, '%')
+            </if>
+            <if test="phoneNumber!=null and phoneNumber!=''">
+                AND usi.phone_number like concat(#{phoneNumber}, '%')
+            </if>
+            <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+                and DATE_FORMAT(csi.last_goods,'%Y-%m-%d') between #{startTime} and #{endTime}
+            </if>
+        </where>
+        ORDER BY usi.grade
+    </select>
+
     <select id="getSpecialUserByIdInfo" parameterType="java.lang.Long" resultType="UserStatisticsInfoDto">
         SELECT
         usi.statistics_id AS statisticsId,
         usi.NAME AS name,
         usi.phone_number AS phoneNumber,
         usi.member_type AS memberType,
-        usi.customer_type AS customerType
+        usi.customer_type AS customerType,
+        usi.grade
         FROM
         user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
         <where> usi.special_user = '1'
+            <if test="statisticsId!=null">
+                AND usi.statistics_id = #{statisticsId}
+            </if>
+        </where>
+        GROUP BY usi.statistics_id
+    </select>
+
+    <select id="getMemberUserByIdInfo" parameterType="java.lang.Long" resultType="UserStatisticsInfoDto">
+        SELECT
+        usi.statistics_id AS statisticsId,
+        usi.NAME AS name,
+        usi.phone_number AS phoneNumber,
+        usi.member_type AS memberType,
+        usi.customer_type AS customerType,
+        usi.grade,
+        usi.member
+        FROM
+        user_statistics_info usi
+        INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
+        <where> usi.member = '1'
             <if test="statisticsId!=null">
                 AND usi.statistics_id = #{statisticsId}
             </if>
@@ -320,6 +377,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where DATE_FORMAT(csi.last_goods, '%Y-%m' ) != DATE_FORMAT( NOW(), '%Y-%m' )
         group by usi.statistics_id
     </select>
+
+    <select id="getIntegralCalculation" parameterType="TimeInfoParam" resultType="UserIntegralCalculationDto">
+        select
+            usi.statistics_id as statisticsId,
+            usi.grade as grade,
+            uii.integral as integral
+        from user_statistics_info usi
+        inner join user_integral_info uii on usi.statistics_id = uii.customer_id
+        <where> usi.special_user ='0'
+            <if test="customerId != null">
+                AND uii.customer_id = #{customerId}
+            </if>
+            <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+                and uii.update_time between #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
     <insert id="insertUserStatisticsInfo" parameterType="UserStatisticsInfo" useGeneratedKeys="true" keyProperty="statisticsId">
         insert into user_statistics_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
@@ -344,6 +418,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quota != null and quota != ''">quota,</if>
             <if test="pickDays != null">pick_days,</if>
             <if test="grade != null">grade,</if>
+            <if test="member != null and member != ''">member,</if>
             <if test="specialUser != null">special_user,</if>
             <if test="operator != null">operator,</if>
             <if test="operatorTime != null">Operator_time,</if>
@@ -375,6 +450,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quota != null and quota != ''">#{quota},</if>
             <if test="pickDays != null">#{pickDays},</if>
             <if test="grade != null">#{grade},</if>
+            <if test="member != null and member != ''">#{member},</if>
             <if test="specialUser != null">#{specialUser},</if>
             <if test="operator != null">#{operator},</if>
             <if test="operatorTime != null">#{operatorTime},</if>
@@ -410,6 +486,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="quota != null and quota != ''">quota = #{quota},</if>
             <if test="pickDays != null">pick_days = #{pickDays},</if>
             <if test="grade != null">grade = #{grade},</if>
+            <if test="member != null and member != ''">member = #{member},</if>
             <if test="specialUser != null">special_user = #{specialUser},</if>
             <if test="operator != null">operator = #{operator},</if>
             <if test="operatorTime != null">Operator_time = #{operatorTime},</if>
@@ -425,6 +502,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update user_statistics_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="grade != null">grade = #{grade},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime}</if>
+        </trim>
+        where statistics_id = #{statisticsId}
+    </update>
+
+    <update id="updateUserStatisticsMember" parameterType="UserStatisticsInfo">
+        update user_statistics_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="member != null and member != ''">member = #{member},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime}</if>
         </trim>

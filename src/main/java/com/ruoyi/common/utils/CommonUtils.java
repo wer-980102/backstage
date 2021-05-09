@@ -56,23 +56,23 @@ public class CommonUtils {
      * @param param
      * @return
      */
-    public static  Integer getPlusIntegralInfo(Integer param)  {
+    public static  Integer getPlusIntegralInfo(Integer integral,Integer param)  {
         if(param>10000){
-            return param+1;
+            return integral<12?integral+1:12;
         }else if(param<=1000){
-            return param>0?param-1:0;
+            return integral>0?integral-1:0;
         }else if(param>8000){
-            return param+1;
+            return integral<12?integral+1:12;
         }else if(param<=8000){
-            return param>0?param-1:0;
+            return integral>0?integral-1:0;
         }else if(param>5000){
-            return param+1;
+            return integral<12?integral+1:12;
         }else if(param<=5000){
-            return param>0?param-1:0;
+            return integral>0?integral-1:0;
         }else if(param>3000){
-            return param+1;
+            return integral<12?integral+1:12;
         }else{
-            return param>0?param-1:0;
+            return integral>0?integral-1:0;
         }
     }
 

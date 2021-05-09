@@ -30,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectUserIntegralInfoList" parameterType="UserIntegralInfo" resultMap="UserIntegralInfoResult">
         <include refid="selectUserIntegralInfoVo"/>
-        <where> status = '0'
+        <where>
             <if test="userId != null"> AND user_id = #{userId} </if>
             <if test="customerId != null "> and customer_id = #{customerId}</if>
             <if test="customerName != null  and customerName != ''"> and customer_name like concat('%', #{customerName}, '%')</if>
@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operatorTime != null "> and Operator_time = #{operatorTime}</if>
             <if test="type == 1 "> and integral_rule = '' or integral_rule is null or integral_remark = '' or integral_remark is null</if>
         </where>
-        order by Operator_time desc
+        order by Operator_time,integral_id desc
     </select>
 
     <select id="selectUserIntegralInfoById" parameterType="Long" resultMap="UserIntegralInfoResult">

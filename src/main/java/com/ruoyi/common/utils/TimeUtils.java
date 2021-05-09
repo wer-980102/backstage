@@ -69,6 +69,23 @@ public class TimeUtils {
     }
 
     /**
+     * 获取昨天最小数据
+     */
+    public static String getYesterdayMinTime(){
+        LocalDateTime today_start = LocalDateTime.of(LocalDate.now().plusDays(-1), LocalTime.MIN);
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return df.format(today_start);
+    }
+
+    /**
+     * 获取昨天最大数据
+     */
+    public static String getYesterdayMaxTime(){
+        LocalDateTime today_start = LocalDateTime.of(LocalDate.now().plusDays(-1), LocalTime.MAX);
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return df.format(today_start);
+    }
+    /**
      * 获取当天数据
      */
     public static String getDayTime(){

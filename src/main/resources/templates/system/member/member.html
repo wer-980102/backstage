@@ -31,7 +31,7 @@
 				</form>
 			</div>
 			<div class="btn-group-sm" id="toolbar" role="group">
-				<h5>解释说明特殊用户情况：<h6>&nbsp;&nbsp;&nbsp;&nbsp;管理员从客户信息中手动升级为特殊客户，同时，管理员可再特殊客户列表中手动将特殊客户降级为普通客户。</h6></h5>
+				<h5>解释说明非会员情况：<h6>&nbsp;&nbsp;&nbsp;&nbsp;管理员从客户信息中手动升级为非会员，同时，管理员可再非会员列表中手动将非会员升级未会员。</h6></h5>
 			</div>
 	        <div class="col-sm-12 select-table table-striped">
 	            <table id="bootstrap-table"></table>
@@ -44,7 +44,7 @@
         var removeFlag = [[${@permission.hasPermi('system:special:remove')}]];
         var types = [[${@dict.getType('sys_notice_type')}]];
         var datas = [[${@dict.getType('sys_notice_status')}]];
-        var prefix = ctx + "system/special";
+        var prefix = ctx + "system/member";
 
         $(function() {
             var options = {
@@ -94,14 +94,21 @@
 						title: '最后拿货时间',
 						sortable: true
 					},
+					{
+						visible: editFlag == 'hidden' ? false : true,
+						title: '是否会员',
+						align: 'center',
+						formatter: function (value, row, index) {
+							return statusTools(row);
+						}
+					},
 		        {
 		            title: '操作',
 		            align: 'center',
 		            formatter: function(value, row, index) {
 		            	var actions = [];
 		            	actions.push('<a class="btn btn-success btn-xs " href="javascript:void(0)" onclick="$.operate.edit(\'' + row.statisticsId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="bbtn btn-danger btn-xs " href="javascript:void(0)" onclick="demotion(\'' + row.statisticsId + '\')"><i class="fa fa-sign-out"></i>降级</a>');
-						return actions.join('');
+                       	return actions.join('');
 		            }
 		        }]
             };
@@ -112,6 +119,29 @@
 		function demotion(id) {
 			$.modal.confirm("确认要降级该客户为普通客户吗？", function() {
 				$.operate.post(prefix + "/specialUserEdit", { "statisticsId": id});
+			})
+		}
+
+		/* 状态显示 */
+		function statusTools(row) {
+			if (row.member == 1) {
+				return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.statisticsId + '\')"></i> ';
+			} else {
+				return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.statisticsId + '\')"></i> ';
+			}
+		}
+
+		/* 状态-停用 */
+		function disable(statisticsId) {
+			$.modal.confirm("确认要停用该会员吗？", function() {
+				$.operate.post(prefix + "/editUser", { "statisticsId": statisticsId, "member": 1 });
+			})
+		}
+
+		/* 状态-启用 */
+		function enable(statisticsId) {
+			$.modal.confirm("确认要启用该会员吗？", function() {
+				$.operate.post(prefix + "/editUser", { "statisticsId": statisticsId, "member": 0 });
 			})
 		}
     </script>

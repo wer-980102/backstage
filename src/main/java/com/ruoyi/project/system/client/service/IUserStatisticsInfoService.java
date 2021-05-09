@@ -2,6 +2,7 @@ package com.ruoyi.project.system.client.service;
 
 import com.ruoyi.project.system.client.domain.NotClerkSaleInfo;
 import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.dto.UserIntegralCalculationDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 
@@ -45,11 +46,25 @@ public interface IUserStatisticsInfoService
     List<UserStatisticsInfoDto> getSpecialUserInfo(UserStatisticsInfo userStatisticsInfo);
 
     /**
+     * 查询会员情况
+     * @param userStatisticsInfo
+     * @return
+     */
+    List<UserStatisticsInfoDto> getMemberUserInfo(UserStatisticsInfo userStatisticsInfo);
+
+    /**
      * 根据ID查询特殊用户
      * @param statisticsId
      * @return
      */
     UserStatisticsInfoDto getSpecialUserByIdInfo(Long statisticsId);
+
+    /**
+     * 根据ID查询会员信息
+     * @param statisticsId
+     * @return
+     */
+    UserStatisticsInfoDto getMemberUserByIdInfo(Long statisticsId);
     /**
      * 查询销售纪录管理
      * @param userStatisticsInfo
@@ -82,6 +97,13 @@ public interface IUserStatisticsInfoService
      * @return
      */
     List<UserStatisticsInfoDto> getTimingSumInfo(TimeInfoParam param);
+
+    /**
+     * 查看积分计算等级
+     * @param param
+     * @return
+     */
+    UserIntegralCalculationDto getIntegralCalculation(TimeInfoParam param);
     /**
      * 新增门店数据
      *
@@ -105,6 +127,14 @@ public interface IUserStatisticsInfoService
      * @return
      */
     int updateUserStatisticsGrade(UserStatisticsInfo userStatisticsInfo);
+
+
+    /**
+     * 修改会员状态
+     * @param userStatisticsInfo
+     * @return
+     */
+    int updateUserStatisticsMember(UserStatisticsInfo userStatisticsInfo);
 
     /**
      * 用户降级

@@ -155,6 +155,14 @@
                     align: "center"
                 },
                 {
+                    visible: editFlag == 'hidden' ? false : true,
+                    title: '是否会员',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
+                },
+                {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
@@ -171,7 +179,7 @@
 
         /* 升级用户*/
         function upgrade(id) {
-            $.modal.confirm("确认要升级该用户吗？", function() {
+            $.modal.confirm("确认要升级该客户为特殊客户吗？", function() {
                 $.operate.post(prefix + "/specialUserEdit", { "statisticsId": id});
             })
         }
@@ -179,6 +187,29 @@
         function scoreReduction() {
             $.modal.confirm("确认要减分吗？", function() {
                 $.operate.post(prefix + "/scoreReduction");
+            })
+        }
+
+        /* 状态显示 */
+        function statusTools(row) {
+            if (row.member == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.statisticsId + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.statisticsId + '\')"></i> ';
+            }
+        }
+
+        /* 状态-停用 */
+        function disable(statisticsId) {
+            $.modal.confirm("确认要停用该会员吗？", function() {
+                $.operate.post(prefix + "/editUser", { "statisticsId": statisticsId, "member": 1 });
+            })
+        }
+
+        /* 状态-启用 */
+        function enable(statisticsId) {
+            $.modal.confirm("确认要启用该会员吗？", function() {
+                $.operate.post(prefix + "/editUser", { "statisticsId": statisticsId, "member": 0 });
             })
         }
     </script>
