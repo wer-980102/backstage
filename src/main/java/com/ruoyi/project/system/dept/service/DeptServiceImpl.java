@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+
+import com.ruoyi.common.utils.CommonUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,7 +38,6 @@ public class DeptServiceImpl implements IDeptService
      * @return 部门信息集合
      */
     @Override
-    @DataScope(deptAlias = "d")
     public List<Dept> selectDeptList(Dept dept)
     {
         return deptMapper.selectDeptList(dept);
@@ -60,7 +61,7 @@ public class DeptServiceImpl implements IDeptService
     /**
      * 查询部门管理树（排除下级）
      *
-     * @param deptId 部门ID
+     * @param dept 部门ID
      * @return 所有部门信息
      */
     @Override
@@ -94,7 +95,12 @@ public class DeptServiceImpl implements IDeptService
     {
         Long roleId = role.getRoleId();
         List<Ztree> ztrees = new ArrayList<Ztree>();
-        List<Dept> deptList = selectDeptList(new Dept());
+        List<Dept> deptList = null;
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            deptList = selectDeptList(new Dept());
+        }else{
+            deptList = selectDeptList(Dept.builder().userId(ShiroUtils.getUserId()).build());
+        }
         if (StringUtils.isNotNull(roleId))
         {
             List<String> roleDeptList = deptMapper.selectRoleDeptTree(roleId);

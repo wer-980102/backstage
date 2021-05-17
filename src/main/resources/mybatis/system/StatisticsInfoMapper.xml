@@ -48,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="customerId != null "> and customer_id = #{customerId}</if>
         </where>
+        limit 1
     </select>
 
     <select id="selectStatisticsInfoById" parameterType="Long" resultMap="StatisticsInfoResult">

@@ -83,8 +83,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="deptId != null and deptId != 0">
 			AND (u.dept_id = #{deptId} OR u.dept_id IN ( SELECT t.dept_id FROM sys_dept t WHERE FIND_IN_SET (#{deptId},ancestors) ))
 		</if>
-		<!-- 数据范围过滤 -->
-		${params.dataScope}
+		<!-- 数据范围过滤
+		${params.dataScope} -->
 	</select>
 
 	<select id="selectAllocatedList" parameterType="User" resultMap="UserResult">
@@ -100,8 +100,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<if test="phonenumber != null and phonenumber != ''">
 			AND u.phonenumber like concat('%', #{phonenumber}, '%')
 		</if>
-		<!-- 数据范围过滤 -->
-		${params.dataScope}
+		<!-- 数据范围过滤
+		${params.dataScope}-->
 	</select>
 
 	<select id="selectUnallocatedList" parameterType="User" resultMap="UserResult">

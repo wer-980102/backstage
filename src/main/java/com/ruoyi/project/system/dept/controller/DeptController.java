@@ -1,6 +1,8 @@
 package com.ruoyi.project.system.dept.controller;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.CommonUtils;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -25,7 +27,7 @@ import com.ruoyi.project.system.role.domain.Role;
 
 /**
  * 部门信息
- * 
+ *
  * @author ruoyi
  */
 @Controller
@@ -155,7 +157,7 @@ public class DeptController extends BaseController
 
     /**
      * 选择部门树
-     * 
+     *
      * @param deptId 部门ID
      * @param excludeId 排除ID
      */
@@ -175,7 +177,13 @@ public class DeptController extends BaseController
     @ResponseBody
     public List<Ztree> treeData()
     {
-        List<Ztree> ztrees = deptService.selectDeptTree(new Dept());
+        List<Ztree> ztrees = null;
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            ztrees = deptService.selectDeptTree(new Dept());
+        }else{
+            ztrees = deptService.selectDeptTree(Dept.builder().userId(ShiroUtils.getUserId()).build());
+
+        }
         return ztrees;
     }
 
@@ -188,7 +196,14 @@ public class DeptController extends BaseController
     {
         Dept dept = new Dept();
         dept.setDeptId(excludeId);
-        List<Ztree> ztrees = deptService.selectDeptTreeExcludeChild(dept);
+        List<Ztree> ztrees = null;
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            ztrees = deptService.selectDeptTreeExcludeChild(dept);
+        }else{
+            dept.setUserId(ShiroUtils.getUserId());
+            ztrees = deptService.selectDeptTreeExcludeChild(dept);
+
+        }
         return ztrees;
     }
 

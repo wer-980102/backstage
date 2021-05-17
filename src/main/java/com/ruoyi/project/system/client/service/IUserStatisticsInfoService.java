@@ -65,12 +65,14 @@ public interface IUserStatisticsInfoService
      * @return
      */
     UserStatisticsInfoDto getMemberUserByIdInfo(Long statisticsId);
+
     /**
      * 查询销售纪录管理
      * @param userStatisticsInfo
      * @return
      */
     List<UserStatisticsInfoDto> getSaleRecordInfo(UserStatisticsInfo userStatisticsInfo);
+
     /**
      * 根据name查询Id
      * @param name
@@ -78,6 +80,12 @@ public interface IUserStatisticsInfoService
      */
     UserStatisticsInfo getUserById(String name);
 
+    /**
+     * 根据name查询Id
+     * @param name
+     * @return
+     */
+    UserStatisticsInfo getUserByInfo(String name);
 
     /**
      * 根据ID查询销售纪录

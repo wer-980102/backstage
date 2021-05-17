@@ -191,7 +191,7 @@ public class ClerkSaleInfoServiceImpl implements IClerkSaleInfoService
         {
             try
             {
-                UserStatisticsInfo user = iUserStatisticsInfoService.getUserById(sale.getCustomer());
+                UserStatisticsInfo user = iUserStatisticsInfoService.getUserByInfo(sale.getCustomer());
                 //判断有没有用户
                 if(user!= null){
                     if (StringUtils.isNotEmpty(sale.getCustomer()))

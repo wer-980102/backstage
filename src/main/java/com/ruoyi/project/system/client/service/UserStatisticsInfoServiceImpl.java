@@ -223,6 +223,16 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     }
 
     /**
+     * 根据name查询Id
+     * @param name
+     * @return
+     */
+    @Override
+    public UserStatisticsInfo getUserByInfo(String name) {
+        return userStatisticsInfoMapper.getUserById(UserInByIdParam.builder().name(name).build());
+    }
+
+    /**
      * 根据ID查询销售纪录
      * @param saleId
      * @return
