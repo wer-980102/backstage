@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.target.mapper.UserDayConsumptionInfoMapper">
+
+    <resultMap type="UserDayConsumptionInfo" id="UserDayConsumptionInfoResult">
+        <result property="dayConsumptionId"    column="day_consumption_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="dayMorning"    column="day_morning"    />
+        <result property="dayNoon"    column="day_noon"    />
+        <result property="dayNight"    column="day_night"    />
+        <result property="restConsumption"    column="rest_consumption"    />
+        <result property="consumptionStatus"    column="consumption_status"    />
+        <result property="status"    column="status"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUserDayConsumptionInfoVo">
+        select day_consumption_id, user_id, day_morning, day_noon, day_night, rest_consumption, consumption_status, status, remarks, create_by, create_time, update_by, update_time from user_day_consumption_info
+    </sql>
+
+    <select id="selectUserDayConsumptionInfoList" parameterType="UserDayConsumptionInfo" resultMap="UserDayConsumptionInfoResult">
+        <include refid="selectUserDayConsumptionInfoVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="dayMorning != null "> and day_morning = #{dayMorning}</if>
+            <if test="dayNoon != null "> and day_noon = #{dayNoon}</if>
+            <if test="dayNight != null "> and day_night = #{dayNight}</if>
+            <if test="restConsumption != null "> and rest_consumption = #{restConsumption}</if>
+            <if test="consumptionStatus != null  and consumptionStatus != ''"> and consumption_status = #{consumptionStatus}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+    </select>
+
+    <select id="selectUserDayConsumptionInfoById" parameterType="Long" resultMap="UserDayConsumptionInfoResult">
+        <include refid="selectUserDayConsumptionInfoVo"/>
+        where day_consumption_id = #{dayConsumptionId}
+    </select>
+
+    <insert id="insertUserDayConsumptionInfo" parameterType="UserDayConsumptionInfo" useGeneratedKeys="true" keyProperty="dayConsumptionId">
+        insert into user_day_consumption_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="dayMorning != null">day_morning,</if>
+            <if test="dayNoon != null">day_noon,</if>
+            <if test="dayNight != null">day_night,</if>
+            <if test="restConsumption != null">rest_consumption,</if>
+            <if test="consumptionStatus != null">consumption_status,</if>
+            <if test="status != null">status,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="dayMorning != null">#{dayMorning},</if>
+            <if test="dayNoon != null">#{dayNoon},</if>
+            <if test="dayNight != null">#{dayNight},</if>
+            <if test="restConsumption != null">#{restConsumption},</if>
+            <if test="consumptionStatus != null">#{consumptionStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserDayConsumptionInfo" parameterType="UserDayConsumptionInfo">
+        update user_day_consumption_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="dayMorning != null">day_morning = #{dayMorning},</if>
+            <if test="dayNoon != null">day_noon = #{dayNoon},</if>
+            <if test="dayNight != null">day_night = #{dayNight},</if>
+            <if test="restConsumption != null">rest_consumption = #{restConsumption},</if>
+            <if test="consumptionStatus != null">consumption_status = #{consumptionStatus},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where day_consumption_id = #{dayConsumptionId}
+    </update>
+
+    <delete id="deleteUserDayConsumptionInfoById" parameterType="Long">
+        delete from user_day_consumption_info where day_consumption_id = #{dayConsumptionId}
+    </delete>
+
+    <delete id="deleteUserDayConsumptionInfoByIds" parameterType="String">
+        delete from user_day_consumption_info where day_consumption_id in
+        <foreach item="dayConsumptionId" collection="array" open="(" separator="," close=")">
+            #{dayConsumptionId}
+        </foreach>
+    </delete>
+
+</mapper>

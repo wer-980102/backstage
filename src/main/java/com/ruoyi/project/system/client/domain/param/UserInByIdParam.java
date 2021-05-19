@@ -15,4 +15,6 @@ public class UserInByIdParam {
     private String startTime;
     /** 姓名**/
     private String name;
+    /** 电话号码**/
+    private String phoneNumber;
 }

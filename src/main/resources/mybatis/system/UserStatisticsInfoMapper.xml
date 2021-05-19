@@ -155,6 +155,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         limit 1
     </select>
 
+    <select id="getuserInfo" parameterType="UserInByIdParam" resultType="UserStatisticsInfoDto">
+        select name from user_statistics_info
+        <where>
+            <if test="name != null  and name != ''">AND name like concat(#{name}, '%')</if>
+            <if test="phoneNumber!=null and phoneNumber!=''">
+                and phone_number = #{phoneNumber}
+            </if>
+        </where>
+    </select>
     <select id="getSpecialUserInfo" parameterType="UserStatisticsInfo" resultType="UserStatisticsInfoDto">
         SELECT
             distinct usi.statistics_id AS statisticsId,
@@ -498,6 +507,43 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </trim>
         where statistics_id = #{statisticsId}
     </update>
+
+    <update id="updateUserByName" parameterType="UserStatisticsInfo">
+        update user_statistics_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="phoneNumber != null and phoneNumber != ''">phone_number = #{phoneNumber},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="storeRemark != null">store_remark = #{storeRemark},</if>
+            <if test="region != null">region = #{region},</if>
+            <if test="store != null">store = #{store},</if>
+            <if test="clerk != null">clerk = #{clerk},</if>
+            <if test="code != null">code = #{code},</if>
+            <if test="discount != null">discount = #{discount},</if>
+            <if test="fixedOffer != null">fixed_offer = #{fixedOffer},</if>
+            <if test="faxNumber != null">fax_number = #{faxNumber},</if>
+            <if test="customerType != null">customer_type = #{customerType},</if>
+            <if test="applicablePrice != null">applicable_price = #{applicablePrice},</if>
+            <if test="birthday != null">birthday = #{birthday},</if>
+            <if test="residualIntegral != null">residual_integral = #{residualIntegral},</if>
+            <if test="balance != null">balance = #{balance},</if>
+            <if test="parentCustomer != null">parent_customer = #{parentCustomer},</if>
+            <if test="memberType != null">member_type = #{memberType},</if>
+            <if test="quota != null and quota != ''">quota = #{quota},</if>
+            <if test="pickDays != null">pick_days = #{pickDays},</if>
+            <if test="grade != null">grade = #{grade},</if>
+            <if test="member != null and member != ''">member = #{member},</if>
+            <if test="specialUser != null">special_user = #{specialUser},</if>
+            <if test="operator != null">operator = #{operator},</if>
+            <if test="operatorTime != null">Operator_time = #{operatorTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where name = #{name}
+    </update>
+
     <update id="updateUserStatisticsGrade" parameterType="UserStatisticsInfo">
         update user_statistics_info
         <trim prefix="SET" suffixOverrides=",">

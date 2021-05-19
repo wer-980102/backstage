@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.target.mapper.UserMotionInfoMapper">
+
+    <resultMap type="UserMotionInfo" id="UserMotionInfoResult">
+        <result property="motionId"    column="motion_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="motionTime"    column="motion_time"    />
+        <result property="motionDescribe"    column="motion_describe"    />
+        <result property="diet"    column="diet"    />
+        <result property="standardStatus"    column="standard_status"    />
+        <result property="status"    column="status"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUserMotionInfoVo">
+        select motion_id, user_id, motion_time, motion_describe, diet, standard_status, status, remarks, create_by, create_time, update_by, update_time from user_motion_info
+    </sql>
+
+    <select id="selectUserMotionInfoList" parameterType="UserMotionInfo" resultMap="UserMotionInfoResult">
+        <include refid="selectUserMotionInfoVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="motionTime != null "> and motion_time = #{motionTime}</if>
+            <if test="motionDescribe != null  and motionDescribe != ''"> and motion_describe = #{motionDescribe}</if>
+            <if test="diet != null "> and diet = #{diet}</if>
+            <if test="standardStatus != null  and standardStatus != ''"> and standard_status = #{standardStatus}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+    </select>
+
+    <select id="selectUserMotionInfoById" parameterType="Long" resultMap="UserMotionInfoResult">
+        <include refid="selectUserMotionInfoVo"/>
+        where motion_id = #{motionId}
+    </select>
+
+    <insert id="insertUserMotionInfo" parameterType="UserMotionInfo" useGeneratedKeys="true" keyProperty="motionId">
+        insert into user_motion_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="motionTime != null">motion_time,</if>
+            <if test="motionDescribe != null">motion_describe,</if>
+            <if test="diet != null">diet,</if>
+            <if test="standardStatus != null">standard_status,</if>
+            <if test="status != null">status,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="motionTime != null">#{motionTime},</if>
+            <if test="motionDescribe != null">#{motionDescribe},</if>
+            <if test="diet != null">#{diet},</if>
+            <if test="standardStatus != null">#{standardStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserMotionInfo" parameterType="UserMotionInfo">
+        update user_motion_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="motionTime != null">motion_time = #{motionTime},</if>
+            <if test="motionDescribe != null">motion_describe = #{motionDescribe},</if>
+            <if test="diet != null">diet = #{diet},</if>
+            <if test="standardStatus != null">standard_status = #{standardStatus},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where motion_id = #{motionId}
+    </update>
+
+    <delete id="deleteUserMotionInfoById" parameterType="Long">
+        delete from user_motion_info where motion_id = #{motionId}
+    </delete>
+
+    <delete id="deleteUserMotionInfoByIds" parameterType="String">
+        delete from user_motion_info where motion_id in
+        <foreach item="motionId" collection="array" open="(" separator="," close=")">
+            #{motionId}
+        </foreach>
+    </delete>
+
+</mapper>

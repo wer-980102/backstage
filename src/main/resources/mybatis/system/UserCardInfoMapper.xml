@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.target.mapper.UserCardInfoMapper">
+
+    <resultMap type="UserCardInfo" id="UserCardInfoResult">
+        <result property="cardId"    column="card_id"    />
+        <result property="userId"    column="user_id"    />
+        <result property="studyTitle"    column="study_title"    />
+        <result property="studyTarget"    column="study_target"    />
+        <result property="preparationTime"    column="preparation_time"    />
+        <result property="targetTime"    column="target_time"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="cardStatus"    column="card_status"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUserCardInfoVo">
+        select card_id, user_id, study_title, study_target, preparation_time, target_time, remarks, card_status, status, create_by, create_time, update_by, update_time from user_card_info
+    </sql>
+
+    <select id="selectUserCardInfoList" parameterType="UserCardInfo" resultMap="UserCardInfoResult">
+        <include refid="selectUserCardInfoVo"/>
+        <where>
+            <if test="userId != null "> and user_id = #{userId}</if>
+            <if test="studyTitle != null  and studyTitle != ''"> and study_title = #{studyTitle}</if>
+            <if test="studyTarget != null  and studyTarget != ''"> and study_target = #{studyTarget}</if>
+            <if test="preparationTime != null "> and preparation_time = #{preparationTime}</if>
+            <if test="targetTime != null "> and target_time = #{targetTime}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="cardStatus != null  and cardStatus != ''"> and card_status = #{cardStatus}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectUserCardInfoById" parameterType="Long" resultMap="UserCardInfoResult">
+        <include refid="selectUserCardInfoVo"/>
+        where card_id = #{cardId}
+    </select>
+
+    <insert id="insertUserCardInfo" parameterType="UserCardInfo" useGeneratedKeys="true" keyProperty="cardId">
+        insert into user_card_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">user_id,</if>
+            <if test="studyTitle != null">study_title,</if>
+            <if test="studyTarget != null">study_target,</if>
+            <if test="preparationTime != null">preparation_time,</if>
+            <if test="targetTime != null">target_time,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="cardStatus != null">card_status,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="studyTitle != null">#{studyTitle},</if>
+            <if test="studyTarget != null">#{studyTarget},</if>
+            <if test="preparationTime != null">#{preparationTime},</if>
+            <if test="targetTime != null">#{targetTime},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="cardStatus != null">#{cardStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUserCardInfo" parameterType="UserCardInfo">
+        update user_card_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
+            <if test="studyTitle != null">study_title = #{studyTitle},</if>
+            <if test="studyTarget != null">study_target = #{studyTarget},</if>
+            <if test="preparationTime != null">preparation_time = #{preparationTime},</if>
+            <if test="targetTime != null">target_time = #{targetTime},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="cardStatus != null">card_status = #{cardStatus},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where card_id = #{cardId}
+    </update>
+
+    <delete id="deleteUserCardInfoById" parameterType="Long">
+        delete from user_card_info where card_id = #{cardId}
+    </delete>
+
+    <delete id="deleteUserCardInfoByIds" parameterType="String">
+        delete from user_card_info where card_id in
+        <foreach item="cardId" collection="array" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+    </delete>
+
+</mapper>

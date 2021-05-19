@@ -43,6 +43,13 @@ public interface UserStatisticsInfoMapper
      * @return
      */
     UserStatisticsInfo getUserById(UserInByIdParam param);
+
+    /**
+     * 查询该用户是否存在
+     * @param param
+     * @return
+     */
+    UserStatisticsInfoDto getuserInfo(UserInByIdParam param);
     /**
      * 查询门店数据列表
      *
@@ -131,6 +138,13 @@ public interface UserStatisticsInfoMapper
      * @return 结果
      */
      int updateUserStatisticsInfo(UserStatisticsInfo userStatisticsInfo);
+
+    /**
+     * 重复用户进行修改
+     * @param userStatisticsInfo
+     * @return
+     */
+     int updateUserByName(UserStatisticsInfo userStatisticsInfo);
 
     /**
      * 修改等级

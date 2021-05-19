@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.project.system.target.mapper.LogRecodeInfoMapper">
+
+    <resultMap type="LogRecodeInfo" id="LogRecodeInfoResult">
+        <result property="recodeId"    column="recode_id"    />
+        <result property="cardId"    column="card_id"    />
+        <result property="studyCategory"    column="study_category"    />
+        <result property="studyStatus"    column="study_status"    />
+        <result property="studyTime"    column="study_time"    />
+        <result property="studyExpect"    column="study_expect"    />
+        <result property="status"    column="status"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectLogRecodeInfoVo">
+        select recode_id, card_id, study_category, study_status, study_time, study_expect, status, remarks, create_by, create_time, update_by, update_time from log_recode_info
+    </sql>
+
+    <select id="selectLogRecodeInfoList" parameterType="LogRecodeInfo" resultMap="LogRecodeInfoResult">
+        <include refid="selectLogRecodeInfoVo"/>
+        <where>
+            <if test="cardId != null "> and card_id = #{cardId}</if>
+            <if test="studyCategory != null  and studyCategory != ''"> and study_category = #{studyCategory}</if>
+            <if test="studyStatus != null  and studyStatus != ''"> and study_status = #{studyStatus}</if>
+            <if test="studyTime != null "> and study_time = #{studyTime}</if>
+            <if test="studyExpect != null  and studyExpect != ''"> and study_expect = #{studyExpect}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+    </select>
+
+    <select id="selectLogRecodeInfoById" parameterType="Long" resultMap="LogRecodeInfoResult">
+        <include refid="selectLogRecodeInfoVo"/>
+        where recode_id = #{recodeId}
+    </select>
+
+    <insert id="insertLogRecodeInfo" parameterType="LogRecodeInfo" useGeneratedKeys="true" keyProperty="recodeId">
+        insert into log_recode_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="cardId != null">card_id,</if>
+            <if test="studyCategory != null">study_category,</if>
+            <if test="studyStatus != null">study_status,</if>
+            <if test="studyTime != null">study_time,</if>
+            <if test="studyExpect != null">study_expect,</if>
+            <if test="status != null">status,</if>
+            <if test="remarks != null">remarks,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="cardId != null">#{cardId},</if>
+            <if test="studyCategory != null">#{studyCategory},</if>
+            <if test="studyStatus != null">#{studyStatus},</if>
+            <if test="studyTime != null">#{studyTime},</if>
+            <if test="studyExpect != null">#{studyExpect},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remarks != null">#{remarks},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateLogRecodeInfo" parameterType="LogRecodeInfo">
+        update log_recode_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="cardId != null">card_id = #{cardId},</if>
+            <if test="studyCategory != null">study_category = #{studyCategory},</if>
+            <if test="studyStatus != null">study_status = #{studyStatus},</if>
+            <if test="studyTime != null">study_time = #{studyTime},</if>
+            <if test="studyExpect != null">study_expect = #{studyExpect},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remarks != null">remarks = #{remarks},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where recode_id = #{recodeId}
+    </update>
+
+    <delete id="deleteLogRecodeInfoById" parameterType="Long">
+        delete from log_recode_info where recode_id = #{recodeId}
+    </delete>
+
+    <delete id="deleteLogRecodeInfoByIds" parameterType="String">
+        delete from log_recode_info where recode_id in
+        <foreach item="recodeId" collection="array" open="(" separator="," close=")">
+            #{recodeId}
+        </foreach>
+    </delete>
+
+</mapper>

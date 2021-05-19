@@ -406,7 +406,6 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
      * @return 结果
      */
     @Override
-    @Transactional
     public String importUser(List<UserStatisticsInfo> userList, Boolean isUpdateSupport)
     {
         if (StringUtils.isNull(userList) || userList.size() == 0)
@@ -418,8 +417,6 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
             throw new BusinessException("该用户没有分店，请先增加分店！");
         }
 
-
-
         int successNum = 0;
         int failureNum = 0;
         StringBuilder successMsg = new StringBuilder();
@@ -429,7 +426,22 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
         {
             try
             {
-                if (StringUtils.isNotEmpty(user.getName()))
+                //查询该用户是否存在
+                UserStatisticsInfoDto userStatisticsInfoDto = userStatisticsInfoMapper.getuserInfo(UserInByIdParam.builder().name(user.getName()).phoneNumber(user.getPhoneNumber()).build());
+                if(StringUtils.isNotNull(userStatisticsInfoDto)){
+                    isUpdateSupport = true;
+                }
+                if (isUpdateSupport)
+                {
+                    if(StringUtils.isNotEmpty(user.getOperatorTime())){
+                        user.setOperatorTime("20"+user.getOperatorTime());
+                    }
+                    user.setUpdateBy(user.getOperator());
+                    user.setUpdateTime(DateUtils.getNowDate());
+                    userStatisticsInfoMapper.updateUserByName(user);
+                    successNum++;
+                    successMsg.append("<br/>" + successNum + "、账号 " + user.getName() + " 更新成功");
+                }else if (StringUtils.isNotEmpty(user.getName()))
                 {
                     if(StringUtils.isNotEmpty(user.getOperatorTime())){
                         user.setOperatorTime("20"+user.getOperatorTime());
@@ -438,16 +450,7 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
                     successNum++;
                     successMsg.append("<br/>" + successNum + "、账号 " + user.getName() + " 导入成功");
                 }
-                else if (isUpdateSupport)
-                {
-                    if(StringUtils.isNotEmpty(user.getOperatorTime())){
-                        user.setOperatorTime("20"+user.getOperatorTime());
-                    }
-                    user.setUpdateBy(user.getOperator());
-                    this.updateUserStatisticsInfo(user);
-                    successNum++;
-                    successMsg.append("<br/>" + successNum + "、账号 " + user.getName() + " 更新成功");
-                }
+
                 else
                 {
                     failureNum++;
