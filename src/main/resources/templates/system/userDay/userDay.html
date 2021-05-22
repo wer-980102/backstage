@@ -10,38 +10,13 @@
                 <form id="formId">
                     <div class="select-list">
                         <ul>
+
                             <li>
-                                <label>用户ID：</label>
-                                <input type="text" name="userId"/>
-                            </li>
-                            <li>
-                                <label>早间消费：</label>
-                                <input type="text" name="dayMorning"/>
-                            </li>
-                            <li>
-                                <label>午间消费：</label>
-                                <input type="text" name="dayNoon"/>
-                            </li>
-                            <li>
-                                <label>晚间消费：</label>
-                                <input type="text" name="dayNight"/>
-                            </li>
-                            <li>
-                                <label>其余消费：</label>
-                                <input type="text" name="restConsumption"/>
-                            </li>
-                            <li>
-                                <label>是否超过自己预期：0 是 1 否 ：</label>
+                                <label>超过预期：</label>
                                 <select name="consumptionStatus">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>状态 0 是 1 否：</label>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option value="0">是</option>
+                                    <option value="1">否</option>
                                 </select>
                             </li>
                             <li>
@@ -54,16 +29,16 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:info:add">
+                <a class="btn btn-success" onclick="$.operate.add()" >
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:info:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:info:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:info:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" >
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>
@@ -76,7 +51,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:info:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:info:remove')}]];
-        var prefix = ctx + "system/info";
+        var prefix = ctx + "system/userDay";
 
         $(function() {
             var options = {
@@ -96,7 +71,8 @@
                 },
                 {
                     field: 'userId',
-                    title: '用户ID'
+                    title: '用户ID',
+                    visible: false
                 },
                 {
                     field: 'dayMorning',
@@ -116,15 +92,20 @@
                 },
                 {
                     field: 'consumptionStatus',
-                    title: '是否超过自己预期：0 是 1 否 '
-                },
-                {
-                    field: 'status',
-                    title: '状态 0 是 1 否'
+                    title: '是否超过自己预期',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
                 },
                 {
                     field: 'remarks',
                     title: '备注'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    sortable: true
                 },
                 {
                     title: '操作',
@@ -132,13 +113,46 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.dayConsumptionId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.dayConsumptionId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.dayConsumptionId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
         });
+
+
+        /* 删除目标 */
+        function remove(id) {
+            $.modal.confirm("确认要删除该条消费记录吗？", function() {
+                $.operate.post(prefix + "/updateUserDayStatus", { "dayConsumptionId": id});
+            })
+        }
+
+        /* 状态显示 */
+        function statusTools(row) {
+            debugger;
+            if (row.consumptionStatus === '1') {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.dayConsumptionId + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.dayConsumptionId + '\')"></i> ';
+            }
+        }
+
+
+        /* 状态-停用 */
+        function disable(dayConsumptionId) {
+            $.modal.confirm("确认要停用该条消费记录吗？", function() {
+                $.operate.post(prefix + "/editConsumptionStatus", { "dayConsumptionId": dayConsumptionId, "consumptionStatus": 1 });
+            })
+        }
+
+        /* 状态-启用 */
+        function enable(dayConsumptionId) {
+            $.modal.confirm("确认要启用该条消费记录吗？", function() {
+                $.operate.post(prefix + "/editConsumptionStatus", { "dayConsumptionId": dayConsumptionId, "consumptionStatus": 0 });
+            })
+        }
     </script>
 </body>
 </html>

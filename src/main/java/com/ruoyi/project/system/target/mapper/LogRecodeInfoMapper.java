@@ -45,6 +45,21 @@ public interface LogRecodeInfoMapper
     public int updateLogRecodeInfo(LogRecodeInfo logRecodeInfo);
 
     /**
+     * 修改目标进行状态
+     *
+     * @param logRecodeInfo 目标进行
+     * @return 结果
+     */
+    int updateLogRecodeStudyExpect(LogRecodeInfo logRecodeInfo);
+
+    /**
+     * 动态删除
+     * @param logRecodeInfo
+     * @return
+     */
+    int updateLogRecodeStatus(LogRecodeInfo logRecodeInfo);
+
+    /**
      * 删除目标进行
      *
      * @param recodeId 目标进行ID

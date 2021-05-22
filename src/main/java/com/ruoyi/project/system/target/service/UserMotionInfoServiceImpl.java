@@ -1,7 +1,10 @@
 package com.ruoyi.project.system.target.service;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.target.domain.UserMotionInfo;
 import com.ruoyi.project.system.target.mapper.UserMotionInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +70,33 @@ public class UserMotionInfoServiceImpl implements IUserMotionInfoService
     public int updateUserMotionInfo(UserMotionInfo userMotionInfo)
     {
         userMotionInfo.setUpdateTime(DateUtils.getNowDate());
+        userMotionInfo.setUpdateBy(ShiroUtils.getLoginName());
         return userMotionInfoMapper.updateUserMotionInfo(userMotionInfo);
+    }
+
+    /**
+     * 修改状态
+     * @param userMotionInfo
+     * @return
+     */
+    @Override
+    public int updateUserMotionStandardStatus(UserMotionInfo userMotionInfo) {
+        userMotionInfo.setUpdateTime(DateUtils.getNowDate());
+        userMotionInfo.setUpdateBy(ShiroUtils.getLoginName());
+        return userMotionInfoMapper.updateUserMotionStandardStatus(userMotionInfo);
+    }
+
+    /**
+     * 动态删除
+     * @param userMotionInfo
+     * @return
+     */
+    @Override
+    public int updateUserStatus(UserMotionInfo userMotionInfo) {
+        userMotionInfo.setUpdateTime(DateUtils.getNowDate());
+        userMotionInfo.setUpdateBy(ShiroUtils.getLoginName());
+        userMotionInfo.setStatus(CommonUtils.NORMAL_STATUS);
+        return userMotionInfoMapper.updateUserStatus(userMotionInfo);
     }
 
     /**

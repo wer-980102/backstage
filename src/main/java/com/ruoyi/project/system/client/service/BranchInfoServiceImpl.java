@@ -28,7 +28,7 @@ public class BranchInfoServiceImpl implements IBranchInfoService
      * @return 分店信息
      */
     @Override
-    public BranchInfo selectBranchInfoById(Long userId)
+    public String selectBranchInfoById(Long userId)
     {
         return branchInfoMapper.selectBranchInfoById(userId);
     }

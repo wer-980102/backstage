@@ -45,6 +45,20 @@ public interface UserDayConsumptionInfoMapper
     public int updateUserDayConsumptionInfo(UserDayConsumptionInfo userDayConsumptionInfo);
 
     /**
+     * 修改预期状态
+     * @param userDayConsumptionInfo
+     * @return
+     */
+    int updateUserDayConsumptionStatus(UserDayConsumptionInfo userDayConsumptionInfo);
+
+    /**
+     * 动态删除状态
+     * @param userDayConsumptionInfo
+     * @return
+     */
+    int updateUserDayStatus(UserDayConsumptionInfo userDayConsumptionInfo);
+
+    /**
      * 删除每日消费流水
      *
      * @param dayConsumptionId 每日消费流水ID

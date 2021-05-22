@@ -45,6 +45,20 @@ public interface IUserDayConsumptionInfoService
     public int updateUserDayConsumptionInfo(UserDayConsumptionInfo userDayConsumptionInfo);
 
     /**
+     * 修改预期状态
+     * @param userDayConsumptionInfo
+     * @return
+     */
+    int updateUserDayConsumptionStatus(UserDayConsumptionInfo userDayConsumptionInfo);
+
+    /**
+     * 动态删除状态
+     * @param userDayConsumptionInfo
+     * @return
+     */
+    int updateUserDayStatus(UserDayConsumptionInfo userDayConsumptionInfo);
+
+    /**
      * 批量删除每日消费流水
      *
      * @param ids 需要删除的数据ID

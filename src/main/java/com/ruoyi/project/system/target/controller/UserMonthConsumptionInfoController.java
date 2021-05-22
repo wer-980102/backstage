@@ -109,6 +109,17 @@ public class UserMonthConsumptionInfoController extends BaseController
     }
 
     /**
+     * 修改保存每月消费流水-停用
+     */
+    @Log(title = "每月消费流水", businessType = BusinessType.UPDATE)
+    @PostMapping("/editConsumptionStatus")
+    @ResponseBody
+    public AjaxResult editConsumptionStatus(UserMonthConsumptionInfo userMonthConsumptionInfo)
+    {
+        return toAjax(userMonthConsumptionInfoService.updateUserMonthConsumptionStatus(userMonthConsumptionInfo));
+    }
+
+    /**
      * 删除每月消费流水
      */
     @Log(title = "每月消费流水", businessType = BusinessType.DELETE)
@@ -117,5 +128,16 @@ public class UserMonthConsumptionInfoController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(userMonthConsumptionInfoService.deleteUserMonthConsumptionInfoByIds(ids));
+    }
+
+    /**
+     * 修改保存每月消费流水-动态删除
+     */
+    @Log(title = "每月消费流水", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateUserMonthStatus")
+    @ResponseBody
+    public AjaxResult updateUserMonthStatus(UserMonthConsumptionInfo userMonthConsumptionInfo)
+    {
+        return toAjax(userMonthConsumptionInfoService.updateUserMonthStatus(userMonthConsumptionInfo));
     }
 }

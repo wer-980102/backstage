@@ -41,7 +41,7 @@ public class TimingController {
     /**
      * 每天11:59:59同步统计数据
      */
-    @Scheduled(cron = "${time.times}")
+   // @Scheduled(cron = "${time.times}")
     @Transactional
     public void setDayStallSum() {
         System.out.println("......每天定时计算积分......");
@@ -58,12 +58,13 @@ public class TimingController {
                         UserIntegralInfo integralInfo = UserIntegralInfo.builder()
                                 .customerId(Long.parseLong(info.getStatisticsId()))
                                 .customerName(info.getName())
-                                .integral(CommonUtils.getPlusIntegralInfo(integralCalculation.getIntegral(),info.getActualSales().intValue()))
+                                .userId(info.getUserId())
+                                .integral(CommonUtils.getPlusIntegralInfo(integralCalculation.getIntegral(),info.getActualSales().intValue(),info.getGrade()))
                                 .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
                                 .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")
-                                .changeSituation(CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
-                                .changeType(CommonUtils.getIntegralJudge(info.getActualSales().intValue()))
-                                .changeName("本月活跃用户积分"+CommonUtils.getIntegralJudge(info.getActualSales().intValue())+CommonUtils.PARAM)
+                                .changeSituation(CommonUtils.getIntegralJudge(info.getActualSales().intValue(),info.getGrade())+CommonUtils.PARAM)
+                                .changeType(CommonUtils.getIntegralJudge(info.getActualSales().intValue(),info.getGrade()))
+                                .changeName("本月活跃用户积分"+CommonUtils.getIntegralJudge(info.getActualSales().intValue(),info.getGrade())+CommonUtils.PARAM)
                                 .operator(info.getOperator())
                                 .operatorTime(info.getLastGoods()).build();
                         iUserIntegralInfoService.updateUserIntegralInfo(integralInfo);
@@ -73,6 +74,7 @@ public class TimingController {
                     UserIntegralInfo integralInfo = UserIntegralInfo.builder()
                             .customerId(Long.parseLong(info.getStatisticsId()))
                             .customerName(info.getName())
+                            .userId(info.getUserId())
                             .integral(10)
                             .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
                             .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")
@@ -107,10 +109,10 @@ public class TimingController {
                 if(StringUtils.isNotNull(statisticsInfos)){
                     StatisticsInfo info = StatisticsInfo.builder()
                             .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
-                            .salesMonthValue(String.valueOf(Integer.valueOf(statisticsInfos.getSalesMonthValue())+Integer.valueOf(statisticsInfo.getSaleMonth())))
-                            .refundAmountValue(String.valueOf(Integer.valueOf(statisticsInfos.getRefundAmountValue())+Integer.valueOf(statisticsInfo.getRefundAmount())))
+                            .salesMonthValue(String.valueOf(Double.valueOf(statisticsInfos.getSalesMonthValue())+Double.valueOf(statisticsInfo.getSaleMonth())))
+                            .refundAmountValue(String.valueOf(Double.valueOf(statisticsInfos.getRefundAmountValue())+Double.valueOf(statisticsInfo.getRefundAmount())))
                             .actualSalesValue(statisticsInfos.getActualSalesValue()+statisticsInfo.getActualSales())
-                            .goodsFrequencyValue(String.valueOf(Integer.valueOf(statisticsInfos.getGoodsFrequencyValue())+Integer.valueOf(statisticsInfo.getGoodsFrequency()))).build();
+                            .goodsFrequencyValue(String.valueOf(Double.valueOf(statisticsInfos.getGoodsFrequencyValue())+Double.valueOf(statisticsInfo.getGoodsFrequency()))).build();
                     ClerkSaleInfoDto lastGoodsInfo = iClerkSaleInfoService.getLastGoodsInfo(statisticsInfo.getStatisticsId());
                     //匹配拿货时间
                     if (StringUtils.isNotNull(lastGoodsInfo)) {
@@ -165,15 +167,13 @@ public class TimingController {
                 iUserStatisticsInfoService.insertUserStatisticsInfo(statistics);
             });
         }
-
-
-
+        System.out.println("时间："+TimeUtils.getDayTime()+" ----------------结束定时--------------");
     }
 
     /**
      * 初始化的时候计算积分
      */
-    //@PostConstruct
+  //  @PostConstruct
     public void initStallSum() {
         System.out.println("......初始化定时计算积分......");
         List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(new TimeInfoParam());
@@ -183,7 +183,7 @@ public class TimingController {
                 UserIntegralInfo integralInfo = UserIntegralInfo.builder()
                         .customerId(Long.parseLong(info.getStatisticsId()))
                         .customerName(info.getName())
-                        .userId(ShiroUtils.getUserId())
+                        .userId(info.getUserId())
                         .integral(CommonUtils.getIntegralInfo(info.getActualSales().intValue()))
                         .integralRule("规则就是不同等级的金额设置，比如第一级：金额为一万")
                         .integralRemark("第一级：>10000 +1或者<=10000 -1，第二级：>8000 +1或者<=8000 -1，第三级：>5000 +1或者<=5000 -1，第四级：>3000 +1或者<=3000 -1")
@@ -211,7 +211,7 @@ public class TimingController {
             });
         }
         //统计所有额度值
-       /* List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(new TimeInfoParam());
+        List<UserStatisticsInfoDto> statisticsInfoDtos = iUserStatisticsInfoService.getTimingSumInfo(new TimeInfoParam());
         if(null != statisticsInfoDtos && statisticsInfoDtos.size()>0){
             //定时插入
             statisticsInfoDtos.stream().forEach(statisticsInfo->{
@@ -222,10 +222,10 @@ public class TimingController {
                 if(StringUtils.isNotNull(infoCount)){
                     StatisticsInfo info = StatisticsInfo.builder()
                             .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
-                            .salesMonthValue(String.valueOf(Integer.valueOf(infoCount.getSalesMonthValue())+Integer.valueOf(statisticsInfo.getSaleMonth())))
-                            .refundAmountValue(String.valueOf(Integer.valueOf(infoCount.getRefundAmountValue())+Integer.valueOf(statisticsInfo.getRefundAmount())))
+                            .salesMonthValue(String.valueOf(Double.valueOf(infoCount.getSalesMonthValue())+Double.valueOf(statisticsInfo.getSaleMonth())))
+                            .refundAmountValue(String.valueOf(Double.valueOf(infoCount.getRefundAmountValue())+Double.valueOf(statisticsInfo.getRefundAmount())))
                             .actualSalesValue(infoCount.getActualSalesValue()+statisticsInfo.getActualSales())
-                            .goodsFrequencyValue(String.valueOf(Integer.valueOf(infoCount.getGoodsFrequencyValue())+Integer.valueOf(statisticsInfo.getGoodsFrequency()))).build();
+                            .goodsFrequencyValue(String.valueOf(Double.valueOf(infoCount.getGoodsFrequencyValue())+Double.valueOf(statisticsInfo.getGoodsFrequency()))).build();
                     //匹配拿货时间
                     if(StringUtils.isNotNull(lastGoodsInfo)){
                         info.setLastGoods(lastGoodsInfo.getLastGoods());
@@ -246,7 +246,7 @@ public class TimingController {
                 }
 
             });
-        }*/
+        }
 
     }
 

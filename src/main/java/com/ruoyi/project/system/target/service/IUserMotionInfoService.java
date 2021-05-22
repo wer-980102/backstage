@@ -45,6 +45,20 @@ public interface IUserMotionInfoService
     public int updateUserMotionInfo(UserMotionInfo userMotionInfo);
 
     /**
+     * 修改状态
+     * @param userMotionInfo
+     * @return
+     */
+    int updateUserMotionStandardStatus(UserMotionInfo userMotionInfo);
+
+    /**
+     * 动态删除
+     * @param userMotionInfo
+     * @return
+     */
+    int updateUserStatus(UserMotionInfo userMotionInfo);
+
+    /**
      * 批量删除运动信息
      *
      * @param ids 需要删除的数据ID

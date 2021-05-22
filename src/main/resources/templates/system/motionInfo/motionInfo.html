@@ -11,29 +11,11 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>用户ID：</label>
-                                <input type="text" name="userId"/>
-                            </li>
-                            <li>
-                                <label>运动时间：</label>
-                                <input type="text" name="motionTime"/>
-                            </li>
-                            <li>
-                                <label>饮食：1.标准 2.一般 3.不标准：</label>
-                                <input type="text" name="diet"/>
-                            </li>
-                            <li>
-                                <label>是否达到标准：0 是 1 否 ：</label>
+                                <label>是否标准：</label>
                                 <select name="standardStatus">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>状态 0 是 1 否：</label>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option value="0">是</option>
+                                    <option value="1">否</option>
                                 </select>
                             </li>
                             <li>
@@ -68,7 +50,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:info:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:info:remove')}]];
-        var prefix = ctx + "system/info";
+        var prefix = ctx + "system/motionInfo";
 
         $(function() {
             var options = {
@@ -100,15 +82,15 @@
                 },
                 {
                     field: 'diet',
-                    title: '饮食：1.标准 2.一般 3.不标准'
+                    title: '饮食'
                 },
                 {
                     field: 'standardStatus',
-                    title: '是否达到标准：0 是 1 否 '
-                },
-                {
-                    field: 'status',
-                    title: '状态 0 是 1 否'
+                    title: '是否达到标准',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
                 },
                 {
                     field: 'remarks',
@@ -120,13 +102,45 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.motionId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.motionId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.motionId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
         });
+
+        /* 删除目标 */
+        function remove(id) {
+            $.modal.confirm("确认要删除该条运动记录吗？", function() {
+                $.operate.post(prefix + "/updateUserStatus", { "motionId": id});
+            })
+        }
+
+        /* 状态显示 */
+        function statusTools(row) {
+            debugger;
+            if (row.consumptionStatus === '1') {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.motionId + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.motionId + '\')"></i> ';
+            }
+        }
+
+
+        /* 状态-停用 */
+        function disable(motionId) {
+            $.modal.confirm("确认要停用该条运动记录吗？", function() {
+                $.operate.post(prefix + "/updateUserMotionStandardStatus", { "motionId": motionId, "standardStatus": 1 });
+            })
+        }
+
+        /* 状态-启用 */
+        function enable(motionId) {
+            $.modal.confirm("确认要启用该条运动记录吗？", function() {
+                $.operate.post(prefix + "/updateUserMotionStandardStatus", { "motionId": motionId, "standardStatus": 0 });
+            })
+        }
     </script>
 </body>
 </html>

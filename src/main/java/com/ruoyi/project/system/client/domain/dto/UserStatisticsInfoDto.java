@@ -63,4 +63,6 @@ public class UserStatisticsInfoDto extends BaseEntity {
     private String branchName;
     /** 是否是会员: 0 否 1是 **/
     private String member;
+    /** 用户ID **/
+    private Long userId;
 }

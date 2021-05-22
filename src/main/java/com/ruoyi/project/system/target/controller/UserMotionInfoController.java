@@ -109,6 +109,28 @@ public class UserMotionInfoController extends BaseController
     }
 
     /**
+     * 修改状态
+     */
+    @Log(title = "运动信息", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateUserMotionStandardStatus")
+    @ResponseBody
+    public AjaxResult updateUserMotionStandardStatus(UserMotionInfo userMotionInfo)
+    {
+        return toAjax(userMotionInfoService.updateUserMotionStandardStatus(userMotionInfo));
+    }
+
+    /**
+     * 动态删除
+     */
+    @Log(title = "运动信息", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateUserStatus")
+    @ResponseBody
+    public AjaxResult updateUserStatus(UserMotionInfo userMotionInfo)
+    {
+        return toAjax(userMotionInfoService.updateUserStatus(userMotionInfo));
+    }
+
+    /**
      * 删除运动信息
      */
     @Log(title = "运动信息", businessType = BusinessType.DELETE)

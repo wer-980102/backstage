@@ -89,8 +89,8 @@ public class TimeUtils {
      * 获取当天数据
      */
     public static String getDayTime(){
-        String format = "YYYY-MM-dd";
-        String formatDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd"));
+        String format = "YYYY-MM-dd  HH:mm:ss";
+        String formatDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd  HH:mm:ss"));
         return formatDateTime;
     }
 

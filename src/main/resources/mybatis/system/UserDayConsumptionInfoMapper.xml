@@ -94,6 +94,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where day_consumption_id = #{dayConsumptionId}
     </update>
 
+    <update id="updateUserDayConsumptionStatus" parameterType="UserDayConsumptionInfo">
+        update user_day_consumption_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="consumptionStatus != null">consumption_status = #{consumptionStatus},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where day_consumption_id = #{dayConsumptionId}
+    </update>
+
+    <update id="updateUserDayStatus" parameterType="UserDayConsumptionInfo">
+        update user_day_consumption_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where day_consumption_id = #{dayConsumptionId}
+    </update>
+
     <delete id="deleteUserDayConsumptionInfoById" parameterType="Long">
         delete from user_day_consumption_info where day_consumption_id = #{dayConsumptionId}
     </delete>

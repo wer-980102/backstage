@@ -109,6 +109,17 @@ public class UserCardInfoController extends BaseController
     }
 
     /**
+     * 修改保存学习目标
+     */
+    @Log(title = "学习目标", businessType = BusinessType.UPDATE)
+    @PostMapping("/editCard")
+    @ResponseBody
+    public AjaxResult editCard(UserCardInfo userCardInfo)
+    {
+        return toAjax(userCardInfoService.updateUserCardStatus(userCardInfo));
+    }
+
+    /**
      * 删除学习目标
      */
     @Log(title = "学习目标", businessType = BusinessType.DELETE)
@@ -117,5 +128,16 @@ public class UserCardInfoController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(userCardInfoService.deleteUserCardInfoByIds(ids));
+    }
+
+    /**
+     * 删除学习目标-动态删除
+     */
+    @Log(title = "学习目标", businessType = BusinessType.DELETE)
+    @PostMapping( "/removeStatus")
+    @ResponseBody
+    public AjaxResult removeStatus(UserCardInfo userCardInfo)
+    {
+        return toAjax(userCardInfoService.updateUserStatus(userCardInfo));
     }
 }

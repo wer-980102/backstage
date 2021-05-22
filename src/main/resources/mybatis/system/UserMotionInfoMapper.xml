@@ -89,6 +89,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where motion_id = #{motionId}
     </update>
 
+    <update id="updateUserMotionStandardStatus" parameterType="UserMotionInfo">
+        update user_motion_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="standardStatus != null">standard_status = #{standardStatus},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where motion_id = #{motionId}
+    </update>
+
+    <update id="updateUserStatus" parameterType="UserMotionInfo">
+        update user_motion_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where motion_id = #{motionId}
+    </update>
+
     <delete id="deleteUserMotionInfoById" parameterType="Long">
         delete from user_motion_info where motion_id = #{motionId}
     </delete>

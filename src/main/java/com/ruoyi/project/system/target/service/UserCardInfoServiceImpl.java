@@ -1,7 +1,10 @@
 package com.ruoyi.project.system.target.service;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.target.domain.UserCardInfo;
 import com.ruoyi.project.system.target.mapper.UserCardInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +56,7 @@ public class UserCardInfoServiceImpl implements IUserCardInfoService
     @Override
     public int insertUserCardInfo(UserCardInfo userCardInfo)
     {
+        userCardInfo.setUserId(ShiroUtils.getUserId());
         userCardInfo.setCreateTime(DateUtils.getNowDate());
         return userCardInfoMapper.insertUserCardInfo(userCardInfo);
     }
@@ -68,6 +72,32 @@ public class UserCardInfoServiceImpl implements IUserCardInfoService
     {
         userCardInfo.setUpdateTime(DateUtils.getNowDate());
         return userCardInfoMapper.updateUserCardInfo(userCardInfo);
+    }
+
+    /**
+     * 修改学习目标状态
+     *
+     * @param userCardInfo 学习目标
+     * @return 结果
+     */
+    @Override
+    public int updateUserCardStatus(UserCardInfo userCardInfo) {
+        userCardInfo.setUpdateTime(DateUtils.getNowDate());
+        userCardInfo.setUpdateBy(ShiroUtils.getLoginName());
+        return userCardInfoMapper.updateUserCardStatus(userCardInfo);
+    }
+
+    /**
+     * 动态删除学习目标
+     * @param userCardInfo
+     * @return
+     */
+    @Override
+    public int updateUserStatus(UserCardInfo userCardInfo) {
+        userCardInfo.setUpdateTime(DateUtils.getNowDate());
+        userCardInfo.setUpdateBy(ShiroUtils.getLoginName());
+        userCardInfo.setStatus(CommonUtils.NORMAL_STATUS);
+        return userCardInfoMapper.updateUserStatus(userCardInfo);
     }
 
     /**

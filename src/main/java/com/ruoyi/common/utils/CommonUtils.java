@@ -35,6 +35,17 @@ public class CommonUtils {
     public static final String PARAM = "1";
 
     /**
+     * 动态删除
+     **/
+    public static final String NORMAL_STATUS = "1";
+
+    /** 等级 **/
+    private static final String ONE_GRADE = "一级";
+    private static final String TWO_GRADE = "二级";
+    private static final String THREE_GRADE = "三级";
+    private static final String FOUR_GRADE = "四级";
+
+    /**
      * 计算积分
      * @param param
      * @return
@@ -56,44 +67,62 @@ public class CommonUtils {
      * @param param
      * @return
      */
-    public static  Integer getPlusIntegralInfo(Integer integral,Integer param)  {
-        if(param>10000){
-            return integral<12?integral+1:12;
-        }else if(param<=1000){
-            return integral>0?integral-1:0;
-        }else if(param>8000){
-            return integral<12?integral+1:12;
-        }else if(param<=8000){
-            return integral>0?integral-1:0;
-        }else if(param>5000){
-            return integral<12?integral+1:12;
-        }else if(param<=5000){
-            return integral>0?integral-1:0;
-        }else if(param>3000){
-            return integral<12?integral+1:12;
+    public static  Integer getPlusIntegralInfo(Integer integral,Integer param,String grade)  {
+        if(ONE_GRADE.equals(grade)){
+            if(param>10000){
+                return integral<12?integral+1:12;
+            }else if(param<=1000){
+                return integral>0?integral-1:0;
+            }
+        }else if(TWO_GRADE.equals(grade)){
+            if(param>8000){
+                return integral<12?integral+1:12;
+            }else if(param<=8000){
+                return integral>0?integral-1:0;
+            }
+        }else if(THREE_GRADE.equals(grade)){
+            if(param>5000){
+                return integral<12?integral+1:12;
+            }else if(param<=5000){
+                return integral>0?integral-1:0;
+            }
         }else{
-            return integral>0?integral-1:0;
+            if(param>3000){
+                return integral<12?integral+1:12;
+            }else{
+                return integral>0?integral-1:0;
+            }
         }
+        return null;
     }
 
-    public static  String getIntegralJudge(Integer param)  {
-        if(param>10000){
-            return "+";
-        }else if(param<=1000){
-            return "-";
-        }else if(param>8000){
-            return "+";
-        }else if(param<=8000){
-            return "-";
-        }else if(param>5000){
-            return "+";
-        }else if(param<=5000){
-            return "-";
-        }else if(param>3000){
-            return "+";
+    public static  String getIntegralJudge(Integer param,String grade)  {
+        if(ONE_GRADE.equals(grade)){
+            if(param>10000){
+                return "+";
+            }else if(param<=1000){
+                return "-";
+            }
+        }else if(TWO_GRADE.equals(grade)){
+            if(param>8000){
+                return "+";
+            }else if(param<=8000){
+                return "-";
+            }
+        }else if(THREE_GRADE.equals(grade)){
+            if(param>5000){
+                return "+";
+            }else if(param<=5000){
+                return "-";
+            }
         }else{
-            return "-";
+            if(param>3000){
+                return "+";
+            }else{
+                return "-";
+            }
         }
+        return null;
     }
 /** 获取*/
     /**

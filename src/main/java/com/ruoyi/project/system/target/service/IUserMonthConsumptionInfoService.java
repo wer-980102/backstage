@@ -45,6 +45,21 @@ public interface IUserMonthConsumptionInfoService
     public int updateUserMonthConsumptionInfo(UserMonthConsumptionInfo userMonthConsumptionInfo);
 
     /**
+     * 修改每月消费流水-停用
+     *
+     * @param userMonthConsumptionInfo 每月消费流水
+     * @return 结果
+     */
+    int updateUserMonthConsumptionStatus(UserMonthConsumptionInfo userMonthConsumptionInfo);
+
+    /**
+     * 动态删除
+     * @param userMonthConsumptionInfo
+     * @return
+     */
+    int updateUserMonthStatus(UserMonthConsumptionInfo userMonthConsumptionInfo);
+
+    /**
      * 批量删除每月消费流水
      *
      * @param ids 需要删除的数据ID

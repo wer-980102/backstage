@@ -147,7 +147,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 operator
         from user_statistics_info
         <where>
-            <if test="name != null  and name != ''">AND name like concat(#{name}, '%')</if>
+            <if test="name != null  and name != ''">AND name=#{name}</if>
             <if test="startTime!=null and startTime!=''">
                 and create_time &lt; #{startTime}
             </if>
@@ -158,7 +158,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="getuserInfo" parameterType="UserInByIdParam" resultType="UserStatisticsInfoDto">
         select name from user_statistics_info
         <where>
-            <if test="name != null  and name != ''">AND name like concat(#{name}, '%')</if>
+            <if test="name != null  and name != ''">AND name=#{name}</if>
             <if test="phoneNumber!=null and phoneNumber!=''">
                 and phone_number = #{phoneNumber}
             </if>
@@ -272,11 +272,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         csi.refund_amount AS refundAmount,
         csi.goods_frequency AS goodsFrequency,
         csi.last_goods AS lastGoods,
-        bi.branch_name as branchName
+        bi.dept_name as branchName
         FROM
         clerk_sale_info csi
         left join user_statistics_info usi on csi.customer_id = usi.statistics_id
-        left join branch_info bi on csi.user_id = bi.user_id
+        left join sys_dept bi on csi.user_id = bi.user_id
         <where>
             <if test="userId != null">
                 AND csi.user_id = #{userId}
@@ -326,7 +326,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             usi.NAME AS NAME,
             sum( csi.actual_sales ) AS actualSales,
             usi.operator,
-            t1.lastGoods
+            t1.lastGoods,
+            csi.user_id as userId,
+            usi.grade
         FROM
             user_statistics_info usi
                 INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
@@ -338,7 +340,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
         GROUP BY
             usi.statistics_id,
-            usi.NAME
+            usi.NAME,
+            csi.user_id,
+            usi.grade
     </select>
 
     <select id="getTimingSumInfo" parameterType="TimeInfoParam" resultType="UserStatisticsInfoDto">

@@ -18,7 +18,7 @@ public interface BranchInfoMapper
      * @param userId 分店信息ID
      * @return 分店信息
      */
-     BranchInfo selectBranchInfoById(Long userId);
+    String selectBranchInfoById(Long userId);
 
 
     /**

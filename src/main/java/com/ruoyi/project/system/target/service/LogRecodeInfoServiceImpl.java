@@ -1,7 +1,10 @@
 package com.ruoyi.project.system.target.service;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.target.domain.LogRecodeInfo;
 import com.ruoyi.project.system.target.mapper.LogRecodeInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +70,34 @@ public class LogRecodeInfoServiceImpl implements ILogRecodeInfoService
     public int updateLogRecodeInfo(LogRecodeInfo logRecodeInfo)
     {
         logRecodeInfo.setUpdateTime(DateUtils.getNowDate());
+        logRecodeInfo.setUpdateBy(ShiroUtils.getLoginName());
         return logRecodeInfoMapper.updateLogRecodeInfo(logRecodeInfo);
+    }
+
+    /**
+     * 修改目标进行状态
+     *
+     * @param logRecodeInfo 目标进行
+     * @return 结果
+     */
+    @Override
+    public int updateLogRecodeStudyExpect(LogRecodeInfo logRecodeInfo) {
+        logRecodeInfo.setUpdateTime(DateUtils.getNowDate());
+        logRecodeInfo.setUpdateBy(ShiroUtils.getLoginName());
+        return logRecodeInfoMapper.updateLogRecodeStudyExpect(logRecodeInfo);
+    }
+
+    /**
+     * 动态删除
+     * @param logRecodeInfo
+     * @return
+     */
+    @Override
+    public int updateLogRecodeStatus(LogRecodeInfo logRecodeInfo) {
+        logRecodeInfo.setUpdateTime(DateUtils.getNowDate());
+        logRecodeInfo.setUpdateBy(ShiroUtils.getLoginName());
+        logRecodeInfo.setStatus(CommonUtils.NORMAL_STATUS);
+        return logRecodeInfoMapper.updateLogRecodeStatus(logRecodeInfo);
     }
 
     /**

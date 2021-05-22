@@ -45,6 +45,20 @@ public interface UserMotionInfoMapper
     public int updateUserMotionInfo(UserMotionInfo userMotionInfo);
 
     /**
+     * 修改状态
+     * @param userMotionInfo
+     * @return
+     */
+    int updateUserMotionStandardStatus(UserMotionInfo userMotionInfo);
+
+    /**
+     * 动态删除
+     * @param userMotionInfo
+     * @return
+     */
+    int updateUserStatus(UserMotionInfo userMotionInfo);
+
+    /**
      * 删除运动信息
      *
      * @param motionId 运动信息ID

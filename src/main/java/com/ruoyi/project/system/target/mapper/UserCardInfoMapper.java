@@ -45,6 +45,21 @@ public interface UserCardInfoMapper
     public int updateUserCardInfo(UserCardInfo userCardInfo);
 
     /**
+     * 修改学习目标状态
+     *
+     * @param userCardInfo 学习目标
+     * @return 结果
+     */
+    int updateUserCardStatus(UserCardInfo userCardInfo);
+
+    /**
+     * 动态删除学习目标
+     * @param userCardInfo
+     * @return
+     */
+    int updateUserStatus(UserCardInfo userCardInfo);
+
+    /**
      * 删除学习目标
      *
      * @param cardId 学习目标ID

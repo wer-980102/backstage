@@ -10,42 +10,13 @@
                 <form id="formId">
                     <div class="select-list">
                         <ul>
+
                             <li>
-                                <label>用户ID：</label>
-                                <input type="text" name="userId"/>
-                            </li>
-                            <li>
-                                <label>每月早间消费：</label>
-                                <input type="text" name="monthMorning"/>
-                            </li>
-                            <li>
-                                <label>每月午间消费：</label>
-                                <input type="text" name="monthNoon"/>
-                            </li>
-                            <li>
-                                <label>每月晚间消费：</label>
-                                <input type="text" name="monthNight"/>
-                            </li>
-                            <li>
-                                <label>每月其余消费：</label>
-                                <input type="text" name="restConsumption"/>
-                            </li>
-                            <li>
-                                <label>每月总消费：</label>
-                                <input type="text" name="monthConsumption"/>
-                            </li>
-                            <li>
-                                <label>是否超过自己预期：0 是 1 否 ：</label>
+                                <label>超过预期：</label>
                                 <select name="consumptionStatus">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>状态 0 是 1 否：</label>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option value="0">是</option>
+                                    <option value="1">否</option>
                                 </select>
                             </li>
                             <li>
@@ -64,9 +35,9 @@
                 <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:info:edit">
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:info:remove">
+           <!--     <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:info:remove">
                     <i class="fa fa-remove"></i> 删除
-                </a>
+                </a>-->
                 <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:info:export">
                     <i class="fa fa-download"></i> 导出
                 </a>
@@ -80,7 +51,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:info:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:info:remove')}]];
-        var prefix = ctx + "system/info";
+        var prefix = ctx + "system/userMonth";
 
         $(function() {
             var options = {
@@ -100,7 +71,8 @@
                 },
                 {
                     field: 'userId',
-                    title: '用户ID'
+                    title: '用户ID',
+                    visible: false
                 },
                 {
                     field: 'monthMorning',
@@ -124,11 +96,11 @@
                 },
                 {
                     field: 'consumptionStatus',
-                    title: '是否超过自己预期：0 是 1 否 '
-                },
-                {
-                    field: 'status',
-                    title: '状态 0 是 1 否'
+                    title: '是否超过自己预期',
+                    align: 'center',
+                    formatter: function (value, row, index) {
+                        return statusTools(row);
+                    }
                 },
                 {
                     field: 'remarks',
@@ -140,13 +112,46 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.monthConsumptionId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.monthConsumptionId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.monthConsumptionId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
         });
+
+        /* 删除目标 */
+        function remove(id) {
+            $.modal.confirm("确认要删除该条消费记录吗？", function() {
+                $.operate.post(prefix + "/updateUserMonthStatus", { "monthConsumptionId": id});
+            })
+        }
+
+
+        /* 状态显示 */
+        function statusTools(row) {
+            debugger;
+            if (row.consumptionStatus === '1') {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.monthConsumptionId + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.monthConsumptionId + '\')"></i> ';
+            }
+        }
+
+
+        /* 状态-停用 */
+        function disable(monthConsumptionId) {
+            $.modal.confirm("确认要停用该笔月消费吗？", function() {
+                $.operate.post(prefix + "/editConsumptionStatus", { "monthConsumptionId": monthConsumptionId, "consumptionStatus": 1 });
+            })
+        }
+
+        /* 状态-启用 */
+        function enable(monthConsumptionId) {
+            $.modal.confirm("确认要启用该笔月消费吗？", function() {
+                $.operate.post(prefix + "/editConsumptionStatus", { "monthConsumptionId": monthConsumptionId, "consumptionStatus": 0 });
+            })
+        }
     </script>
 </body>
 </html>

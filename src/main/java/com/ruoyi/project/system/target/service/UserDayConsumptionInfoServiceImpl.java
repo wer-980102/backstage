@@ -1,7 +1,10 @@
 package com.ruoyi.project.system.target.service;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.target.domain.UserDayConsumptionInfo;
 import com.ruoyi.project.system.target.mapper.UserDayConsumptionInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +70,33 @@ public class UserDayConsumptionInfoServiceImpl implements IUserDayConsumptionInf
     public int updateUserDayConsumptionInfo(UserDayConsumptionInfo userDayConsumptionInfo)
     {
         userDayConsumptionInfo.setUpdateTime(DateUtils.getNowDate());
+        userDayConsumptionInfo.setUpdateBy(ShiroUtils.getLoginName());
         return userDayConsumptionInfoMapper.updateUserDayConsumptionInfo(userDayConsumptionInfo);
+    }
+
+    /**
+     * 修改预期状态
+     * @param userDayConsumptionInfo
+     * @return
+     */
+    @Override
+    public int updateUserDayConsumptionStatus(UserDayConsumptionInfo userDayConsumptionInfo) {
+        userDayConsumptionInfo.setUpdateTime(DateUtils.getNowDate());
+        userDayConsumptionInfo.setUpdateBy(ShiroUtils.getLoginName());
+        return userDayConsumptionInfoMapper.updateUserDayConsumptionStatus(userDayConsumptionInfo);
+    }
+
+    /**
+     * 动态删除状态
+     * @param userDayConsumptionInfo
+     * @return
+     */
+    @Override
+    public int updateUserDayStatus(UserDayConsumptionInfo userDayConsumptionInfo) {
+        userDayConsumptionInfo.setUpdateTime(DateUtils.getNowDate());
+        userDayConsumptionInfo.setUpdateBy(ShiroUtils.getLoginName());
+        userDayConsumptionInfo.setStatus(CommonUtils.NORMAL_STATUS);
+        return userDayConsumptionInfoMapper.updateUserDayStatus(userDayConsumptionInfo);
     }
 
     /**

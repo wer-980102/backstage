@@ -5,59 +5,49 @@
 </head>
 <body class="white-bg">
     <div class="wrapper wrapper-content animated fadeInRight ibox-content">
-        <form class="form-horizontal m" id="form-info-add">
-            <div class="form-group">    
+        <form class="form-horizontal m" id="form-userMonth-add">
+            <div class="form-group">
                 <label class="col-sm-3 control-label is-required">用户ID：</label>
                 <div class="col-sm-8">
                     <input name="userId" class="form-control" type="text" required>
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">每月早间消费：</label>
                 <div class="col-sm-8">
                     <input name="monthMorning" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">每月午间消费：</label>
                 <div class="col-sm-8">
                     <input name="monthNoon" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">每月晚间消费：</label>
                 <div class="col-sm-8">
                     <input name="monthNight" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">每月其余消费：</label>
                 <div class="col-sm-8">
                     <input name="restConsumption" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">每月总消费：</label>
                 <div class="col-sm-8">
                     <input name="monthConsumption" class="form-control" type="text">
                 </div>
             </div>
-            <div class="form-group">    
+            <div class="form-group">
                 <label class="col-sm-3 control-label">是否超过自己预期：0 是 1 否 ：</label>
                 <div class="col-sm-8">
                     <div class="radio-box">
                         <input type="radio" name="consumptionStatus" value="">
                         <label th:for="consumptionStatus" th:text="未知"></label>
-                    </div>
-                    <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
-                </div>
-            </div>
-            <div class="form-group">    
-                <label class="col-sm-3 control-label">状态 0 是 1 否：</label>
-                <div class="col-sm-8">
-                    <div class="radio-box">
-                        <input type="radio" name="status" value="">
-                        <label th:for="status" th:text="未知"></label>
                     </div>
                     <span class="help-block m-b-none"><i class="fa fa-info-circle"></i> 代码生成请选择字典属性</span>
                 </div>
@@ -72,14 +62,14 @@
     </div>
     <th:block th:include="include :: footer" />
     <script th:inline="javascript">
-        var prefix = ctx + "system/info"
-        $("#form-info-add").validate({
+        var prefix = ctx + "system/userMonth"
+        $("#form-userMonth-add").validate({
             focusCleanup: true
         });
 
         function submitHandler() {
             if ($.validate.form()) {
-                $.operate.save(prefix + "/add", $('#form-info-add').serialize());
+                $.operate.save(prefix + "/add", $('#form-userMonth-add').serialize());
             }
         }
     </script>

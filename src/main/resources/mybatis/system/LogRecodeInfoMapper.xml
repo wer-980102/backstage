@@ -89,6 +89,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where recode_id = #{recodeId}
     </update>
 
+    <update id="updateLogRecodeStudyExpect" parameterType="LogRecodeInfo">
+        update log_recode_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="studyExpect != null">study_expect = #{studyExpect},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where recode_id = #{recodeId}
+    </update>
+
+    <update id="updateLogRecodeStatus" parameterType="LogRecodeInfo">
+        update log_recode_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where recode_id = #{recodeId}
+    </update>
+
     <delete id="deleteLogRecodeInfoById" parameterType="Long">
         delete from log_recode_info where recode_id = #{recodeId}
     </delete>

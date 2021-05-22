@@ -99,6 +99,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where month_consumption_id = #{monthConsumptionId}
     </update>
 
+    <update id="updateUserMonthConsumptionStatus" parameterType="UserMonthConsumptionInfo">
+        update user_month_consumption_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="consumptionStatus != null">consumption_status = #{consumptionStatus},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where month_consumption_id = #{monthConsumptionId}
+    </update>
+
+    <update id="updateUserMonthStatus" parameterType="UserMonthConsumptionInfo">
+        update user_month_consumption_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where month_consumption_id = #{monthConsumptionId}
+    </update>
+
     <delete id="deleteUserMonthConsumptionInfoById" parameterType="Long">
         delete from user_month_consumption_info where month_consumption_id = #{monthConsumptionId}
     </delete>

@@ -109,6 +109,17 @@ public class UserDayConsumptionInfoController extends BaseController
     }
 
     /**
+     * 修改保存每日消费流水
+     */
+    @Log(title = "每日消费流水", businessType = BusinessType.UPDATE)
+    @PostMapping("/editConsumptionStatus")
+    @ResponseBody
+    public AjaxResult editConsumptionStatus(UserDayConsumptionInfo userDayConsumptionInfo)
+    {
+        return toAjax(userDayConsumptionInfoService.updateUserDayConsumptionStatus(userDayConsumptionInfo));
+    }
+
+    /**
      * 删除每日消费流水
      */
     @Log(title = "每日消费流水", businessType = BusinessType.DELETE)
@@ -117,5 +128,16 @@ public class UserDayConsumptionInfoController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(userDayConsumptionInfoService.deleteUserDayConsumptionInfoByIds(ids));
+    }
+
+    /**
+     * 修改保存每日消费流水-动态删除
+     */
+    @Log(title = "每日消费流水", businessType = BusinessType.UPDATE)
+    @PostMapping("/updateUserDayStatus")
+    @ResponseBody
+    public AjaxResult updateUserDayStatus(UserDayConsumptionInfo userDayConsumptionInfo)
+    {
+        return toAjax(userDayConsumptionInfoService.updateUserDayStatus(userDayConsumptionInfo));
     }
 }

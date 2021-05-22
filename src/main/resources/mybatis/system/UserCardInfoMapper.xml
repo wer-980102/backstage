@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectUserCardInfoList" parameterType="UserCardInfo" resultMap="UserCardInfoResult">
         <include refid="selectUserCardInfoVo"/>
-        <where>
+        <where> status = '0'
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="studyTitle != null  and studyTitle != ''"> and study_title = #{studyTitle}</if>
             <if test="studyTarget != null  and studyTarget != ''"> and study_target = #{studyTarget}</if>
@@ -90,6 +90,26 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where card_id = #{cardId}
+    </update>
+
+    <update id="updateUserCardStatus" parameterType="UserCardInfo">
+        update user_card_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="cardStatus != null">card_status = #{cardStatus}</if>
+        </trim>
+        where card_id = #{cardId}
+    </update>
+
+    <update id="updateUserStatus" parameterType="UserCardInfo">
+        update user_card_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="status != null">status = #{status}</if>
         </trim>
         where card_id = #{cardId}
     </update>

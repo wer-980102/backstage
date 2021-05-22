@@ -11,33 +11,15 @@
                     <div class="select-list">
                         <ul>
                             <li>
-                                <label>目标ID：</label>
-                                <input type="text" name="cardId"/>
-                            </li>
-                            <li>
                                 <label>学习类目：</label>
                                 <input type="text" name="studyCategory"/>
                             </li>
                             <li>
-                                <label>今日状态: 1.一般 2.还行 3.很好 4.不学习会死：</label>
-                                <select name="studyStatus">
+                                <label>预期:</label>
+                                <select name="studyExpect">
                                     <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
-                                </select>
-                            </li>
-                            <li>
-                                <label>学习时间：</label>
-                                <input type="text" name="studyTime"/>
-                            </li>
-                            <li>
-                                <label>是否达到自己预期：0 是 1 否 ：</label>
-                                <input type="text" name="studyExpect"/>
-                            </li>
-                            <li>
-                                <label>状态 0 是 1 否：</label>
-                                <select name="status">
-                                    <option value="">所有</option>
-                                    <option value="-1">代码生成请选择字典属性</option>
+                                    <option value="0">是</option>
+                                    <option value="1">否</option>
                                 </select>
                             </li>
                             <li>
@@ -72,7 +54,7 @@
     <script th:inline="javascript">
         var editFlag = [[${@permission.hasPermi('system:info:edit')}]];
         var removeFlag = [[${@permission.hasPermi('system:info:remove')}]];
-        var prefix = ctx + "system/info";
+        var prefix = ctx + "system/logRecode";
 
         $(function() {
             var options = {
@@ -92,7 +74,8 @@
                 },
                 {
                     field: 'cardId',
-                    title: '目标ID'
+                    title: '目标ID',
+                    visible: false
                 },
                 {
                     field: 'studyCategory',
@@ -100,7 +83,7 @@
                 },
                 {
                     field: 'studyStatus',
-                    title: '今日状态: 1.一般 2.还行 3.很好 4.不学习会死'
+                    title: '今日状态'
                 },
                 {
                     field: 'studyTime',
@@ -108,15 +91,20 @@
                 },
                 {
                     field: 'studyExpect',
-                    title: '是否达到自己预期：0 是 1 否 '
-                },
-                {
-                    field: 'status',
-                    title: '状态 0 是 1 否'
-                },
+                    title: '是否达到自己预期',
+                    align: 'center',
+                   formatter: function (value, row, index) {
+                        return statusTools(row);
+                   }
+                 },
                 {
                     field: 'remarks',
                     title: '备注'
+                },
+                {
+                    field: 'createTime',
+                    title: '创建时间',
+                    sortable: true
                 },
                 {
                     title: '操作',
@@ -124,13 +112,45 @@
                     formatter: function(value, row, index) {
                         var actions = [];
                         actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.recodeId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="$.operate.remove(\'' + row.recodeId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.recodeId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
             };
             $.table.init(options);
         });
+
+
+        /* 删除目标 */
+        function remove(id) {
+            $.modal.confirm("确认要删除该目标吗？", function() {
+                $.operate.post(prefix + "/removeStatus", { "recodeId": id});
+            })
+        }
+
+        /* 状态显示 */
+        function statusTools(row) {
+            if (row.studyExpect == 1) {
+                return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.recodeId + '\')"></i> ';
+            } else {
+                return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.recodeId + '\')"></i> ';
+            }
+        }
+
+
+        /* 状态-停用 */
+        function disable(recodeId) {
+            $.modal.confirm("确认要停用该目标吗？", function() {
+                $.operate.post(prefix + "/editRecode", { "recodeId": recodeId, "studyExpect": 1 });
+            })
+        }
+
+        /* 状态-启用 */
+        function enable(recodeId) {
+            $.modal.confirm("确认要启用该目标吗？", function() {
+                $.operate.post(prefix + "/editRecode", { "recodeId": recodeId, "studyExpect": 0 });
+            })
+        }
     </script>
 </body>
 </html>

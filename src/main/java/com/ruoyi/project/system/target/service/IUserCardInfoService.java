@@ -45,6 +45,22 @@ public interface IUserCardInfoService
     public int updateUserCardInfo(UserCardInfo userCardInfo);
 
     /**
+     * 修改学习目标状态
+     *
+     * @param userCardInfo 学习目标
+     * @return 结果
+     */
+    int updateUserCardStatus(UserCardInfo userCardInfo);
+
+    /**
+     * 动态删除学习目标
+     * @param userCardInfo
+     * @return
+     */
+    int updateUserStatus(UserCardInfo userCardInfo);
+
+
+    /**
      * 批量删除学习目标
      *
      * @param ids 需要删除的数据ID

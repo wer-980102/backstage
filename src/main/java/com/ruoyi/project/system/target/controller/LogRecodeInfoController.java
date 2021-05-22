@@ -109,6 +109,17 @@ public class LogRecodeInfoController extends BaseController
     }
 
     /**
+     * 修改保存目标进行
+     */
+    @Log(title = "目标进行", businessType = BusinessType.UPDATE)
+    @PostMapping("/editRecode")
+    @ResponseBody
+    public AjaxResult editRecode(LogRecodeInfo logRecodeInfo)
+    {
+        return toAjax(logRecodeInfoService.updateLogRecodeStudyExpect(logRecodeInfo));
+    }
+
+    /**
      * 删除目标进行
      */
     @Log(title = "目标进行", businessType = BusinessType.DELETE)
@@ -117,5 +128,16 @@ public class LogRecodeInfoController extends BaseController
     public AjaxResult remove(String ids)
     {
         return toAjax(logRecodeInfoService.deleteLogRecodeInfoByIds(ids));
+    }
+
+    /**
+     * 删除目标进行
+     */
+    @Log(title = "目标进行", businessType = BusinessType.DELETE)
+    @PostMapping( "/removeStatus")
+    @ResponseBody
+    public AjaxResult removeStatus(LogRecodeInfo logRecodeInfo)
+    {
+        return toAjax(logRecodeInfoService.updateLogRecodeStatus(logRecodeInfo));
     }
 }

@@ -1,7 +1,10 @@
 package com.ruoyi.project.system.target.service;
 
 import java.util.List;
+
+import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.target.domain.UserMonthConsumptionInfo;
 import com.ruoyi.project.system.target.mapper.UserMonthConsumptionInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +70,34 @@ public class UserMonthConsumptionInfoServiceImpl implements IUserMonthConsumptio
     public int updateUserMonthConsumptionInfo(UserMonthConsumptionInfo userMonthConsumptionInfo)
     {
         userMonthConsumptionInfo.setUpdateTime(DateUtils.getNowDate());
+        userMonthConsumptionInfo.setUpdateBy(ShiroUtils.getLoginName());
         return userMonthConsumptionInfoMapper.updateUserMonthConsumptionInfo(userMonthConsumptionInfo);
+    }
+
+    /**
+     * 修改每月消费流水-停用
+     *
+     * @param userMonthConsumptionInfo 每月消费流水
+     * @return 结果
+     */
+    @Override
+    public int updateUserMonthConsumptionStatus(UserMonthConsumptionInfo userMonthConsumptionInfo) {
+        userMonthConsumptionInfo.setUpdateTime(DateUtils.getNowDate());
+        userMonthConsumptionInfo.setUpdateBy(ShiroUtils.getLoginName());
+        return userMonthConsumptionInfoMapper.updateUserMonthConsumptionStatus(userMonthConsumptionInfo);
+    }
+
+    /**
+     * 动态删除
+     * @param userMonthConsumptionInfo
+     * @return
+     */
+    @Override
+    public int updateUserMonthStatus(UserMonthConsumptionInfo userMonthConsumptionInfo) {
+        userMonthConsumptionInfo.setUpdateTime(DateUtils.getNowDate());
+        userMonthConsumptionInfo.setUpdateBy(ShiroUtils.getLoginName());
+        userMonthConsumptionInfo.setStatus(CommonUtils.NORMAL_STATUS);
+        return userMonthConsumptionInfoMapper.updateUserMonthStatus(userMonthConsumptionInfo);
     }
 
     /**

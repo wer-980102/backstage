@@ -412,7 +412,7 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
         {
             throw new BusinessException("导入用户数据不能为空！");
         }
-        BranchInfo branchInfo = branchInfoMapper.selectBranchInfoById(ShiroUtils.getUserId());
+        String branchInfo = branchInfoMapper.selectBranchInfoById(ShiroUtils.getUserId());
         if(StringUtils.isNull(branchInfo)){
             throw new BusinessException("该用户没有分店，请先增加分店！");
         }

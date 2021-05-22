@@ -38,8 +38,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectBranchInfoById" parameterType="Long" resultMap="BranchInfoResult">
-        <include refid="selectBranchInfoVo"/>
+    <select id="selectBranchInfoById" parameterType="Long" resultType="java.lang.String">
+        select
+            dept_name as deptName
+        from sys_dept
         where user_id = #{userId}
     </select>
 
