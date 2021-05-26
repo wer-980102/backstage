@@ -2,7 +2,10 @@ package com.ruoyi.project.system.target.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.CommonUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.target.domain.UserCardInfo;
+import com.ruoyi.project.system.target.domain.dto.LogRecodeInfoDto;
 import com.ruoyi.project.system.target.service.IUserCardInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +52,14 @@ public class UserCardInfoController extends BaseController
     public TableDataInfo list(UserCardInfo userCardInfo)
     {
         startPage();
-        List<UserCardInfo> list = userCardInfoService.selectUserCardInfoList(userCardInfo);
+        List<UserCardInfo> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = userCardInfoService.selectUserCardInfoList(userCardInfo);
+        }else{
+            userCardInfo.setUserId(ShiroUtils.getUserId());
+            list = userCardInfoService.selectUserCardInfoList(userCardInfo);
+        }
         return getDataTable(list);
     }
 

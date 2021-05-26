@@ -56,6 +56,7 @@ public class UserMotionInfoServiceImpl implements IUserMotionInfoService
     @Override
     public int insertUserMotionInfo(UserMotionInfo userMotionInfo)
     {
+        userMotionInfo.setUserId(ShiroUtils.getUserId());
         userMotionInfo.setCreateTime(DateUtils.getNowDate());
         return userMotionInfoMapper.insertUserMotionInfo(userMotionInfo);
     }

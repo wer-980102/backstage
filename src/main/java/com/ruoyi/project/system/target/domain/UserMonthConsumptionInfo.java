@@ -32,23 +32,23 @@ public class UserMonthConsumptionInfo extends BaseEntity
 
     /** 每月早间消费（元） */
     @Excel(name = "每月早间消费", readConverterExp = "元=")
-    private Integer monthMorning;
+    private Double monthMorning;
 
     /** 每月午间消费（元） */
     @Excel(name = "每月午间消费", readConverterExp = "元=")
-    private Integer monthNoon;
+    private Double monthNoon;
 
     /** 每月晚间消费（元） */
     @Excel(name = "每月晚间消费", readConverterExp = "元=")
-    private Integer monthNight;
+    private Double monthNight;
 
     /** 每月其余消费（元） */
     @Excel(name = "每月其余消费", readConverterExp = "元=")
-    private Integer restConsumption;
+    private Double restConsumption;
 
     /** 每月总消费（元） */
     @Excel(name = "每月总消费", readConverterExp = "元=")
-    private Integer monthConsumption;
+    private Double monthConsumption;
 
     /** 是否超过自己预期：0 是 1 否  */
     @Excel(name = "是否超过自己预期：0 是 1 否 ")
@@ -61,5 +61,9 @@ public class UserMonthConsumptionInfo extends BaseEntity
     /** 备注（钱的用向说明） */
     @Excel(name = "备注", readConverterExp = "钱=的用向说明")
     private String remarks;
+
+    /** 月份  */
+    @Excel(name = "月份", readConverterExp = "月份")
+    private String monthValue;
 
 }

@@ -20,12 +20,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectLogRecodeInfoVo">
-        select recode_id, card_id, study_category, study_status, study_time, study_expect, status, remarks, create_by, create_time, update_by, update_time from log_recode_info
+        select recode_id, card_id, study_category, study_status, study_time, study_expect, punch,status, remarks, create_by, create_time, update_by, update_time from log_recode_info
     </sql>
 
     <select id="selectLogRecodeInfoList" parameterType="LogRecodeInfo" resultMap="LogRecodeInfoResult">
         <include refid="selectLogRecodeInfoVo"/>
-        <where>
+        <where> status = '0'
             <if test="cardId != null "> and card_id = #{cardId}</if>
             <if test="studyCategory != null  and studyCategory != ''"> and study_category = #{studyCategory}</if>
             <if test="studyStatus != null  and studyStatus != ''"> and study_status = #{studyStatus}</if>
@@ -36,9 +36,81 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </where>
     </select>
 
-    <select id="selectLogRecodeInfoById" parameterType="Long" resultMap="LogRecodeInfoResult">
-        <include refid="selectLogRecodeInfoVo"/>
-        where recode_id = #{recodeId}
+    <select id="getLogRecodeInfo" parameterType="LogRecodeInfo" resultType="LogRecodeInfoDto">
+        SELECT
+            lri.recode_id AS recodeId,
+            lri.card_id AS cardId,
+            lri.study_category AS studyCategory,
+            lri.study_status AS studyStatus,
+            lri.study_time AS studyTime,
+            lri.study_expect AS studyExpect,
+            uci.study_title AS studyTitle,
+            uci.preparation_time AS preparationTime,
+            uci.target_time AS targetTime,
+            lri.create_time as createTime
+        FROM
+            log_recode_info lri
+                INNER JOIN user_card_info uci ON lri.card_id = uci.card_id
+        <where>
+            lri.STATUS = '0' AND lri.STATUS = '0'
+            <if test="userId != null "> and uci.user_id = #{userId}</if>
+            <if test="cardId != null "> and lri.card_id = #{cardId}</if>
+            <if test="studyCategory != null  and studyCategory != ''"> and study_category = #{studyCategory}</if>
+            <if test="studyExpect != null  and studyExpect != ''"> and study_expect = #{studyExpect}</if>
+        </where>
+    </select>
+
+    <select id="selectLogRecodeInfoById" parameterType="Long" resultType="LogRecodeInfoDto">
+        SELECT
+            lri.recode_id AS recodeId,
+            lri.card_id AS cardId,
+            lri.study_category AS studyCategory,
+            lri.study_status AS studyStatus,
+            lri.study_time AS studyTime,
+            lri.study_expect AS studyExpect,
+            uci.study_title AS studyTitle,
+            uci.preparation_time AS preparationTime,
+            uci.target_time AS targetTime,
+            lri.create_time as createTime
+        FROM
+            log_recode_info lri
+                INNER JOIN user_card_info uci ON lri.card_id = uci.card_id
+        where lri.recode_id = #{recodeId}
+    </select>
+
+    <select id="getUserCardById" parameterType="UserCardInfoParam" resultType="UserCardInfoDto">
+        select
+            card_id as cardId,
+            study_title as studyTitle
+        from user_card_info
+        <where>
+        <if test="cardId != null">
+            AND card_id = #{cardId}
+        </if>
+        <if test="userId != null and userId != 0">
+            AND user_id = #{userId}
+        </if>
+        </where>
+    </select>
+
+    <select id="getUserCardInfo" parameterType="UserCardInfo" resultType="UserCardInfoDto">
+        select
+        card_id as cardId,
+        study_title as studyTitle
+        from user_card_info
+        <where>
+            <if test="cardId != null"> AND card_id = #{cardId}</if>
+            <if test="userId != null and userId != 0">
+                AND user_id = #{userId}
+            </if>
+        </where>
+    </select>
+
+    <select id="getUserCardByName" parameterType="UserCardInfoParam" resultType="String">
+        select
+            study_title
+        from user_card_info
+        where  card_id =#{cardId}  and study_title = #{studyTitle}
     </select>
 
     <insert id="insertLogRecodeInfo" parameterType="LogRecodeInfo" useGeneratedKeys="true" keyProperty="recodeId">
@@ -103,6 +175,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         update log_recode_info
         <trim prefix="SET" suffixOverrides=",">
             <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where recode_id = #{recodeId}
+    </update>
+
+    <update id="updatePunch" parameterType="LogRecodeInfo">
+        update log_recode_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="status != null">punch = #{punch},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>

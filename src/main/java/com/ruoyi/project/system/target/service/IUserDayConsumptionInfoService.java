@@ -1,6 +1,8 @@
 package com.ruoyi.project.system.target.service;
 
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.target.domain.UserDayConsumptionInfo;
+import com.ruoyi.project.system.target.domain.dto.TimingCalculationDto;
 
 import java.util.List;
 
@@ -21,12 +23,20 @@ public interface IUserDayConsumptionInfoService
     public UserDayConsumptionInfo selectUserDayConsumptionInfoById(Long dayConsumptionId);
 
     /**
+     * 定时计算消费金额
+     * @param param
+     * @return
+     */
+    TimingCalculationDto TimeCalculation(TimeInfoParam param);
+
+    /**
      * 查询每日消费流水列表
      *
      * @param userDayConsumptionInfo 每日消费流水
      * @return 每日消费流水集合
      */
-    public List<UserDayConsumptionInfo> selectUserDayConsumptionInfoList(UserDayConsumptionInfo userDayConsumptionInfo);
+     List<UserDayConsumptionInfo> selectUserDayConsumptionInfoList(UserDayConsumptionInfo userDayConsumptionInfo);
+
 
     /**
      * 新增每日消费流水

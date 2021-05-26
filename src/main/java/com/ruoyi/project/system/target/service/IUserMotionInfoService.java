@@ -26,7 +26,7 @@ public interface IUserMotionInfoService
      * @param userMotionInfo 运动信息
      * @return 运动信息集合
      */
-    public List<UserMotionInfo> selectUserMotionInfoList(UserMotionInfo userMotionInfo);
+     List<UserMotionInfo> selectUserMotionInfoList(UserMotionInfo userMotionInfo);
 
     /**
      * 新增运动信息

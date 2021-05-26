@@ -1,11 +1,17 @@
 package com.ruoyi.project.system.target.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.TimeUtils;
 import com.ruoyi.common.utils.security.ShiroUtils;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
+import com.ruoyi.project.system.target.domain.UserDayConsumptionInfo;
 import com.ruoyi.project.system.target.domain.UserMonthConsumptionInfo;
+import com.ruoyi.project.system.target.domain.dto.TimingCalculationDto;
+import com.ruoyi.project.system.target.mapper.UserDayConsumptionInfoMapper;
 import com.ruoyi.project.system.target.mapper.UserMonthConsumptionInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +28,8 @@ public class UserMonthConsumptionInfoServiceImpl implements IUserMonthConsumptio
 {
     @Autowired
     private UserMonthConsumptionInfoMapper userMonthConsumptionInfoMapper;
+    @Autowired
+    private UserDayConsumptionInfoMapper userDayConsumptionInfoMapper;
 
     /**
      * 查询每月消费流水
@@ -47,6 +55,16 @@ public class UserMonthConsumptionInfoServiceImpl implements IUserMonthConsumptio
         return userMonthConsumptionInfoMapper.selectUserMonthConsumptionInfoList(userMonthConsumptionInfo);
     }
 
+
+    /**
+     * 查询当前月
+     * @param monthValue
+     * @return
+     */
+    @Override
+    public UserMonthConsumptionInfo getMoneyInfo(String monthValue) {
+        return userMonthConsumptionInfoMapper.getMoneyInfo(monthValue);
+    }
     /**
      * 新增每月消费流水
      *

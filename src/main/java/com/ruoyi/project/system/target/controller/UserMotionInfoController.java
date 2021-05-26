@@ -2,7 +2,10 @@ package com.ruoyi.project.system.target.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.CommonUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.target.domain.UserMotionInfo;
+import com.ruoyi.project.system.target.domain.dto.LogRecodeInfoDto;
 import com.ruoyi.project.system.target.service.IUserMotionInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,7 +52,14 @@ public class UserMotionInfoController extends BaseController
     public TableDataInfo list(UserMotionInfo userMotionInfo)
     {
         startPage();
-        List<UserMotionInfo> list = userMotionInfoService.selectUserMotionInfoList(userMotionInfo);
+        List<UserMotionInfo> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = userMotionInfoService.selectUserMotionInfoList(userMotionInfo);
+        }else{
+            userMotionInfo.setUserId(ShiroUtils.getUserId());
+            list = userMotionInfoService.selectUserMotionInfoList(userMotionInfo);
+        }
         return getDataTable(list);
     }
 

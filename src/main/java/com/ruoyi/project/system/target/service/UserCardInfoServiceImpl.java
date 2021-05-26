@@ -101,6 +101,18 @@ public class UserCardInfoServiceImpl implements IUserCardInfoService
     }
 
     /**
+     * 减少目标日期
+     * @param userCardInfo
+     * @return
+     */
+    @Override
+    public int updateTime(UserCardInfo userCardInfo) {
+        userCardInfo.setUpdateTime(DateUtils.getNowDate());
+        userCardInfo.setUpdateBy(ShiroUtils.getLoginName());
+        return userCardInfoMapper.updateTime(userCardInfo);
+    }
+
+    /**
      * 删除学习目标对象
      *
      * @param ids 需要删除的数据ID

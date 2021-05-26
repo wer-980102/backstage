@@ -26,8 +26,15 @@ public interface IUserMonthConsumptionInfoService
      * @param userMonthConsumptionInfo 每月消费流水
      * @return 每月消费流水集合
      */
-    public List<UserMonthConsumptionInfo> selectUserMonthConsumptionInfoList(UserMonthConsumptionInfo userMonthConsumptionInfo);
+     List<UserMonthConsumptionInfo> selectUserMonthConsumptionInfoList(UserMonthConsumptionInfo userMonthConsumptionInfo);
 
+
+    /**
+     * 查询当前月
+     * @param monthValue
+     * @return
+     */
+    UserMonthConsumptionInfo getMoneyInfo(String monthValue);
     /**
      * 新增每月消费流水
      *
@@ -42,7 +49,7 @@ public interface IUserMonthConsumptionInfoService
      * @param userMonthConsumptionInfo 每月消费流水
      * @return 结果
      */
-    public int updateUserMonthConsumptionInfo(UserMonthConsumptionInfo userMonthConsumptionInfo);
+     int updateUserMonthConsumptionInfo(UserMonthConsumptionInfo userMonthConsumptionInfo);
 
     /**
      * 修改每月消费流水-停用

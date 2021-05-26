@@ -26,7 +26,7 @@ public interface UserCardInfoMapper
      * @param userCardInfo 学习目标
      * @return 学习目标集合
      */
-    public List<UserCardInfo> selectUserCardInfoList(UserCardInfo userCardInfo);
+     List<UserCardInfo> selectUserCardInfoList(UserCardInfo userCardInfo);
 
     /**
      * 新增学习目标
@@ -58,6 +58,13 @@ public interface UserCardInfoMapper
      * @return
      */
     int updateUserStatus(UserCardInfo userCardInfo);
+
+    /**
+     * 减少目标日期
+     * @param userCardInfo
+     * @return
+     */
+    int updateTime(UserCardInfo userCardInfo);
 
     /**
      * 删除学习目标

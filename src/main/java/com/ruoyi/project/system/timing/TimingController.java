@@ -13,6 +13,13 @@ import com.ruoyi.project.system.client.domain.dto.UserIntegralCalculationDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.client.service.*;
+import com.ruoyi.project.system.target.domain.UserCardInfo;
+import com.ruoyi.project.system.target.domain.UserDayConsumptionInfo;
+import com.ruoyi.project.system.target.domain.UserMonthConsumptionInfo;
+import com.ruoyi.project.system.target.domain.dto.TimingCalculationDto;
+import com.ruoyi.project.system.target.service.IUserCardInfoService;
+import com.ruoyi.project.system.target.service.IUserDayConsumptionInfoService;
+import com.ruoyi.project.system.target.service.IUserMonthConsumptionInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -37,11 +44,17 @@ public class TimingController {
     private IUserStatisticsInfoService iUserStatisticsInfoService;
     @Autowired
     private IUserIntegralInfoService iUserIntegralInfoService;
+    @Autowired
+    private IUserDayConsumptionInfoService iUserDayConsumptionInfoService;
+    @Autowired
+    private IUserMonthConsumptionInfoService insertUserMonthConsumptionInfo;
+    @Autowired
+    private IUserCardInfoService iUserCardInfoService;
 
     /**
      * 每天11:59:59同步统计数据
      */
-   // @Scheduled(cron = "${time.times}")
+    @Scheduled(cron = "${time.times}")
     @Transactional
     public void setDayStallSum() {
         System.out.println("......每天定时计算积分......");
@@ -167,9 +180,52 @@ public class TimingController {
                 iUserStatisticsInfoService.insertUserStatisticsInfo(statistics);
             });
         }
+
+        // 定时计算每天金额
+        UserMonthConsumptionInfo userMonthConsumptionInfo = insertUserMonthConsumptionInfo.getMoneyInfo(TimeUtils.getYearMonthTime());
+        TimingCalculationDto timingCalculationDto = iUserDayConsumptionInfoService.TimeCalculation(TimeInfoParam.builder().startTime(TimeUtils.getYesterdayMinTime()).endTime(TimeUtils.getYesterdayMaxTime()).build());
+        //计算总和
+        Double monthCount = timingCalculationDto.getDayMorning()+timingCalculationDto.getDayNoon()+timingCalculationDto.getDayNight()+timingCalculationDto.getRestConsumption();
+        //实体
+        UserMonthConsumptionInfo monthInfo = UserMonthConsumptionInfo.builder().userId(ShiroUtils.getUserId())
+                .monthMorning(timingCalculationDto.getDayMorning())
+                .monthNoon(timingCalculationDto.getDayNoon())
+                .monthNight(timingCalculationDto.getDayNight())
+                .restConsumption(timingCalculationDto.getRestConsumption())
+                .monthConsumption(monthCount).build();
+
+        if(null == userMonthConsumptionInfo){
+            insertUserMonthConsumptionInfo.insertUserMonthConsumptionInfo(monthInfo);
+        }else{
+            monthInfo.setMonthConsumptionId(userMonthConsumptionInfo.getMonthConsumptionId());
+            insertUserMonthConsumptionInfo.updateUserMonthConsumptionInfo(monthInfo);
+        }
+
+        //每日减少日期
+        List<UserCardInfo> userCardInfos = iUserCardInfoService.selectUserCardInfoList(new UserCardInfo());
+        userCardInfos.stream().forEach(info->{
+            iUserCardInfoService.updateTime(UserCardInfo.builder().cardId(info.getCardId()).preparationTime(info.getPreparationTime()>0?info.getPreparationTime()-1:0).targetTime(info.getTargetTime()>0?info.getTargetTime()-1:0).build());
+        });
+
         System.out.println("时间："+TimeUtils.getDayTime()+" ----------------结束定时--------------");
     }
 
+    /**
+     * 计算消费金额
+     */
+    @Scheduled(cron = "${time.months}")
+    public void timingMoney(){
+        TimingCalculationDto timingCalculationDto = iUserDayConsumptionInfoService.TimeCalculation(TimeInfoParam.builder().startTime(TimeUtils.getYesterdayMinTime()).endTime(TimeUtils.getYesterdayMaxTime()).build());
+        if(StringUtils.isNotNull(timingCalculationDto)){
+            Double monthCount = timingCalculationDto.getDayMorning()+timingCalculationDto.getDayNoon()+timingCalculationDto.getDayNight()+timingCalculationDto.getRestConsumption();
+            insertUserMonthConsumptionInfo.insertUserMonthConsumptionInfo(UserMonthConsumptionInfo.builder().userId(ShiroUtils.getUserId())
+                        .monthMorning(timingCalculationDto.getDayMorning())
+                        .monthNoon(timingCalculationDto.getDayNoon())
+                        .monthNight(timingCalculationDto.getDayNight())
+                        .restConsumption(timingCalculationDto.getRestConsumption())
+                        .monthConsumption(monthCount).build());
+        }
+    }
     /**
      * 初始化的时候计算积分
      */

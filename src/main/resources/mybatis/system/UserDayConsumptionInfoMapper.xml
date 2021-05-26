@@ -26,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectUserDayConsumptionInfoList" parameterType="UserDayConsumptionInfo" resultMap="UserDayConsumptionInfoResult">
         <include refid="selectUserDayConsumptionInfoVo"/>
-        <where>
+        <where> status = '0'
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="dayMorning != null "> and day_morning = #{dayMorning}</if>
             <if test="dayNoon != null "> and day_noon = #{dayNoon}</if>
@@ -35,6 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="consumptionStatus != null  and consumptionStatus != ''"> and consumption_status = #{consumptionStatus}</if>
             <if test="status != null  and status != ''"> and status = #{status}</if>
             <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+            <if test="monthValue != null  and monthValue != ''"> and month_value = #{monthValue}</if>
         </where>
     </select>
 
@@ -43,6 +44,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where day_consumption_id = #{dayConsumptionId}
     </select>
 
+    <select id="TimeCalculation" parameterType="TimeInfoParam" resultType="TimingCalculationDto">
+        SELECT
+            IFNULL(sum( day_morning ),0) AS dayMorning,
+            IFNULL(sum( day_noon ),0) AS dayNoon,
+            IFNULL(sum( day_night ),0) AS dayNight,
+            IFNULL(sum( rest_consumption ),0) AS restConsumption
+        FROM
+            user_day_consumption_info
+        <where>
+            <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+                and create_time between #{startTime} and #{endTime}
+            </if>
+        </where>
+    </select>
     <insert id="insertUserDayConsumptionInfo" parameterType="UserDayConsumptionInfo" useGeneratedKeys="true" keyProperty="dayConsumptionId">
         insert into user_day_consumption_info
         <trim prefix="(" suffix=")" suffixOverrides=",">

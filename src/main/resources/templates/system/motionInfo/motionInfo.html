@@ -28,16 +28,16 @@
             </div>
 
             <div class="btn-group-sm" id="toolbar" role="group">
-                <a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:info:add">
+                <a class="btn btn-success" onclick="$.operate.add()" >
                     <i class="fa fa-plus"></i> 添加
                 </a>
-                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" shiro:hasPermission="system:info:edit">
+                <a class="btn btn-primary single disabled" onclick="$.operate.edit()" >
                     <i class="fa fa-edit"></i> 修改
                 </a>
-                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:info:remove">
+                <a class="btn btn-danger multiple disabled" onclick="$.operate.removeAll()" >
                     <i class="fa fa-remove"></i> 删除
                 </a>
-                <a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:info:export">
+                <a class="btn btn-warning" onclick="$.table.exportExcel()" >
                     <i class="fa fa-download"></i> 导出
                 </a>
             </div>
@@ -70,7 +70,8 @@
                 },
                 {
                     field: 'userId',
-                    title: '用户ID'
+                    title: '用户ID',
+                    visible: false
                 },
                 {
                     field: 'motionTime',
@@ -93,16 +94,16 @@
                     }
                 },
                 {
-                    field: 'remarks',
-                    title: '备注'
+                    field: 'createTime',
+                    title: '创建时间'
                 },
                 {
                     title: '操作',
                     align: 'center',
                     formatter: function(value, row, index) {
                         var actions = [];
-                        actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.motionId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
-                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="javascript:void(0)" onclick="remove(\'' + row.motionId + '\')"><i class="fa fa-remove"></i>删除</a>');
+                        actions.push('<a class="btn btn-success btn-xs" href="javascript:void(0)" onclick="$.operate.edit(\'' + row.motionId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs" href="javascript:void(0)" onclick="remove(\'' + row.motionId + '\')"><i class="fa fa-remove"></i>删除</a>');
                         return actions.join('');
                     }
                 }]
@@ -120,7 +121,7 @@
         /* 状态显示 */
         function statusTools(row) {
             debugger;
-            if (row.consumptionStatus === '1') {
+            if (row.standardStatus === '1') {
                 return '<i class=\"fa fa-toggle-off text-info fa-2x\" onclick="enable(\'' + row.motionId + '\')"></i> ';
             } else {
                 return '<i class=\"fa fa-toggle-on text-info fa-2x\" onclick="disable(\'' + row.motionId + '\')"></i> ';

@@ -58,4 +58,6 @@ public class UserDayConsumptionInfo extends BaseEntity
     @Excel(name = "备注", readConverterExp = "钱=的用向说明")
     private String remarks;
 
+
+    private String monthValue;
 }

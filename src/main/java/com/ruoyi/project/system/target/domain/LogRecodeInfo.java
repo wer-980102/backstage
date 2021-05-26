@@ -54,5 +54,9 @@ public class LogRecodeInfo extends BaseEntity
     @Excel(name = "备注")
     private String remarks;
 
+    /** 用户ID */
+    private Long userId;
 
+    /** 打卡状态 */
+    private String punch;
 }

@@ -5,7 +5,9 @@ import java.util.List;
 import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.security.ShiroUtils;
+import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.target.domain.UserDayConsumptionInfo;
+import com.ruoyi.project.system.target.domain.dto.TimingCalculationDto;
 import com.ruoyi.project.system.target.mapper.UserDayConsumptionInfoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,6 +35,16 @@ public class UserDayConsumptionInfoServiceImpl implements IUserDayConsumptionInf
     public UserDayConsumptionInfo selectUserDayConsumptionInfoById(Long dayConsumptionId)
     {
         return userDayConsumptionInfoMapper.selectUserDayConsumptionInfoById(dayConsumptionId);
+    }
+
+    /**
+     * 定时计算消费金额
+     * @param param
+     * @return
+     */
+    @Override
+    public TimingCalculationDto TimeCalculation(TimeInfoParam param) {
+        return userDayConsumptionInfoMapper.TimeCalculation(param);
     }
 
     /**

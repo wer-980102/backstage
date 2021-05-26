@@ -25,7 +25,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectUserMotionInfoList" parameterType="UserMotionInfo" resultMap="UserMotionInfoResult">
         <include refid="selectUserMotionInfoVo"/>
-        <where>
+        <where> status = '0'
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="motionTime != null "> and motion_time = #{motionTime}</if>
             <if test="motionDescribe != null  and motionDescribe != ''"> and motion_describe = #{motionDescribe}</if>

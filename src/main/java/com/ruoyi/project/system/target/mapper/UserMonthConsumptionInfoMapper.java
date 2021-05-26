@@ -1,5 +1,6 @@
 package com.ruoyi.project.system.target.mapper;
 
+import com.ruoyi.project.system.target.domain.UserDayConsumptionInfo;
 import com.ruoyi.project.system.target.domain.UserMonthConsumptionInfo;
 
 import java.util.List;
@@ -26,8 +27,15 @@ public interface UserMonthConsumptionInfoMapper
      * @param userMonthConsumptionInfo 每月消费流水
      * @return 每月消费流水集合
      */
-    public List<UserMonthConsumptionInfo> selectUserMonthConsumptionInfoList(UserMonthConsumptionInfo userMonthConsumptionInfo);
+     List<UserMonthConsumptionInfo> selectUserMonthConsumptionInfoList(UserMonthConsumptionInfo userMonthConsumptionInfo);
 
+
+    /**
+     * 查询当前月
+     * @param monthValue
+     * @return
+     */
+    UserMonthConsumptionInfo getMoneyInfo(String monthValue);
     /**
      * 新增每月消费流水
      *

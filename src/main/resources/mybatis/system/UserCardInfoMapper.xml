@@ -114,6 +114,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where card_id = #{cardId}
     </update>
 
+    <update id="updateTime" parameterType="UserCardInfo">
+        update user_card_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="preparationTime != null">preparation_time = #{preparationTime}</if>
+            <if test="targetTime != null">target_time = #{targetTime}</if>
+        </trim>
+        where card_id = #{cardId}
+    </update>
+
     <delete id="deleteUserCardInfoById" parameterType="Long">
         delete from user_card_info where card_id = #{cardId}
     </delete>

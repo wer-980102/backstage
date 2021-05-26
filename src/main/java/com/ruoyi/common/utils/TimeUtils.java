@@ -89,8 +89,15 @@ public class TimeUtils {
      * 获取当天数据
      */
     public static String getDayTime(){
-        String format = "YYYY-MM-dd  HH:mm:ss";
-        String formatDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd  HH:mm:ss"));
+        String formatDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM-dd HH:mm:ss"));
+        return formatDateTime;
+    }
+
+    /**
+     * 获取当前年月
+     */
+    public static String getYearMonthTime(){
+        String formatDateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("YYYY-MM"));
         return formatDateTime;
     }
 
@@ -98,7 +105,7 @@ public class TimeUtils {
      * 获取本月的最小天数
      */
     public static String getMonthMinTime(){
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime firstday = LocalDateTime.now().with(TemporalAdjusters.firstDayOfMonth());
         return firstday.format(fmt);
     }
@@ -108,7 +115,7 @@ public class TimeUtils {
      * 获取本月的最大天数
      */
     public static String getMonthMaxTime(){
-        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime lastDay = LocalDateTime.now().with(TemporalAdjusters.lastDayOfMonth());
         return lastDay.format(fmt);
     }

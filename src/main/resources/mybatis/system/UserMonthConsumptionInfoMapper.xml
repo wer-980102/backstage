@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="restConsumption"    column="rest_consumption"    />
         <result property="monthConsumption"    column="month_consumption"    />
         <result property="consumptionStatus"    column="consumption_status"    />
+        <result property="monthValue"    column="month_value"    />
         <result property="status"    column="status"    />
         <result property="remarks"    column="remarks"    />
         <result property="createBy"    column="create_by"    />
@@ -22,12 +23,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectUserMonthConsumptionInfoVo">
-        select month_consumption_id, user_id, month_morning, month_noon, month_night, rest_consumption, month_consumption, consumption_status, status, remarks, create_by, create_time, update_by, update_time from user_month_consumption_info
+        select month_consumption_id, user_id, month_morning, month_noon, month_night, rest_consumption, month_consumption, consumption_status,month_value, status, remarks, create_by, create_time, update_by, update_time from user_month_consumption_info
     </sql>
 
     <select id="selectUserMonthConsumptionInfoList" parameterType="UserMonthConsumptionInfo" resultMap="UserMonthConsumptionInfoResult">
         <include refid="selectUserMonthConsumptionInfoVo"/>
-        <where>
+        <where> status = '0'
             <if test="userId != null "> and user_id = #{userId}</if>
             <if test="monthMorning != null "> and month_morning = #{monthMorning}</if>
             <if test="monthNoon != null "> and month_noon = #{monthNoon}</if>
@@ -43,6 +44,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectUserMonthConsumptionInfoById" parameterType="Long" resultMap="UserMonthConsumptionInfoResult">
         <include refid="selectUserMonthConsumptionInfoVo"/>
         where month_consumption_id = #{monthConsumptionId}
+    </select>
+
+    <select id="getMoneyInfo" parameterType="String" resultType="UserMonthConsumptionInfo">
+        <include refid="selectUserMonthConsumptionInfoVo"/>
+        <where> status = '0'
+            <if test="monthValue != null  and monthValue != ''"> and month_value = #{monthValue}</if>
+        </where>
     </select>
 
     <insert id="insertUserMonthConsumptionInfo" parameterType="UserMonthConsumptionInfo" useGeneratedKeys="true" keyProperty="monthConsumptionId">

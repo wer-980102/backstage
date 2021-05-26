@@ -2,6 +2,9 @@ package com.ruoyi.project.system.target.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.CommonUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
+import com.ruoyi.project.system.target.domain.UserCardInfo;
 import com.ruoyi.project.system.target.domain.UserMonthConsumptionInfo;
 import com.ruoyi.project.system.target.service.IUserMonthConsumptionInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -49,7 +52,14 @@ public class UserMonthConsumptionInfoController extends BaseController
     public TableDataInfo list(UserMonthConsumptionInfo userMonthConsumptionInfo)
     {
         startPage();
-        List<UserMonthConsumptionInfo> list = userMonthConsumptionInfoService.selectUserMonthConsumptionInfoList(userMonthConsumptionInfo);
+        List<UserMonthConsumptionInfo> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = userMonthConsumptionInfoService.selectUserMonthConsumptionInfoList(userMonthConsumptionInfo);
+        }else{
+            userMonthConsumptionInfo.setUserId(ShiroUtils.getUserId());
+            list = userMonthConsumptionInfoService.selectUserMonthConsumptionInfoList(userMonthConsumptionInfo);
+        }
         return getDataTable(list);
     }
 

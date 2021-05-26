@@ -2,12 +2,22 @@ package com.ruoyi.project.system.target.controller;
 
 import java.util.List;
 
+import com.ruoyi.common.constant.UserConstants;
+import com.ruoyi.common.utils.CommonUtils;
+import com.ruoyi.common.utils.security.ShiroUtils;
+import com.ruoyi.framework.web.domain.Ztree;
+import com.ruoyi.project.system.client.domain.UserIntegralInfo;
+import com.ruoyi.project.system.dept.domain.Dept;
 import com.ruoyi.project.system.target.domain.LogRecodeInfo;
+import com.ruoyi.project.system.target.domain.UserCardInfo;
+import com.ruoyi.project.system.target.domain.dto.LogRecodeInfoDto;
+import com.ruoyi.project.system.target.domain.param.UserCardInfoParam;
 import com.ruoyi.project.system.target.service.ILogRecodeInfoService;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,7 +59,14 @@ public class LogRecodeInfoController extends BaseController
     public TableDataInfo list(LogRecodeInfo logRecodeInfo)
     {
         startPage();
-        List<LogRecodeInfo> list = logRecodeInfoService.selectLogRecodeInfoList(logRecodeInfo);
+        List<LogRecodeInfoDto> list = null;
+        //管理员查全部
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            list = logRecodeInfoService.getLogRecodeInfo(logRecodeInfo);
+        }else{
+            logRecodeInfo.setUserId(ShiroUtils.getUserId());
+            list = logRecodeInfoService.getLogRecodeInfo(logRecodeInfo);
+        }
         return getDataTable(list);
     }
 
@@ -61,8 +78,8 @@ public class LogRecodeInfoController extends BaseController
     @ResponseBody
     public AjaxResult export(LogRecodeInfo logRecodeInfo)
     {
-        List<LogRecodeInfo> list = logRecodeInfoService.selectLogRecodeInfoList(logRecodeInfo);
-        ExcelUtil<LogRecodeInfo> util = new ExcelUtil<LogRecodeInfo>(LogRecodeInfo.class);
+        List<LogRecodeInfoDto> list = logRecodeInfoService.getLogRecodeInfo(logRecodeInfo);
+        ExcelUtil<LogRecodeInfoDto> util = new ExcelUtil<LogRecodeInfoDto>(LogRecodeInfoDto.class);
         return util.exportExcel(list, "目标进行数据");
     }
 
@@ -92,7 +109,7 @@ public class LogRecodeInfoController extends BaseController
     @GetMapping("/edit/{recodeId}")
     public String edit(@PathVariable("recodeId") Long recodeId, ModelMap mmap)
     {
-        LogRecodeInfo logRecodeInfo = logRecodeInfoService.selectLogRecodeInfoById(recodeId);
+        LogRecodeInfoDto logRecodeInfo = logRecodeInfoService.selectLogRecodeInfoById(recodeId);
         mmap.put("logRecodeInfo", logRecodeInfo);
         return prefix + "/edit";
     }
@@ -106,6 +123,17 @@ public class LogRecodeInfoController extends BaseController
     public AjaxResult editSave(LogRecodeInfo logRecodeInfo)
     {
         return toAjax(logRecodeInfoService.updateLogRecodeInfo(logRecodeInfo));
+    }
+
+    /**
+     * 打卡状态
+     */
+    @Log(title = "打卡状态", businessType = BusinessType.UPDATE)
+    @PostMapping("/editPunch")
+    @ResponseBody
+    public AjaxResult editPunch(LogRecodeInfo logRecodeInfo)
+    {
+        return toAjax(logRecodeInfoService.updatePunch(logRecodeInfo));
     }
 
     /**
@@ -139,5 +167,37 @@ public class LogRecodeInfoController extends BaseController
     public AjaxResult removeStatus(LogRecodeInfo logRecodeInfo)
     {
         return toAjax(logRecodeInfoService.updateLogRecodeStatus(logRecodeInfo));
+    }
+
+    /**
+     * 选择部门树
+     *
+     * @param cardId 目标ID
+     * @param excludeId 排除ID
+     */
+    @GetMapping(value = { "/selectCardTree/{cardId}", "/selectCardTree/{cardId}/{excludeId}" })
+    public String selectDeptTree(@PathVariable("cardId") Long cardId,
+                                 @PathVariable(value = "excludeId", required = false) String excludeId, ModelMap mmap)
+    {
+        mmap.put("card", logRecodeInfoService.getUserCardById(UserCardInfoParam.builder().cardId(cardId.toString()).build()));
+        mmap.put("excludeId", excludeId);
+        return prefix + "/tree";
+    }
+
+    /**
+     * 加载部门列表树
+     */
+    @GetMapping("/treeData")
+    @ResponseBody
+    public List<Ztree> treeData()
+    {
+        List<Ztree> ztrees = null;
+        if(CommonUtils.USER_ADMIN.equals(ShiroUtils.getLoginName())){
+            ztrees = logRecodeInfoService.selectDeptTree(new UserCardInfo());
+        }else{
+            ztrees = logRecodeInfoService.selectDeptTree(UserCardInfo.builder().userId(ShiroUtils.getUserId()).build());
+
+        }
+        return ztrees;
     }
 }
