@@ -16,7 +16,7 @@ ruoyi:
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为80
-  port: 4366
+  port: 2333
   servlet:
     # 应用的访问路径
     context-path: /
@@ -69,6 +69,23 @@ spring:
     restart:
       # 热部署开关
       enabled: true
+  #邮件配置
+  mail:
+    host: smtp.qq.com
+    username: 1780104168@qq.com
+    password: uopdwzxjodskcfia
+    default-encoding: UTF-8
+    # 启动SSL时的配置
+    mail:
+      smtp:
+        socketFactory:
+          class: javax.net.ssl.SSLSocketFactory
+          fallback: false
+          port: 465
+#推送地址
+mail:
+  fromMail:
+    addr: 1780104168@qq.com
 
 # MyBatis
 mybatis:
@@ -147,7 +164,10 @@ gen:
   # 表前缀（生成类名不会包含表前缀，多个用逗号分隔）
   tablePrefix: sys_
 
+
+
 time:
   times: 0 30 1 * * ?
+  emails: 0 20 11 * * ?
   months: 0 30 23 28-31 * ?
 

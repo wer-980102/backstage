@@ -2,6 +2,7 @@ package com.ruoyi.framework.web.service;
 
 import java.util.List;
 
+import com.ruoyi.common.utils.security.ShiroUtils;
 import com.ruoyi.project.system.target.domain.UserCardInfo;
 import com.ruoyi.project.system.target.domain.dto.UserCardInfoDto;
 import com.ruoyi.project.system.target.mapper.LogRecodeInfoMapper;
@@ -48,7 +49,7 @@ public class DictService
      */
     public List<UserCardInfoDto> getUserCardInfo(String dictType)
     {
-        return logRecodeInfoMapper.getUserCardInfo(new UserCardInfo());  }
+        return logRecodeInfoMapper.getUserCardInfo(UserCardInfo.builder().userId(ShiroUtils.getUserId()).build());  }
 
     /**
      * 根据字典类型和字典键值查询字典数据信息

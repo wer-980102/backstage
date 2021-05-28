@@ -13,6 +13,7 @@ import com.ruoyi.project.system.client.domain.dto.UserIntegralCalculationDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
 import com.ruoyi.project.system.client.domain.param.TimeInfoParam;
 import com.ruoyi.project.system.client.service.*;
+import com.ruoyi.project.system.email.service.MailService;
 import com.ruoyi.project.system.target.domain.UserCardInfo;
 import com.ruoyi.project.system.target.domain.UserDayConsumptionInfo;
 import com.ruoyi.project.system.target.domain.UserMonthConsumptionInfo;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 import javax.annotation.PostConstruct;
 import javax.xml.crypto.Data;
@@ -51,6 +54,10 @@ public class TimingController {
     @Autowired
     private IUserCardInfoService iUserCardInfoService;
 
+    @Autowired
+    private MailService mailService;
+    @Autowired
+    private TemplateEngine templateEngine;
     /**
      * 每天11:59:59同步统计数据
      */
@@ -225,6 +232,18 @@ public class TimingController {
                         .restConsumption(timingCalculationDto.getRestConsumption())
                         .monthConsumption(monthCount).build());
         }
+    }
+
+    /**
+     * 定时发送邮件
+     * 2540808026@qq.com
+     */
+    @Scheduled(cron = "${time.emails}")
+    public void sendTemplateMail() {
+        //创建邮件正文
+        Context context = new Context();
+        String emailContent = templateEngine.process("emailTemplate", context);
+        mailService.sendHtmlMail("2540808026@qq.com","This is a clocked email!",emailContent);
     }
     /**
      * 初始化的时候计算积分

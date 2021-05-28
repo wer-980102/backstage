@@ -74,6 +74,7 @@ public class UserMonthConsumptionInfoServiceImpl implements IUserMonthConsumptio
     @Override
     public int insertUserMonthConsumptionInfo(UserMonthConsumptionInfo userMonthConsumptionInfo)
     {
+        userMonthConsumptionInfo.setUserId(ShiroUtils.getUserId());
         userMonthConsumptionInfo.setCreateTime(DateUtils.getNowDate());
         return userMonthConsumptionInfoMapper.insertUserMonthConsumptionInfo(userMonthConsumptionInfo);
     }

@@ -68,6 +68,7 @@ public class UserDayConsumptionInfoServiceImpl implements IUserDayConsumptionInf
     @Override
     public int insertUserDayConsumptionInfo(UserDayConsumptionInfo userDayConsumptionInfo)
     {
+        userDayConsumptionInfo.setUserId(ShiroUtils.getUserId());
         userDayConsumptionInfo.setCreateTime(DateUtils.getNowDate());
         return userDayConsumptionInfoMapper.insertUserDayConsumptionInfo(userDayConsumptionInfo);
     }
