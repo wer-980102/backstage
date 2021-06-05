@@ -64,12 +64,15 @@ public class NotClerkSaleInfo extends BaseEntity
     private Integer actualSales;
 
     /** 最后一次拿货 */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @Excel(name = "最后一次拿货", width = 30, dateFormat = "yyyy-MM-dd")
-    private Date lastGoods;
+    private String lastGoods;
 
     /** 拿货次数 */
     @Excel(name = "拿货次数")
     private String goodsFrequency;
+
+    /** 开始时间**/
+    private String startTime;
+    /** 结束时间**/
+    private String endTime;
 
 }

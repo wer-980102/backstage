@@ -74,6 +74,15 @@ public class UserIntegralInfoServiceImpl implements IUserIntegralInfoService
     }
 
     /**
+     * 用户一键减分
+     * @return
+     */
+    @Override
+    public int updateUserIntegral(UserIntegralInfo userIntegralInfo) {
+        return userIntegralInfoMapper.updateUserIntegral(userIntegralInfo);
+    }
+
+    /**
      * 删除积分规则对象
      *
      * @param ids 需要删除的数据ID

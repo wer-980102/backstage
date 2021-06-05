@@ -47,6 +47,12 @@ public interface UserIntegralInfoMapper
      int updateUserIntegralInfo(UserIntegralInfo userIntegralInfo);
 
     /**
+     * 用户一键减分
+     * @return
+     */
+     int updateUserIntegral(UserIntegralInfo userIntegralInfo);
+
+    /**
      * 删除积分规则
      *
      * @param integralId 积分规则ID

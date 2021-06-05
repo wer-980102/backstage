@@ -46,6 +46,12 @@ public interface IUserIntegralInfoService
      int updateUserIntegralInfo(UserIntegralInfo userIntegralInfo);
 
     /**
+     * 用户一键减分
+     * @return
+     */
+    int updateUserIntegral(UserIntegralInfo userIntegralInfo);
+
+    /**
      * 批量删除积分规则
      *
      * @param ids 需要删除的数据ID

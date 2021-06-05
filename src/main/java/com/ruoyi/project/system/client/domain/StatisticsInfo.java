@@ -60,4 +60,8 @@ public class StatisticsInfo extends BaseEntity
     /** 最后拿货时间**/
     @JsonFormat(pattern = "yyyy-MM-dd hh:MM:ss")
     private Date lastGoods;
+
+    /** 用户ID**/
+    @Excel(name = "用户ID")
+    private Long userId;
 }

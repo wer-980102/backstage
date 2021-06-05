@@ -486,4 +486,16 @@ public class UserStatisticsInfoServiceImpl implements IUserStatisticsInfoService
     public List<NotClerkSaleInfo> getCustomerInfo(TimeInfoParam param) {
         return notClerkSaleInfoMapper.getCustomerInfo(param);
     }
+
+    /**
+     * 查询未注册人的销售纪录列表
+     *
+     * @param notClerkSaleInfo 未注册人的销售纪录
+     * @return 未注册人的销售纪录集合
+     */
+    @Override
+    public List<NotClerkSaleInfo> selectNotClerkSaleInfoList(NotClerkSaleInfo notClerkSaleInfo) {
+        return notClerkSaleInfoMapper.selectNotClerkSaleInfoList(notClerkSaleInfo);
+    }
+
 }

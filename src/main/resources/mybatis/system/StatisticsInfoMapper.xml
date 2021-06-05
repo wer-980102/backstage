@@ -7,6 +7,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <resultMap type="StatisticsInfo" id="StatisticsInfoResult">
         <result property="statisticsId"    column="statistics_id"    />
         <result property="customerId"    column="customer_id"    />
+        <result property="userId"    column="user_id"    />
         <result property="salesMonthValue"    column="sales_month_value"    />
         <result property="salesValue"    column="sales_value"    />
         <result property="storeValue"    column="store_value"    />
@@ -19,7 +20,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectStatisticsInfoVo">
-        select statistics_id, customer_id, sales_month_value, sales_value, store_value, refund_amount_value, actual_sales_value, goods_frequency_value, lastGoods,create_time, update_time from statistics_info
+        select statistics_id, customer_id, user_id,sales_month_value, sales_value, store_value, refund_amount_value, actual_sales_value, goods_frequency_value, lastGoods,create_time, update_time from statistics_info
     </sql>
 
     <select id="selectStatisticsInfoList" parameterType="StatisticsInfo" resultMap="StatisticsInfoResult">
@@ -60,6 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into statistics_info
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="customerId != null">customer_id,</if>
+            <if test="userId != null">user_id,</if>
             <if test="salesMonthValue != null">sales_month_value,</if>
             <if test="salesValue != null">sales_value,</if>
             <if test="storeValue != null">store_value,</if>
@@ -72,6 +74,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="customerId != null">#{customerId},</if>
+            <if test="userId != null">#{userId},</if>
             <if test="salesMonthValue != null">#{salesMonthValue},</if>
             <if test="salesValue != null">#{salesValue},</if>
             <if test="storeValue != null">#{storeValue},</if>
@@ -87,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateStatisticsInfo" parameterType="StatisticsInfo">
         update statistics_info
         <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id = #{userId},</if>
             <if test="salesMonthValue != null">sales_month_value = #{salesMonthValue},</if>
             <if test="salesValue != null">sales_value = #{salesValue},</if>
             <if test="storeValue != null">store_value = #{storeValue},</if>

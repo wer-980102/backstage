@@ -90,12 +90,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         user_statistics_info usi
         INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
         INNER JOIN user_integral_info uii ON uii.customer_id = csi.customer_id
-        WHERE
-        usi.special_user = '0'
-        <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
-            and (csi.last_goods &lt; #{startTime} or csi.last_goods &gt; #{endTime})
-        </if>
-
+        <where>
+            usi.special_user = '0'
+            <if test="userId!=null">
+                and uii.user_id = #{userId}
+            </if>
+            <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+                and (csi.last_goods &lt; #{startTime} or csi.last_goods &gt; #{endTime})
+            </if>
+        </where>
     </select>
     <insert id="insertClerkSaleInfo" parameterType="ClerkSaleInfo" useGeneratedKeys="true" keyProperty="saleId">
         insert into clerk_sale_info

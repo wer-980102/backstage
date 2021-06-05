@@ -45,7 +45,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="operatorTime != null "> and Operator_time = #{operatorTime}</if>
             <if test="type == 1 "> and integral_rule = '' or integral_rule is null or integral_remark = '' or integral_remark is null</if>
         </where>
-        order by Operator_time,integral_id desc
+        order by Operator_time desc ,integral desc
     </select>
 
     <select id="selectUserIntegralInfoById" parameterType="Long" resultMap="UserIntegralInfoResult">
@@ -113,6 +113,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time = #{updateTime},</if>
         </trim>
         where customer_id = #{customerId}
+    </update>
+
+
+    <update id="updateUserIntegral" parameterType="UserIntegralInfo">
+        update user_integral_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="integral != null">integral = #{integral},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime}</if>
+        </trim>
+        where customer_id = #{customerId} and user_id = #{userId}
     </update>
 
     <delete id="deleteUserIntegralInfoById" parameterType="Long">

@@ -194,11 +194,11 @@ public class UserStatisticsInfoController extends BaseController
     public AjaxResult ScoreReduction()
     {
         int i= 0;
-        List<UserIntegralInfoDto> inactiveUserInfo = iClerkSaleInfoService.getInactiveUserInfo(TimeInfoParam.builder().startTime(TimeUtils.getMonthMinTime()).endTime(TimeUtils.getMonthMaxTime()).build());
+        List<UserIntegralInfoDto> inactiveUserInfo = iClerkSaleInfoService.getInactiveUserInfo(TimeInfoParam.builder().userId(ShiroUtils.getUserId()).startTime(TimeUtils.getMonthMinTime()).endTime(TimeUtils.getMonthMaxTime()).build());
        if(null != inactiveUserInfo){
            for (UserIntegralInfoDto dto : inactiveUserInfo){
                if(dto.getIntegral()>0){
-                   i = iUserIntegralInfoService.updateUserIntegralInfo(UserIntegralInfo.builder().customerId(dto.getCustomerId()).integral(dto.getIntegral() - 1).build());
+                   i = iUserIntegralInfoService.updateUserIntegral(UserIntegralInfo.builder().userId(ShiroUtils.getUserId()).customerId(dto.getCustomerId()).integral(dto.getIntegral() - 1).build());
                }
 
            }

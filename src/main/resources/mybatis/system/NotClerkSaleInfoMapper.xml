@@ -40,6 +40,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="actualSales != null  and actualSales != ''"> and actual_sales = #{actualSales}</if>
             <if test="lastGoods != null "> and last_goods = #{lastGoods}</if>
             <if test="goodsFrequency != null  and goodsFrequency != ''"> and goods_frequency = #{goodsFrequency}</if>
+            <if test="startTime!=null and startTime!='' and endTime!=null and endTime!=''">
+                and create_time between #{startTime} and #{endTime}
+            </if>
         </where>
     </select>
 

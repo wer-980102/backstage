@@ -4,10 +4,7 @@ import com.ruoyi.common.utils.CommonUtils;
 import com.ruoyi.common.utils.StringUtils;
 import com.ruoyi.common.utils.TimeUtils;
 import com.ruoyi.common.utils.security.ShiroUtils;
-import com.ruoyi.project.system.client.domain.NotClerkSaleInfo;
-import com.ruoyi.project.system.client.domain.StatisticsInfo;
-import com.ruoyi.project.system.client.domain.UserIntegralInfo;
-import com.ruoyi.project.system.client.domain.UserStatisticsInfo;
+import com.ruoyi.project.system.client.domain.*;
 import com.ruoyi.project.system.client.domain.dto.ClerkSaleInfoDto;
 import com.ruoyi.project.system.client.domain.dto.UserIntegralCalculationDto;
 import com.ruoyi.project.system.client.domain.dto.UserStatisticsInfoDto;
@@ -129,6 +126,7 @@ public class TimingController {
                 if(StringUtils.isNotNull(statisticsInfos)){
                     StatisticsInfo info = StatisticsInfo.builder()
                             .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
+                            .userId(statisticsInfo.getUserId())
                             .salesMonthValue(String.valueOf(Double.valueOf(statisticsInfos.getSalesMonthValue())+Double.valueOf(statisticsInfo.getSaleMonth())))
                             .refundAmountValue(String.valueOf(Double.valueOf(statisticsInfos.getRefundAmountValue())+Double.valueOf(statisticsInfo.getRefundAmount())))
                             .actualSalesValue(statisticsInfos.getActualSalesValue()+statisticsInfo.getActualSales())
@@ -142,6 +140,7 @@ public class TimingController {
                 }else {
                     StatisticsInfo info = StatisticsInfo.builder()
                             .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
+                            .userId(statisticsInfo.getUserId())
                             .salesMonthValue(statisticsInfo.getSaleMonth())
                             .refundAmountValue(statisticsInfo.getRefundAmount())
                             .actualSalesValue(statisticsInfo.getActualSales())
@@ -198,6 +197,7 @@ public class TimingController {
                 .monthMorning(timingCalculationDto.getDayMorning())
                 .monthNoon(timingCalculationDto.getDayNoon())
                 .monthNight(timingCalculationDto.getDayNight())
+                .monthValue(TimeUtils.getYearMonthTime())
                 .restConsumption(timingCalculationDto.getRestConsumption())
                 .monthConsumption(monthCount).build();
 
@@ -220,7 +220,7 @@ public class TimingController {
     /**
      * 计算消费金额
      */
-    @Scheduled(cron = "${time.months}")
+    //@Scheduled(cron = "${time.months}")
     public void timingMoney(){
         TimingCalculationDto timingCalculationDto = iUserDayConsumptionInfoService.TimeCalculation(TimeInfoParam.builder().startTime(TimeUtils.getYesterdayMinTime()).endTime(TimeUtils.getYesterdayMaxTime()).build());
         if(StringUtils.isNotNull(timingCalculationDto)){
@@ -238,7 +238,7 @@ public class TimingController {
      * 定时发送邮件
      * 2540808026@qq.com
      */
-    @Scheduled(cron = "${time.emails}")
+   // @Scheduled(cron = "${time.emails}")
     public void sendTemplateMail() {
         //创建邮件正文
         Context context = new Context();
@@ -248,12 +248,13 @@ public class TimingController {
     /**
      * 初始化的时候计算积分
      */
+    @Transactional
   //  @PostConstruct
     public void initStallSum() {
         System.out.println("......初始化定时计算积分......");
-        List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(new TimeInfoParam());
+          List<UserStatisticsInfoDto> timingInfo = iUserStatisticsInfoService.getTimingInfo(new TimeInfoParam());
         if(null != timingInfo && timingInfo.size()>0){
-            timingInfo.stream().forEach(info->{
+          timingInfo.stream().forEach(info->{
                 List<UserIntegralInfo> userIntegralInfos = iUserIntegralInfoService.selectUserIntegralInfoList(UserIntegralInfo.builder().customerId(Long.parseLong(info.getStatisticsId())).build());
                 UserIntegralInfo integralInfo = UserIntegralInfo.builder()
                         .customerId(Long.parseLong(info.getStatisticsId()))
@@ -297,6 +298,7 @@ public class TimingController {
                 if(StringUtils.isNotNull(infoCount)){
                     StatisticsInfo info = StatisticsInfo.builder()
                             .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
+                            .userId(statisticsInfo.getUserId())
                             .salesMonthValue(String.valueOf(Double.valueOf(infoCount.getSalesMonthValue())+Double.valueOf(statisticsInfo.getSaleMonth())))
                             .refundAmountValue(String.valueOf(Double.valueOf(infoCount.getRefundAmountValue())+Double.valueOf(statisticsInfo.getRefundAmount())))
                             .actualSalesValue(infoCount.getActualSalesValue()+statisticsInfo.getActualSales())
@@ -309,6 +311,7 @@ public class TimingController {
                 }else{
                     StatisticsInfo info = StatisticsInfo.builder()
                             .customerId(Long.parseLong(statisticsInfo.getStatisticsId()))
+                            .userId(statisticsInfo.getUserId())
                             .salesMonthValue(statisticsInfo.getSaleMonth())
                             .refundAmountValue(statisticsInfo.getRefundAmount())
                             .actualSalesValue(statisticsInfo.getActualSales())
@@ -319,6 +322,58 @@ public class TimingController {
                     }
                     iStatisticsInfoService.insertStatisticsInfo(info);
                 }
+
+            });
+        }
+
+        //从销售纪录查询客户表没有的客户
+        List<NotClerkSaleInfo> customerInfo = iUserStatisticsInfoService.getCustomerInfo(new TimeInfoParam());
+        if(StringUtils.isNotNull(customerInfo)){
+            //每天定时插入
+            customerInfo.stream().forEach(info->{
+                UserStatisticsInfo statistics = UserStatisticsInfo.builder()
+                        .name(info.getCustomer())
+                        .store("部落")
+                        .discount("1")
+                        .customerType("零批客户")
+                        .applicablePrice("无")
+                        .residualIntegral("0")
+                        .balance("0")
+                        .specialUser("0")
+                        .memberType("普通会员")
+                        .quota("0")
+                        .pickDays("0")
+                        .operator("晓（18273261939）")
+                        .operatorTime(TimeUtils.getMinTime()).build();
+                if(info.getActualSales()>=10000){
+                    statistics.setGrade("一级");
+                }else if(info.getActualSales()>=8000 && info.getActualSales()<=9999){
+                    statistics.setGrade("二级");
+                }else if(info.getActualSales()>=5000 && info.getActualSales()<=7999){
+                    statistics.setGrade("三级");
+                }else{
+                    statistics.setGrade("四级");
+                }
+                iUserStatisticsInfoService.insertUserStatisticsInfo(statistics);
+
+                //生成用户后，在把销售数据插入销售表
+                List<NotClerkSaleInfo> notClerkSaleInfos = iUserStatisticsInfoService.selectNotClerkSaleInfoList(NotClerkSaleInfo.builder().customer(info.getCustomer()).build());
+                notClerkSaleInfos.stream().forEach(saleInfo->{
+                    ClerkSaleInfo clerk = ClerkSaleInfo.builder()
+                            .modelNumber(saleInfo.getModelNumber())
+                            .productName(saleInfo.getProductName())
+                            .brand(saleInfo.getBrand())
+                            .customerId(statistics.getStatisticsId())
+                            .customer(saleInfo.getCustomer())
+                            .userId(saleInfo.getUserId())
+                            .sales(saleInfo.getSales())
+                            .store(saleInfo.getStore())
+                            .refundAmount(saleInfo.getRefundAmount())
+                            .actualSales(saleInfo.getActualSales().toString())
+                            .lastGoods(saleInfo.getLastGoods())
+                            .goodsFrequency(saleInfo.getGoodsFrequency()).build();
+                    iClerkSaleInfoService.insertClerkSaleInfo(clerk);
+                });
 
             });
         }

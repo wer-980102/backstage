@@ -168,6 +168,6 @@ gen:
 
 time:
   times: 0 30 1 * * ?
-  emails: 0 20 11 * * ?
+  emails: 0 30 21 * * ?
   months: 0 30 23 28-31 * ?
 

@@ -16,4 +16,6 @@ public class TimeInfoParam {
     private String endTime;
     /** 客户Id**/
     private Long customerId;
+
+    private Long userId;
 }

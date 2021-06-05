@@ -34,7 +34,7 @@ public interface NotClerkSaleInfoMapper
      * @param notClerkSaleInfo 未注册人的销售纪录
      * @return 未注册人的销售纪录集合
      */
-    public List<NotClerkSaleInfo> selectNotClerkSaleInfoList(NotClerkSaleInfo notClerkSaleInfo);
+     List<NotClerkSaleInfo> selectNotClerkSaleInfoList(NotClerkSaleInfo notClerkSaleInfo);
 
     /**
      * 新增未注册人的销售纪录

@@ -198,4 +198,12 @@ public interface IUserStatisticsInfoService
      */
     List<NotClerkSaleInfo> getCustomerInfo(TimeInfoParam param);
 
+    /**
+     * 查询未注册人的销售纪录列表
+     *
+     * @param notClerkSaleInfo 未注册人的销售纪录
+     * @return 未注册人的销售纪录集合
+     */
+     List<NotClerkSaleInfo> selectNotClerkSaleInfoList(NotClerkSaleInfo notClerkSaleInfo);
+
 }

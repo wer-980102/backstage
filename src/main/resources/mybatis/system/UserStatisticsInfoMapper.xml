@@ -351,7 +351,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             t2.lastGoodsCount AS saleMonth,
             sum( csi.actual_sales ) AS actualSales,
             sum( csi.refund_amount ) AS refundAmount,
-            sum( csi.goods_frequency ) AS goodsFrequency
+            sum( csi.goods_frequency ) AS goodsFrequency,
+            csi.user_id as userId
         FROM
             user_statistics_info usi
                 INNER JOIN clerk_sale_info csi ON usi.statistics_id = csi.customer_id
@@ -380,7 +381,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             </if>
         </where>
         GROUP BY
-            usi.statistics_id
+            usi.statistics_id,csi.user_id
     </select>
     <select id="getScoreReduction" resultType="java.lang.String">
         select
